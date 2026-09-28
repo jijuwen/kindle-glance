@@ -13,6 +13,9 @@ TOOLS = ['build_release.py', 'build_public_release.py', 'public_files.py', 'expo
 def source_files(root=ROOT):
     files = [root / p for p in ROOT_FILES] + [root / 'docs' / p for p in DOCS]
     files += [root / 'tools' / p for p in TOOLS]
+    missing = [str(p.relative_to(root)) for p in files if not p.is_file() or p.is_symlink()]
+    if missing:
+        raise ValueError('Required public sources missing: ' + ', '.join(missing))
     for folder in ('kindle-display', 'kindle-plugin', 'kindle-launcher-ab', 'previews', 'tools/codex-collector', '.github'):
         for path in (root / folder).rglob('*'):
             if not path.is_file() or path.is_symlink():

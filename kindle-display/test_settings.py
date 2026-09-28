@@ -203,6 +203,18 @@ class SettingsTest(unittest.TestCase):
         self.assertFalse((self.directory/'settings.json').exists())
         self.assertEqual((self.directory/'playlist.json').read_text(),'{broken')
 
+    def test_legacy_without_password_can_claim_without_replacing_playlist(self):
+        (self.directory/'settings.json').unlink()
+        original=main.default_playlist()
+        original['items'][0]['name']='Existing personal title'
+        settings.atomic_json(self.directory/'playlist.json',original)
+        self.assertEqual(settings.load(self.directory)['setup_state'],'migration_review')
+        self.assertEqual(self.claim().status_code,200)
+        current=main.board_settings()
+        result=self.client.post('/admin/api/setup/finish',json={'revision':current['revision']},headers=self.csrf())
+        self.assertEqual(result.status_code,200)
+        self.assertEqual(settings.read_json(self.directory/'playlist.json'),original)
+
 
 if __name__ == '__main__':
     unittest.main()

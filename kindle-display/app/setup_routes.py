@@ -58,7 +58,8 @@ def install(app, g):
         with g["STATE_LOCK"]:
             settings.establish_admin(g["DATA_DIR"], data.get("code"), data.get("password"))
             current = g["board_settings"]()
-            settings.save(g["DATA_DIR"], {"setup_state": "in_progress"}, current["revision"])
+            phase = "migration_review" if current["setup_state"] == "migration_review" else "in_progress"
+            settings.save(g["DATA_DIR"], {"setup_state": phase}, current["revision"])
             session = g["make_admin_session"]()
         response = JSONResponse({"status": "ok"}, headers={"Cache-Control": "no-store"})
         response.set_cookie(g["ADMIN_SESSION_COOKIE"], session, httponly=True, samesite="strict", path="/",

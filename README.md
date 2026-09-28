@@ -36,6 +36,21 @@ KUAL → KindleGlance → **B - Dashboard (no framework)** → KOReader 工具 �
 
 `浏览器 → 服务端配置 / 渲染 ← 天气源与可选采集器`，`Kindle 插件 → 鉴权 API → 灰阶图片`。单管理员、一个全局地区和播放列表、单 Uvicorn worker。运行数据与授权不进入源码仓库。
 
+```text
+kindle-display/          服务端、管理页面、设置与九类渲染
+kindle-plugin/           KOReader 插件和 Lua 回归测试
+kindle-launcher-ab/      A/B KUAL 菜单与构建器
+tools/codex-collector/   可选账号授权及用量采集
+tools/                  公开清单、构建与安装验证
+docs/                   规划、进度、安装、升级及兼容范围
+previews/               静态示例与设置页面截图
+.github/                CI、Issue 与 PR 模板
+compose.yaml            基础部署
+compose.codex.yaml      可选采集器覆盖配置
+```
+
+![首次设置与真实预览](previews/setup-desktop.png)
+
 - [安装](docs/INSTALL.md) · [配置与数据流](docs/CONFIGURATION.md)
 - [升级 / 备份 / 回退 / 卸载](docs/UPGRADING.md) · [故障处理](docs/TROUBLESHOOTING.md)
 - [开源规划](docs/OPEN_SOURCE_PLAN.md) · [实施进度](docs/IMPLEMENTATION_STATUS.md)
