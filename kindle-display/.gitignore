@@ -1,0 +1,7 @@
+.env
+.fnos-inline-compose.yaml
+.fnos-deployment.env
+.fnos-remote-compose.yaml
+data/
+__pycache__/
+*.pyc

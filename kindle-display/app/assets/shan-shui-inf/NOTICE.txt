@@ -1,0 +1,5 @@
+Upstream: https://github.com/LingDong-/shan-shui-inf
+Pinned commit: 9f754d2b2e73495db7883d4d4055a7b0903b0454
+License: MIT (see LICENSE)
+
+index.html is the unmodified upstream source. render.html only adds display-only CSS and reads width/height from the URL so the original generator fills the Kindle canvas.

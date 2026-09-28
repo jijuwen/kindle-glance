@@ -1,0 +1,17 @@
+{
+  "day-sunny": "f00d",
+  "night-clear": "f02e",
+  "day-cloudy": "f002",
+  "night-alt-cloudy": "f086",
+  "cloudy": "f013",
+  "fog": "f014",
+  "sprinkle": "f01c",
+  "rain": "f019",
+  "rain-mix": "f017",
+  "snow": "f01b",
+  "snowflake-cold": "f076",
+  "showers": "f01a",
+  "thunderstorm": "f01e",
+  "hail": "f015",
+  "na": "f07b"
+}

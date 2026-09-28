@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension>
+    <information>
+        <name>Kindle Board A-B Test</name>
+        <version>1.0</version>
+        <author>Kindle board project</author>
+        <id>kindle-board-launcher-ab</id>
+    </information>
+    <menus>
+        <menu type="json" dynamic="true">menu.json</menu>
+    </menus>
+</extension>

@@ -1,0 +1,2 @@
+"""Kindle dashboard service."""
+

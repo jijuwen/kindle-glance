@@ -1,0 +1,26 @@
+{
+    "items": [
+        {
+            "name": "KindleGlance",
+            "priority": 0,
+            "items": [
+                {
+                    "name": "A - Reading (normal)",
+                    "priority": 1,
+                    "action": "/mnt/us/koreader/koreader.sh",
+                    "params": "--kual",
+                    "status": false,
+                    "internal": "status A - Reading (normal)"
+                },
+                {
+                    "name": "B - Dashboard (no framework)",
+                    "priority": 2,
+                    "action": "/mnt/us/koreader/koreader.sh",
+                    "params": "--kual --framework_stop",
+                    "status": false,
+                    "internal": "status B - Dashboard (no framework)"
+                }
+            ]
+        }
+    ]
+}

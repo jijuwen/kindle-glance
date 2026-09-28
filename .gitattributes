@@ -1,0 +1,22 @@
+* text=auto eol=lf
+*.lua text eol=lf
+*.py text eol=lf
+*.ps1 text eol=lf
+*.sh text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+*.geojson text eol=lf
+*.yaml text eol=lf
+*.xml text eol=lf
+*.png binary
+*.ttf binary
+*.zip binary
+*.gz binary
+# Preserve upstream resource and fixture bytes used by provenance manifests.
+kindle-display/app/assets/** -text
+# Keep the deployed frontend byte-identical in the initial baseline.
+kindle-display/app/static/** -text
+kindle-plugin/tests/fixtures/koreader/frontend/** -text
+kindle-plugin/tests/fixtures/koreader/COPYING -text
+kindle-plugin/tests/fixtures/koreader/git-rev -text
+kindle-plugin/LICENSE -text

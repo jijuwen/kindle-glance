@@ -1,0 +1,3 @@
+Weather Icons by Erik Flowers; original designs by Lukas Bischoff.
+https://github.com/erikflowers/weather-icons
+Font license: SIL Open Font License 1.1 (OFL.txt).

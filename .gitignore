@@ -1,0 +1,26 @@
+# Private recovery archives and machine-specific configuration
+/backups/
+/.local/
+*.local.md
+*.local.json
+**/.env
+**/.env.*
+!**/.env.example
+**/.fnos*
+**/apikey.txt
+*.pem
+*.key
+*.log
+*.log.*
+/kindle-display/data/
+
+# Rebuildable dependencies and outputs
+/.venv/
+/tools/lua-test-runtime/
+**/__pycache__/
+*.py[cod]
+**/.pytest_cache/
+**/dist/
+/previews/generated/
+.DS_Store
+Thumbs.db

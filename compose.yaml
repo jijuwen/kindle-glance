@@ -1,0 +1,21 @@
+name: kindleglance
+services:
+  board:
+    build: ./kindle-display
+    image: kindleglance:0.2.0-rc.1
+    restart: unless-stopped
+    ports:
+      - "${BIND_ADDRESS:-127.0.0.1}:${PORT:-3001}:8000"
+    environment:
+      DATA_DIR: /app/data
+      ADMIN_COOKIE_SECURE: "${ADMIN_COOKIE_SECURE:-0}"
+    volumes:
+      - board-data:/app/data
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+volumes:
+  board-data:

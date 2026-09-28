@@ -1,0 +1,30 @@
+services:
+  board:
+    environment:
+      CODEX_COLLECTOR_URL: http://collector:8091
+      CODEX_COLLECTOR_SECRET_FILE: /bridge/secret
+      CODEX_SNAPSHOT_PATH: /codex-data/ai-accounts.json
+    volumes:
+      - collector-bridge:/bridge:ro
+      - collector-public:/codex-data:ro
+    depends_on:
+      collector:
+        condition: service_healthy
+  collector:
+    build: ./tools/codex-collector
+    restart: unless-stopped
+    environment:
+      COLLECTOR_SECRET_FILE: /bridge/secret
+    volumes:
+      - collector-state:/state
+      - collector-public:/public
+      - collector-bridge:/bridge
+    healthcheck:
+      test: [CMD, python3, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8091/health', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+volumes:
+  collector-state:
+  collector-public:
+  collector-bridge:

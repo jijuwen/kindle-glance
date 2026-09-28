@@ -1,0 +1,2 @@
+-r kindle-display/requirements-dev.txt
+lupa==2.8
