@@ -57,18 +57,18 @@
       <article class="mini-card">
         <div class="mini-thumb">${screenPicture(item)}</div>
         <strong>${h(item.name)}</strong>
-        <small>${index === 0 ? "正在显示" : formatTime(item.at, true)} · ${h(orientationLabel(item))}</small>
+        <small>${index === 0 ? "当前排期" : formatTime(item.at, true)} · ${h(orientationLabel(item))}</small>
       </article>`).join("");
     const events = data.events.length ? data.events.map(event => `
       <li><time>${h(event.time)}</time><span>${h(event.message)}</span></li>`).join("") : '<li><span>暂无事件</span></li>';
     app.innerHTML = `
       <section class="page-head">
-        <div><p class="eyebrow">Overview</p><h1>${h(data.greeting)}</h1><p class="lead">Kindle 看板${data.metrics.service_ok ? "运行正常" : "需要检查"}，所有时间使用上海时区。</p></div>
+        <div><p class="eyebrow">Overview</p><h1>${h(data.greeting)}</h1><p class="lead">Kindle 看板${data.metrics.service_ok ? "运行正常" : "需要检查"}，显示时区为 ${h(data.settings?.timezone || "UTC")}。</p></div>
         <a class="primary-button" href="/admin/playlist">编辑播放列表 ›</a>
       </section>
       <section class="hero-grid">
         <article class="panel current-panel">
-          <div class="panel-head"><div><h2>当前画面</h2><p>Kindle 实际收到的 1236 × 1648 图片</p></div></div>
+          <div class="panel-head"><div><h2>当前画面</h2><p>服务器准备的 1236 × 1648 图片；设备连接见最近取图记录</p></div></div>
           <div class="screen-stage">${screenPicture(current, "screen-image")}<span class="screen-badge">${h(orientationLabel(current))}</span></div>
           <div class="current-meta"><div><h2>${h(current?.name || "尚未生成")}</h2><p>${h(current?.page_title || "等待首次渲染")} · 更新于 ${formatTime(current?.rendered_at)}</p></div></div>
           <div class="button-row"><button id="render-current" class="primary-button">立即重新渲染</button><button id="preview-current" class="secondary-button">大图预览</button></div>

@@ -33,7 +33,7 @@ function Transport.matchesHost(cert, host)
 end
 
 function Transport.caFile(custom)
-    for _, path in ipairs({custom or "", "./common/turbo/ca-certificates.crt",
+    for _, path in ipairs({custom or "", "./data/ca-bundle.crt", "/mnt/us/koreader/data/ca-bundle.crt", "./common/turbo/ca-certificates.crt",
         "/mnt/us/koreader/common/turbo/ca-certificates.crt", "/etc/ssl/certs/ca-certificates.crt"}) do
         if path ~= "" then
             local file = io.open(path, "rb")

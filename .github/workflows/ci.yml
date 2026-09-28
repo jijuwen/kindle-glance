@@ -49,5 +49,7 @@ jobs:
       - run: docker compose -f compose.yaml -f compose.codex.yaml up -d --wait
       - run: docker compose -f compose.yaml -f compose.codex.yaml exec -T collector codex --version
       - run: docker compose -f compose.yaml -f compose.codex.yaml exec -T collector python3 smoke_rpc.py
+      - run: python tools/smoke_install.py --existing-collector
+      - run: docker stats --no-stream
       - if: always()
         run: docker compose -f compose.yaml -f compose.codex.yaml down -v

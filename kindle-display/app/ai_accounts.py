@@ -5,7 +5,6 @@ import hashlib
 import json
 import math
 from datetime import datetime
-from zoneinfo import ZoneInfo
 
 from PIL import Image, ImageDraw
 
@@ -13,7 +12,6 @@ from app.display_context import preferences, clock
 from app.ai_account_data import MAX_BYTES, validate_snapshot
 
 REVISION = 'usage-notice-contrast-v3'
-SHANGHAI = ZoneInfo('Asia/Shanghai')
 STALE_SECONDS = 1800
 # E-ink text hierarchy: core, important, secondary, supporting.
 # Antialiased glyph edges naturally contain intermediate gray values.
@@ -37,8 +35,8 @@ def snapshot_revision(snapshot):
     return hashlib.sha256(json.dumps(snapshot, sort_keys=True).encode()).hexdigest()[:20]
 
 
-def shanghai_time(timestamp, pattern='%m/%d %H:%M'):
-    return datetime.fromtimestamp(timestamp, SHANGHAI).strftime(pattern) if timestamp else '未知'
+def account_time(timestamp, now, pattern='%m/%d %H:%M'):
+    return clock(datetime.fromtimestamp(timestamp, now.tzinfo), pattern) if timestamp else '未知'
 
 
 def reset_label(timestamp, now):
@@ -106,7 +104,7 @@ def draw_ai_accounts(snapshot, now, font):
 
     def local_time(timestamp):
         pattern = '%H:%M' if timestamp and datetime.fromtimestamp(timestamp, now.tzinfo).date() == now.date() else '%m/%d %H:%M'
-        return clock(datetime.fromtimestamp(timestamp, now.tzinfo), pattern) if timestamp else "未知"
+        return account_time(timestamp, now, pattern)
 
     write(72, 46, '用量提示', 58, True)
     weekday = '一二三四五六日'[now.weekday()]
@@ -193,7 +191,7 @@ def draw_ai_accounts(snapshot, now, font):
         else:
             write(1226, top + 107, '已到期' if expiry else '未知', 34, fill=IMPORTANT_INK)
         if expiry:
-            write(1226, top + 160, shanghai_time(expiry) + ' 到期', 24, fill=SECONDARY_INK)
+            write(1226, top + 160, local_time(expiry) + ' 到期', 24, fill=SECONDARY_INK)
         status = account_status(account, snapshot['collected_at'], now)
         footer = '额度更新 ' + local_time(account['updated_at'])
         if status:

@@ -1086,7 +1086,7 @@ def admin_bootstrap(view: str) -> dict[str, Any]:
         if len(up_next) == 3:
             break
     hour = now.hour
-    greeting = "早上好" if hour < 11 else ("下午好" if hour < 18 else "晚上好")
+    greeting = "夜深了" if hour < 5 else ("早上好" if hour < 11 else ("下午好" if hour < 18 else "晚上好"))
     return {
         "greeting": f"{greeting}，看板已就绪",
         "current": current,
@@ -1114,7 +1114,7 @@ def dashboard_page(session: str, view: str = "dashboard") -> HTMLResponse:
 async def renderer_loop() -> None:
     while True:
         try:
-            if not board_settings()["location"]:
+            if board_settings()["setup_state"] not in {"complete", "migration_review"}:
                 await asyncio.sleep(3)
                 continue
             now = datetime.now(display_timezone())
@@ -1238,7 +1238,7 @@ def admin_preview(request: Request) -> FileResponse:
     state = read_state()
     if not state:
         raise HTTPException(status_code=404, detail="no rendered image")
-    if state.get("config_revision") is not None and state.get("config_revision") != board_settings()["revision"]:
+    if state.get("config_revision") != board_settings()["revision"]:
         state = compose_playlist_item(select_playlist_item()["item"])
     path = DATA_DIR / state.get("filename", "")
     if not path.is_file():
@@ -1284,7 +1284,10 @@ def admin_render(request: Request) -> dict[str, Any]:
         }
         if previous.get("last_device_request"):
             state["last_device_request"] = previous["last_device_request"]
-        write_state(state)
+        with STATE_LOCK:
+            if state.get("config_revision") != board_settings()["revision"]:
+                raise HTTPException(409, detail="settings changed; retry render")
+            write_state(state)
     except Exception as error:
         LOG.exception("manual dashboard render failed")
         record_event("render_failed", "手动重新渲染失败", error=str(error)[:180])

@@ -15,6 +15,7 @@ def archive(path, entries):
         for source, name in sorted(entries, key=lambda x:x[1]):
             item = ZipInfo(name, (2026,9,28,0,0,0))
             item.compress_type = ZIP_DEFLATED
+            item.create_system = 3
             item.external_attr = 0o100644 << 16
             zipfile.writestr(item, source.read_bytes())
     with ZipFile(path) as zipfile:

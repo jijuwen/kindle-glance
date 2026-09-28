@@ -167,6 +167,42 @@ class SettingsTest(unittest.TestCase):
         self.assertEqual(raised.exception.status_code, 409)
         self.assertNotIn('simple-calendar', main.read_pages_state().get('pages', {}))
 
+    def test_malformed_values_locks_and_login_throttle(self):
+        self.claim()
+        before = main.board_settings()
+        for field, value in [('external_base_url', 'https://[broken'), ('external_base_url','https://example.com:wrong'),
+                             ('display_preferences', {'temperature_unit': [], 'week_start': 0, 'hour_format':'24','mask_email':False}),
+                             ('timezone', []), ('selected_pages', ['missing-page'])]:
+            response = self.client.post('/admin/api/settings', headers=self.csrf(), json={'revision':before['revision'], field:value})
+            self.assertEqual(response.status_code,400,response.text)
+            self.assertEqual(main.board_settings(),before)
+        with patch.dict(os.environ, {'SETTINGS_LOCK_FIELDS':'timezone'}):
+            self.assertEqual(self.client.get('/admin/api/settings').json()['locked_fields'],['timezone'])
+            response=self.client.post('/admin/api/settings',headers=self.csrf(),json=self.region())
+            self.assertEqual(response.status_code,403)
+        for _ in range(10):
+            response=self.client.post('/admin/login',json={'password':'wrong'})
+        self.assertEqual(response.status_code,429)
+
+    def test_different_city_never_uses_old_weather_on_failure(self):
+        self.claim()
+        self.client.post('/admin/api/settings',json=self.region(),headers=self.csrf())
+        old=main.config()
+        with patch.object(main,'fetch_weather',return_value={'temperature':25,'forecast':[{'high':30}]}):
+            main.get_weather(old)
+        current=main.board_settings()
+        settings.save(self.directory,{'location':{'name':'Different','latitude':0,'longitude':0},'timezone':'UTC'},current['revision'])
+        with patch.object(main,'fetch_weather',side_effect=OSError('offline')):
+            with self.assertRaises(OSError):
+                main.get_weather(main.config())
+
+    def test_damaged_legacy_data_is_not_a_fresh_install(self):
+        (self.directory/'settings.json').unlink()
+        (self.directory/'playlist.json').write_text('{broken')
+        with self.assertRaises(settings.SettingsError): settings.load(self.directory)
+        self.assertFalse((self.directory/'settings.json').exists())
+        self.assertEqual((self.directory/'playlist.json').read_text(),'{broken')
+
 
 if __name__ == '__main__':
     unittest.main()

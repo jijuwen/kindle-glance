@@ -7,7 +7,7 @@ import unittest
 from zoneinfo import ZoneInfo
 
 from app.ai_account_data import validate_snapshot
-from app.ai_accounts import account_status, load_snapshot, reset_label, shanghai_time, snapshot_revision
+from app.ai_accounts import account_status, load_snapshot, reset_label, account_time, snapshot_revision
 
 
 class AiAccountsTest(unittest.TestCase):
@@ -22,7 +22,18 @@ class AiAccountsTest(unittest.TestCase):
     def test_la_daylight_and_standard_time(self):
         for month, expected in [(9, '09/19 14:46'), (12, '12/19 15:46')]:
             source = datetime(2026, month, 18, 23, 46, tzinfo=ZoneInfo('America/Los_Angeles'))
-            self.assertEqual(shanghai_time(source.timestamp()), expected)
+            self.assertEqual(account_time(source.timestamp(), self.now), expected)
+
+    def test_time_labels_follow_selected_zone_and_hour_format(self):
+        from app.display_context import preferences
+        source = datetime(2026, 9, 28, 18, 30, tzinfo=ZoneInfo('UTC'))
+        for zone, expected in [('America/Los_Angeles','09/28 11:30'), ('Asia/Kolkata','09/29 00:00'), ('Pacific/Kiritimati','09/29 08:30')]:
+            self.assertEqual(account_time(source.timestamp(), source.astimezone(ZoneInfo(zone))), expected)
+        context = preferences.set({'hour_format':'12'})
+        try:
+            self.assertEqual(account_time(source.timestamp(), source), '09/28 06:30 PM')
+        finally:
+            preferences.reset(context)
 
     def test_recent_upload_does_not_make_old_quota_fresh(self):
         self.account['updated_at'] -= 3600

@@ -19,6 +19,8 @@ with tempfile.TemporaryDirectory() as folder:
         subprocess.run(['openssl','req','-x509','-newkey','rsa:2048','-nodes','-keyout',str(folder/f'{name}.key'),
                         '-out',str(folder/f'{name}.crt'),'-days','1','-subj',f'/CN={hostname}',
                         '-addext',f'subjectAltName=DNS:{hostname}'],check=True,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+    subprocess.run(['openssl','x509','-in',str(folder/'valid.crt'),'-signkey',str(folder/'valid.key'),'-days','-1','-out',str(folder/'expired.crt')],check=True,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+    shutil.copyfile(folder/'valid.key',folder/'expired.key')
     script=folder/'client.lua'
     script.write_text('''package.path="kindle-plugin/trmnl.koplugin/?.lua;"..package.path
 local T=require("trmnl_transport")
@@ -26,7 +28,7 @@ local sink={}
 local ok,status=T.request({url=arg[1],headers={["access-token"]="synthetic-test"},sink=require("ltn12").sink.table(sink)},arg[2])
 print(tostring(ok).." "..tostring(status))
 ''')
-    for name,path,expected in [('valid','/',200),('wrong','/',None),('untrusted','/',None),('valid','/redirect',302)]:
+    for name,path,expected in [('valid','/',200),('wrong','/',None),('untrusted','/',None),('expired','/',None),('valid','/redirect',302)]:
         received=[]
         class Handler(http.server.BaseHTTPRequestHandler):
             def do_GET(self):
@@ -43,7 +45,7 @@ print(tostring(ok).." "..tostring(status))
         server.socket=context.wrap_socket(server.socket,server_side=True)
         worker=threading.Thread(target=server.serve_forever,daemon=True);worker.start()
         try:
-            trust=folder/('wrong.crt' if name=='wrong' else 'valid.crt')
+            trust=folder/(name+'.crt' if name in {'wrong','expired'} else 'valid.crt')
             result=subprocess.run([lua,str(script),f'https://localhost:{server.server_port}{path}',str(trust)],cwd=ROOT,
                                   capture_output=True,text=True,timeout=15,check=True)
             if expected:
@@ -54,4 +56,4 @@ print(tostring(ok).." "..tostring(status))
                 assert not received, 'HTTP headers were sent before verification'
         finally:
             server.shutdown();server.server_close();worker.join()
-    print('PASS: real LuaSec trusted peer, wrong hostname, untrusted CA and blocked redirect')
+    print('PASS: real LuaSec trusted peer, wrong hostname, untrusted/expired CA and blocked redirect')

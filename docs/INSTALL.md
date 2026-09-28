@@ -34,7 +34,7 @@ docker compose exec board python -m app.manage setup-code
 5. KOReader → 工具 → Kindle 看板 → 服务器与设备：填写服务地址和管理端显示的设备令牌。
 6. 手动开始看板。停止看板返回 KOReader；正常退出 KOReader 才恢复原生界面。
 
-HTTPS 需要设备时钟正确、完整证书链及可信 CA bundle。插件检查 KOReader 的 `common/turbo/ca-certificates.crt` 或系统 `/etc/ssl/certs/ca-certificates.crt`；也可在插件设置中指定 `ca_file`。自签证书需显式导入 CA；不提供关闭证书验证选项。首次候选版 TLS 尚需真机回归。
+HTTPS 需要设备时钟正确、完整证书链及可信 CA bundle。插件优先检查 KOReader 的 `data/ca-bundle.crt`，也兼容 `common/turbo/ca-certificates.crt` 或系统 `/etc/ssl/certs/ca-certificates.crt`；也可在插件设置中指定 `ca_file`。自签证书需显式导入 CA；不提供关闭证书验证选项。首次候选版 TLS 尚需真机回归。
 
 ## 可选 Codex 采集器
 

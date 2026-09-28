@@ -25,7 +25,7 @@ def source_files(root=ROOT):
             if path.suffix in {'.pyc', '.log', '.zip'} or path.name == 'apikey.txt':
                 continue
             # Old hash manifest describes 1.0.2, not this candidate.
-            if path.name == 'SOURCE_SHA256SUMS':
+            if path.name in {'SOURCE_SHA256SUMS', 'BASELINE_SHA256SUMS'}:
                 continue
             files.append(path)
     return sorted(set(p for p in files if p.is_file()))

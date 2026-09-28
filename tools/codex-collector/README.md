@@ -31,4 +31,4 @@
 
 从仓库根目录运行 `python -m unittest discover -s tools/codex-collector -v`，只使用临时目录和虚构账号，不读取或变更生产授权。验收边界见 [兼容矩阵](../../docs/COMPATIBILITY.md)。
 
-`tools/cockpit-sync` 保留旧 Windows 同步方式，当前 VPS 自动采集不依赖它。
+旧 Windows / Cockpit 同步工具属于私有历史，不包含在公开发行包中。
