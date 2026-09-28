@@ -132,6 +132,9 @@ class SettingsTest(unittest.TestCase):
         self.assertEqual(b-a, 3600)
         stamp = settings.local_timestamp('2026-09-28T12:00', 'Asia/Kolkata')
         self.assertEqual(datetime.fromtimestamp(stamp, ZoneInfo('UTC')).hour, 6)
+        current=main.board_settings()
+        settings.save(self.directory, {'timezone':'Asia/Kolkata', 'display_preferences':{**current['display_preferences'],'hour_format':'12'}},current['revision'])
+        self.assertIn('12:00:00 PM',main.format_time(stamp))
 
     def test_password_invalidates_sessions_and_token_rotation(self):
         self.claim()

@@ -918,7 +918,8 @@ def format_time(value: Any) -> str:
     if not value:
         return "尚无记录"
     try:
-        return datetime.fromtimestamp(int(value), tz=display_timezone()).strftime("%Y-%m-%d %H:%M:%S")
+        pattern = "%Y-%m-%d %I:%M:%S %p" if board_settings()["display_preferences"]["hour_format"] == "12" else "%Y-%m-%d %H:%M:%S"
+        return datetime.fromtimestamp(int(value), tz=display_timezone()).strftime(pattern)
     except (TypeError, ValueError, OSError):
         return "时间未知"
 

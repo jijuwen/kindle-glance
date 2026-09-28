@@ -178,7 +178,7 @@ def draw_overview(width, height, weather, now, font_factory, city=''):
     text(1052,382,advice,35,max_width=516,fill=INK_SECONDARY)
     text(1052,468,f'最低 {degrees(weather.get("low","--"))}   最高 {degrees(weather.get("high","--"))}',32,max_width=516)
     observed = parse_time(weather.get('observed_at'), now)
-    updated = f'{observed:%H:%M} 天气数据' if observed and observed.date()==now.date() else f'{observed:%m/%d %H:%M} 天气数据' if observed else '天气数据暂不可用'
+    updated = (clock(observed, '%H:%M' if observed.date()==now.date() else '%m/%d %H:%M') + ' 天气数据') if observed else '天气数据暂不可用'
     text(1052,523,updated,26,max_width=516,fill=INK_TERTIARY)
 
     line(80,610,1568,610)
@@ -187,7 +187,8 @@ def draw_overview(width, height, weather, now, font_factory, city=''):
     for index, item in enumerate(hour_slots(weather,now)):
         cx = 177+index*258.8
         stamp = item['stamp']
-        label = f'{stamp.hour:02d} 时' if stamp.date()==now.date() else f'明日 {stamp.hour:02d} 时'
+        hour = clock(stamp) if preferences.get().get('hour_format') == '12' else f'{stamp.hour:02d} 时'
+        label = hour if stamp.date()==now.date() else '明日 ' + hour
         text(cx,715,label,29,align='center',fill=INK_SECONDARY)
         icon(item,cx-37,765,74,63)
         text(cx,854,degrees(item.get('temperature','--')),43,True,align='center')
