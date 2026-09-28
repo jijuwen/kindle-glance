@@ -50,6 +50,7 @@ def validate(payloads: dict[str, bytes]) -> None:
 def main() -> None:
     payloads = {name: (ROOT / name).read_bytes() for name in FILES}
     validate(payloads)
+    license_bytes = (ROOT.parent / 'LICENSE').read_bytes()
     out = ROOT / "dist"
     out.mkdir(exist_ok=True)
     target = out / f"{RELEASE}.zip"
@@ -60,9 +61,16 @@ def main() -> None:
             entry.create_system = 3
             entry.external_attr = 0o100644 << 16
             archive.writestr(entry, payloads[name])
+        license_entry = ZipInfo('LICENSE', date_time=(2026, 9, 28, 0, 0, 0))
+        license_entry.compress_type = ZIP_DEFLATED
+        license_entry.create_system = 3
+        license_entry.external_attr = 0o100644 << 16
+        archive.writestr(license_entry, license_bytes)
     with ZipFile(target) as archive:
-        if archive.namelist() != list(FILES) or archive.testzip() is not None:
+        if archive.namelist() != list(FILES) + ['LICENSE'] or archive.testzip() is not None:
             raise ValueError("Archive contents or CRC failed verification")
+        if archive.read('LICENSE') != license_bytes:
+            raise ValueError('Launcher license differs from source')
         extracted = {name: archive.read(name) for name in FILES}
         validate(extracted)
         if extracted != payloads:

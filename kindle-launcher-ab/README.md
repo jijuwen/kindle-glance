@@ -12,3 +12,5 @@
 目录继续为 `extensions/kindle-board-ab`，旧 A/B Test 名称仅改为 KindleGlance。历史 B 不显示飞机图标有用户验证，新候选版需要真机回归。
 
 `python kindle-launcher-ab/build.py` 生成两文件 ZIP 和 SHA256，检查参数、路径、CRC 和源码一致性。安装见 [安装指南](../docs/INSTALL.md)。
+
+发行 ZIP 另附根 LICENSE；实际复制到设备的菜单配置仍为两个文件。

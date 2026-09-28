@@ -13,6 +13,7 @@ out=source/'dist'
 out.mkdir(exist_ok=True)
 target=out/'kindle-display-source.tar.gz'
 with tarfile.open(target,'w:gz') as archive:
+    archive.add(ROOT/'LICENSE', arcname='LICENSE')
     for p in sorted(files): archive.add(p,arcname='kindle-display/'+p.relative_to(source).as_posix())
 with tarfile.open(target) as archive:
     for p in files:
