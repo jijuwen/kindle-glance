@@ -20,6 +20,18 @@ from app import main
 
 class DashboardTest(unittest.TestCase):
     def setUp(self) -> None:
+        # Restore module functions, paths and environment after each test. A
+        # leaked weather stub previously hid failures in later cache tests.
+        attributes = ('DATA_DIR', 'STATE_PATH', 'EVENTS_PATH', 'PAGES_STATE_PATH', 'PLAYLIST_PATH', 'get_weather')
+        module_patch = patch.multiple(main, **{name:getattr(main,name) for name in attributes})
+        module_patch.start()
+        self.addCleanup(module_patch.stop)
+        environment_patch = patch.dict(os.environ)
+        environment_patch.start()
+        self.addCleanup(environment_patch.stop)
+        main.LOGIN_ATTEMPTS.clear()
+        main._JSON_CACHE.clear()
+        main._PLAYLIST_CACHE.clear()
         self.temporary = tempfile.TemporaryDirectory()
         data_dir = Path(self.temporary.name)
         main.DATA_DIR = data_dir
