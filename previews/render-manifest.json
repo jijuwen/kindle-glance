@@ -1,0 +1,17 @@
+{
+  "version": "0.2.0",
+  "rendered_at": "2026-09-30T00:05:00+08:00",
+  "weather": "synthetic demonstration",
+  "city": "厦门市",
+  "pages": [
+    "day-night",
+    "weather-glance",
+    "simple-calendar",
+    "hourly-weather",
+    "shan-shui",
+    "year-progress",
+    "daily-overview",
+    "time-scales"
+  ],
+  "private_data": false
+}

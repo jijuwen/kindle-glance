@@ -15,6 +15,10 @@ jobs:
         env:
           DATA_DIR: /tmp/kindleglance-tests
       - run: python -m unittest discover -s tools/codex-collector
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node kindle-display/test_admin_navigation.cjs
       - run: python tools/test_plugin.py
       - run: sudo apt-get update && sudo apt-get install -y lua5.1 lua-sec lua-socket
       - run: python tools/test_tls_live.py
@@ -22,8 +26,12 @@ jobs:
       - run: python tools/build_public_release.py
       - uses: actions/upload-artifact@v4
         with:
-          name: release-candidate
-          path: dist/
+          name: release-packages
+          path: |
+            dist/kindleglance-deploy-0.2.0.zip
+            dist/kindleglance-plugin-1.1.0.zip
+            dist/kindleglance-launcher-1.1.0.zip
+            dist/SHA256SUMS
   install:
     runs-on: ubuntu-latest
     timeout-minutes: 20

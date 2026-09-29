@@ -40,14 +40,29 @@ def install(app, g):
     async def settings_error(request, error):
         return JSONResponse({"detail": str(error)}, status_code=409 if isinstance(error, settings.Conflict) else 400)
 
-    @app.get("/admin/settings")
-    def settings_page(request: Request):
+    @app.get("/admin/setup")
+    def setup_page(request: Request):
         session = request.cookies.get(g["ADMIN_SESSION_COOKIE"])
         if g["admin_password"]() and not g["valid_admin_session"](session):
             return RedirectResponse("/admin/login", status_code=303)
+        if g["admin_password"]() and g["board_settings"]()["setup_state"] == "complete":
+            return RedirectResponse("/admin", status_code=303)
         csrf = g["csrf_token"](session) if session else ""
         from app.setup_ui import shell
         return HTMLResponse(shell(csrf, bool(g["admin_password"]())), headers={"Cache-Control": "no-store"})
+
+    @app.get('/admin/settings')
+    def settings_page(request: Request):
+        session = request.cookies.get(g['ADMIN_SESSION_COOKIE'])
+        if not g['admin_password']():
+            return RedirectResponse('/admin/setup', status_code=303)
+        if not g['valid_admin_session'](session):
+            return RedirectResponse('/admin/login', status_code=303)
+        if g['board_settings']()['setup_state'] in ('uninitialized', 'in_progress'):
+            return RedirectResponse('/admin/setup', status_code=303)
+        from app.admin_ui import admin_shell
+        return HTMLResponse(admin_shell('settings', '设置', {'settings': state()}, g['csrf_token'](session)),
+                            headers={'Cache-Control': 'no-store'})
 
     @app.post("/admin/api/setup/claim")
     async def claim(request: Request):
@@ -85,7 +100,7 @@ def install(app, g):
             for key in locked:
                 if key in data and data[key] != current.get(key):
                     raise HTTPException(403, detail=f"{key} 已由部署配置锁定")
-            settings.save(g["DATA_DIR"], data, data.get("revision"))
+            g["save_board_settings"](data, data.get("revision"))
         return JSONResponse(state(), headers={"Cache-Control": "no-store"})
 
     @app.post("/admin/api/setup/finish")
@@ -98,12 +113,14 @@ def install(app, g):
                 raise settings.Conflict("设置已更新，请重新载入")
             if not current["location"]:
                 raise HTTPException(400, detail="请先确认地区与时区")
+            if current["setup_state"] == "complete":
+                return {"status": "ok"}
             if current["setup_state"] in {"uninitialized", "in_progress"}:
                 # Do not replace an existing migrated user's playlist.
                 playlist = {"version": g["PLAYLIST_VERSION"], "revision": 1, "smart_skip": True,
                             "items": [g["default_playlist_item"](page, i) for i, page in enumerate(current["selected_pages"])]}
                 g["write_playlist_state"](playlist)
-            settings.save(g["DATA_DIR"], {"setup_state": "complete"}, data.get("revision"))
+            g["save_board_settings"]({"setup_state": "complete"}, data.get("revision"))
         return {"status": "ok"}
 
     @app.get("/admin/api/device/token")
@@ -145,7 +162,7 @@ def install(app, g):
     @app.get("/admin/api/diagnostics")
     def diagnostics(request: Request):
         g["require_admin"](request)
-        return JSONResponse({"version": "0.2.0-rc.1", "device_profile": "kpw11",
+        return JSONResponse({"version": "0.2.0", "device_profile": "kpw11",
                              "setup_state": g["board_settings"]()["setup_state"],
                              "has_device_fetch": bool((g["read_state"]() or {}).get("last_device_request")),
                              "collector_installed": bool(g["os"].getenv("CODEX_COLLECTOR_URL"))},

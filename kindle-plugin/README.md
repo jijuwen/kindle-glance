@@ -1,4 +1,4 @@
-# KindleGlance 插件 1.1.0-rc.1
+# KindleGlance 插件 1.1.0
 
 安装、运行、退出与恢复见 [安装指南](../docs/INSTALL.md) 和 [故障处理](../docs/TROUBLESHOOTING.md)。保留 `trmnl.koplugin` 目录、设置键及设备 API。
 

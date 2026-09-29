@@ -2,14 +2,18 @@
 
 把闲置 Kindle 变成天气、日历和生活进度看板。服务端生成灰阶图片，KOReader 插件负责定时取图与省电显示。
 
-**当前为开源候选版 `v0.2.0-rc.1`。** 地区、时区和首次设置已实现；设备基线是 KPW11 / KOReader v2026.07.1。新 TLS 与长期休眠还需要真机验证，请先阅读 [兼容范围](docs/COMPATIBILITY.md)。
+**正式版 [v0.2.0](https://github.com/jijuwen/kindle-glance/releases/tag/v0.2.0) 已发布。** 支持地区与时区配置、首次设置和独立日常管理；设备基线为 KPW11 / KOReader v2026.07.1。安装前请阅读 [兼容范围](docs/COMPATIBILITY.md)。
 
-![世界昼夜示例](previews/day-night.png)
+![KindleGlance 当前版本八种看板拼图](previews/showcase.png)
+
+当前版本直接渲染的八种看板：天气、日历、世界昼夜、山水与时间进度。示例日期为 2026-09-30，天气为演示数据；[查看单张原图与生成说明](previews/README.md)。
 
 ## 包含什么
 
 - 九类内容：每日概览、天气一览、逐时天气、简约月历、世界昼夜、山水长卷、年度进度、时间刻度、可选 Codex 用量。
-- 手机和桌面管理端：首次设置、地区搜索 / 手填、时区、播放列表、预览与设备连接。
+- 手机和桌面管理端：首次设置与日常设置分离，共享 Dock、播放列表、后台预览和设备连接。
+- 城市搜索支持中文、繁体、拼音和英文；城市优先、其他地点折叠。
+- 管理密码至少 6 字符，支持显示／隐藏；设备连接码自动生成 6 位大写字母与数字。
 - 设置持久化、旧配置迁移、缓存版本隔离、摄氏 / 华氏、周起始日、12 / 24 小时制。
 - Kindle 插件：RTC 定时唤醒取图后关闭 Wi-Fi 休眠，也支持保持联网的常驻模式。
 - KUAL A / B 启动入口：普通阅读模式与看板 no framework 模式，保留官方启动参数。
@@ -49,7 +53,7 @@ compose.yaml            基础部署
 compose.codex.yaml      可选采集器覆盖配置
 ```
 
-![首次设置与真实预览](previews/setup-desktop.png)
+![当前版本的日常设置](previews/setup-desktop.png)
 
 - [安装](docs/INSTALL.md) · [配置与数据流](docs/CONFIGURATION.md)
 - [升级 / 备份 / 回退 / 卸载](docs/UPGRADING.md) · [故障处理](docs/TROUBLESHOOTING.md)

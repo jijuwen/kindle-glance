@@ -1041,8 +1041,8 @@ def admin_item_view(item: dict[str, Any], current_item_id: str | None = None) ->
         "native_orientation": definition["orientation"],
         "orientation_label": "横屏页面" if definition["orientation"] == "landscape" else "竖屏页面",
         "rendered_at": page.get("rendered_at"),
-        "preview_url": f"/admin/pages/{item['page_id']}/preview?v={page.get('rendered_at', '')}" if page.get("filename") else "",
-        "display_preview_url": f"/admin/playlist/items/{item['id']}/preview?v={page.get('rendered_at', '')}",
+        "preview_url": f"/admin/pages/{item['page_id']}/preview?v={page.get('rendered_at', '')}" if preview_available(page) else "",
+        "display_preview_url": f"/admin/playlist/items/{item['id']}/preview?v={page.get('rendered_at', '')}" if preview_available(page) else "",
         "is_current": item["id"] == current_item_id,
     }
 
@@ -1089,7 +1089,7 @@ def admin_bootstrap(view: str) -> dict[str, Any]:
     hour = now.hour
     greeting = "夜深了" if hour < 5 else ("早上好" if hour < 11 else ("下午好" if hour < 18 else "晚上好"))
     return {
-        "greeting": f"{greeting}，看板已就绪",
+        "greeting": f"{greeting}，" + ("画面正在准备" if not current.get("preview_url") else "等待 Kindle 连接" if not device.get("at") else "画面已生成"),
         "current": current,
         "up_next": up_next,
         "playlist_count": sum(1 for item in playlist["items"] if item["enabled"]),
@@ -1107,25 +1107,122 @@ def admin_bootstrap(view: str) -> dict[str, Any]:
 
 def dashboard_page(session: str, view: str = "dashboard") -> HTMLResponse:
     title = "播放列表" if view == "playlist" else "仪表盘"
-    response = HTMLResponse(admin_shell(view, title, {**admin_bootstrap(view), "settings": board_settings()}, csrf_token(session)))
+    response = HTMLResponse(admin_shell(view, title, {**admin_bootstrap(view), "settings": board_settings(), "previews": preview_progress()}, csrf_token(session)))
     response.headers["Cache-Control"] = "no-store"
     return response
+
+
+def preview_targets():
+    saved = board_settings()
+    if not saved['location'] or saved['setup_state'] == 'uninitialized':
+        return []
+    if saved['setup_state'] == 'in_progress':
+        return list(dict.fromkeys(saved['selected_pages']))
+    selection = select_playlist_item()
+    return list(dict.fromkeys([selection['page_id']] + [item['page_id'] for item in selection['playlist']['items']]))
+
+
+def preview_jobs():
+    path = DATA_DIR / 'preview-jobs.json'
+    return persistent.read_json(path) if path.exists() else {}
+
+
+def preview_available(page):
+    return bool(page.get('filename') and page.get('config_revision') == board_settings()['revision']
+                and (DATA_DIR / page['filename']).is_file())
+
+
+def preview_progress():
+    with STATE_LOCK:
+        saved, jobs, pages = board_settings(), preview_jobs(), read_pages_state().get('pages', {})
+        result = []
+        for page_id in preview_targets():
+            page, job = pages.get(page_id, {}), jobs.get(page_id, {})
+            valid_job = job.get('revision') == saved['revision']
+            available = preview_available(page)
+            status = 'ready' if available else (job.get('status', 'queued') if valid_job else 'queued')
+            if not available and status == 'ready':
+                status = 'queued'
+            result.append({'page_id': page_id, 'title': PAGE_DEFINITIONS[page_id]['title'], 'status': status,
+                           'error': job.get('error', '') if status == 'error' else '',
+                           'preview_url': f"/admin/pages/{page_id}/preview?v={page.get('rendered_at', '')}" if preview_available(page) else '',
+                           'degraded': bool(page.get('weather_status') and not page['weather_status'].get('ok'))})
+        return {'pages': result, 'total': len(result), 'ready': sum(p['status'] == 'ready' for p in result),
+                'failed': sum(p['status'] == 'error' for p in result),
+                'active': any(p['status'] in ('queued', 'running') for p in result)}
+
+
+def set_preview_job(page_id, revision, status, error=''):
+    with STATE_LOCK:
+        if board_settings()['revision'] != revision:
+            return
+        jobs = preview_jobs()
+        jobs[page_id] = {'revision': revision, 'status': status, 'error': error, 'at': time.time()}
+        persistent.atomic_json(DATA_DIR / 'preview-jobs.json', jobs)
+
+
+def render_preview_pass():
+    # One background worker fills every selected preview, including hidden items.
+    # Per-page render locks also serialize manual requests and device fetches.
+    for page_id in preview_targets():
+        if page_id not in preview_targets():
+            continue
+        saved = board_settings()
+        page = read_pages_state().get('pages', {}).get(page_id, {})
+        current = saved['setup_state'] in ('complete', 'migration_review') and select_playlist_item()['page_id'] == page_id
+        if preview_available(page) and (not current or not page_needs_render(page_id, page)):
+            continue
+        job = preview_jobs().get(page_id, {})
+        if job.get('revision') == saved['revision'] and job.get('status') == 'error' and time.time() - job.get('at', 0) < 60:
+            continue
+        set_preview_job(page_id, saved['revision'], 'running')
+        try:
+            render_page_if_stale(page_id)
+            set_preview_job(page_id, saved['revision'], 'ready')
+        except Exception:
+            LOG.exception('preview render failed for %s', page_id)
+            set_preview_job(page_id, saved['revision'], 'error', '生成失败，请重试；若持续失败请查看服务日志')
+
+
+def save_board_settings(candidate, revision):
+    # Preserve unaffected images when a non-visual preference is saved. Renders
+    # already in flight still have to pass the original revision check.
+    with STATE_LOCK:
+        before = board_settings()
+        updated = persistent.save(DATA_DIR, candidate, revision)
+        affected = set()
+        if before['timezone'] != updated['timezone']:
+            affected.update(PAGE_DEFINITIONS)
+        if before['location'] != updated['location']:
+            affected.update(('weather-glance', 'hourly-weather', 'daily-overview', 'day-night'))
+        old, new = before['display_preferences'], updated['display_preferences']
+        if old['temperature_unit'] != new['temperature_unit']:
+            affected.update(('weather-glance', 'hourly-weather', 'daily-overview'))
+        if old['week_start'] != new['week_start']:
+            affected.add('simple-calendar')
+        if old['hour_format'] != new['hour_format']:
+            affected.update(PAGE_DEFINITIONS)
+        if old['mask_email'] != new['mask_email']:
+            affected.add('ai-accounts')
+        pages = read_pages_state()
+        for page_id, page in pages.get('pages', {}).items():
+            if page_id not in affected and page.get('config_revision') == before['revision']:
+                page['config_revision'] = updated['revision']
+        write_pages_state(pages)
+        state = read_state() or {}
+        if state.get('active_page_id') not in affected and state.get('config_revision') == before['revision']:
+            state['config_revision'] = updated['revision']
+            write_state(state)
+        return updated
 
 
 async def renderer_loop() -> None:
     while True:
         try:
-            if board_settings()["setup_state"] not in {"complete", "migration_review"}:
-                await asyncio.sleep(3)
-                continue
-            now = datetime.now(display_timezone())
-            selection = select_playlist_item(now)
-            page = read_pages_state().get("pages", {}).get(selection["page_id"], {})
-            if page_needs_render(selection["page_id"], page, now):
-                await asyncio.to_thread(render_page_if_stale, selection["page_id"], now)
+            await asyncio.to_thread(render_preview_pass)
         except Exception:
-            LOG.exception("background render failed")
-        await asyncio.sleep(config()["render_interval"])
+            LOG.exception('background preview pass failed')
+        await asyncio.sleep(2)
 
 
 def verify_configuration() -> None:
@@ -1137,6 +1234,12 @@ def verify_configuration() -> None:
 async def lifespan(_: FastAPI):
     verify_configuration()
     # The admin UI becomes available before weather or Chromium rendering.
+    with STATE_LOCK:
+        jobs = preview_jobs()
+        for job in jobs.values():
+            if job.get('status') == 'running':
+                job['status'] = 'queued'
+        persistent.atomic_json(DATA_DIR / 'preview-jobs.json', jobs)
     task = asyncio.create_task(renderer_loop())
     try:
         yield
@@ -1170,7 +1273,7 @@ def ready():
 @app.get("/admin/login")
 def admin_login(request: Request) -> Response:
     if not admin_password():
-        return RedirectResponse("/admin/settings", status_code=303)
+        return RedirectResponse("/admin/setup", status_code=303)
     if valid_admin_session(request.cookies.get(ADMIN_SESSION_COOKIE)):
         return RedirectResponse("/admin", status_code=303)
     return login_page()
@@ -1214,23 +1317,50 @@ def admin_logout() -> Response:
 @app.get("/admin")
 def admin_dashboard(request: Request) -> Response:
     if not admin_password():
-        return RedirectResponse("/admin/settings", status_code=303)
+        return RedirectResponse("/admin/setup", status_code=303)
     session = request.cookies.get(ADMIN_SESSION_COOKIE)
     if not valid_admin_session(session):
         return RedirectResponse("/admin/login", status_code=303)
     if board_settings()["setup_state"] in {"uninitialized", "in_progress"}:
-        return RedirectResponse("/admin/settings", status_code=303)
+        return RedirectResponse("/admin/setup", status_code=303)
     return dashboard_page(session)
 
 
 @app.get("/admin/playlist")
 def admin_playlist(request: Request) -> Response:
     if not admin_password():
-        return RedirectResponse("/admin/settings", status_code=303)
+        return RedirectResponse("/admin/setup", status_code=303)
     session = request.cookies.get(ADMIN_SESSION_COOKIE)
     if not valid_admin_session(session):
         return RedirectResponse("/admin/login", status_code=303)
+    if board_settings()["setup_state"] in {"uninitialized", "in_progress"}:
+        return RedirectResponse("/admin/setup", status_code=303)
     return dashboard_page(session, "playlist")
+
+
+@app.get('/admin/api/previews')
+def admin_previews(request: Request):
+    require_admin(request)
+    return JSONResponse(preview_progress(), headers={'Cache-Control': 'no-store'})
+
+
+@app.post('/admin/api/previews/retry')
+async def retry_previews(request: Request):
+    require_csrf(request)
+    with STATE_LOCK:
+        persistent.atomic_json(DATA_DIR / 'preview-jobs.json', {})
+    return preview_progress()
+
+
+@app.get('/admin/api/view/{view}')
+def admin_view(view: str, request: Request):
+    require_admin(request)
+    if board_settings()['setup_state'] in ('uninitialized', 'in_progress'):
+        raise HTTPException(409, detail='请先完成初次设置')
+    if view not in ('dashboard', 'playlist', 'settings'):
+        raise HTTPException(404, detail='页面不存在')
+    payload = {} if view == 'settings' else admin_bootstrap(view)
+    return JSONResponse({**payload, 'settings': board_settings(), 'previews': preview_progress()}, headers={'Cache-Control': 'no-store'})
 
 
 @app.get("/admin/preview")

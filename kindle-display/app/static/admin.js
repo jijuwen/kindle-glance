@@ -1,7 +1,7 @@
 (() => {
   "use strict";
 
-  const data = JSON.parse(document.getElementById("bootstrap").textContent);
+  let data = JSON.parse(document.getElementById("bootstrap").textContent);
   const app = document.getElementById("app");
   const overlay = document.getElementById("overlay-root");
   const csrf = document.querySelector('meta[name="csrf-token"]').content;
@@ -47,7 +47,10 @@
   }
 
   function screenPicture(item, className = "") {
-    if (!item?.preview_url) return '<div class="screen-empty">尚未生成预览</div>';
+    if (!item?.preview_url) {
+      const job=data.previews?.pages.find(p=>p.page_id===item?.page_id);
+      return `<div class="screen-empty">${job?.status==='error'?'生成失败，可重试':job?.status==='running'?'正在生成…':'等待生成…'}</div>`;
+    }
     return `<img class="${className}" src="${h(item.preview_url)}" alt="${h(item.name)}预览">`;
   }
 
@@ -139,7 +142,7 @@
       catch (error) { toast(error.message, true); }
     });
     document.getElementById("add-page").addEventListener("click", showAddSheet);
-    app.addEventListener("click", playlistClick);
+
     enablePointerReorder();
   }
 
@@ -249,5 +252,65 @@
     list.addEventListener("pointercancel", () => { if (active) { active.row.classList.remove("dragging"); active.row.style.transform = ""; active = null; location.reload(); } });
   }
 
-  if (document.body.dataset.view === "playlist") renderPlaylist(); else renderDashboard();
+  let view=document.body.dataset.view, pollTimer, navigation=0, historyIndex=history.state?.kindleIndex||0, reverting=false;
+  const routes={dashboard:'/admin',playlist:'/admin/playlist',settings:'/admin/settings'};
+  history.replaceState({kindleIndex:historyIndex,view},'',location.href);
+  app.addEventListener('click',event=>{if(view==='playlist')playlistClick(event);});
+  function progressLine(){
+    let line=document.getElementById('preview-progress');
+    if(!line){line=document.createElement('div');line.id='preview-progress';line.className='preview-progress';line.setAttribute('role','status');app.querySelector('.page-head')?.after(line);}
+    const p=data.previews;line.hidden=!p||(!p.active&&!p.failed);
+    line.replaceChildren();if(line.hidden)return;
+    const label=document.createElement('span');label.textContent=`${p.active?'正在生成预览':'预览生成完成'} · ${p.ready}/${p.total}`+(p.failed?` · ${p.failed} 张失败`:'');line.append(label);
+    if(p.failed){const retry=document.createElement('button');retry.type='button';retry.className='quiet-button';retry.textContent='重试失败页面';retry.onclick=async()=>{retry.disabled=true;try{data.previews=await api('/admin/api/previews/retry',{method:'POST'});progressLine();}catch(error){toast(error.message,true);}finally{retry.disabled=false;}};line.append(retry);}
+  }
+  async function mount(){
+    clearTimeout(pollTimer);app.onclick=null;app.oninput=null;app.onchange=null;app.onsubmit=null;
+    overlay.replaceChildren();window.KindleSettings.dispose();
+    document.body.dataset.view=view;document.title=({dashboard:'仪表盘',playlist:'播放列表',settings:'设置'})[view]+' · KindleGlance';
+    document.querySelectorAll('.dock-item').forEach(a=>{const selected=a.getAttribute('href')===routes[view];a.classList.toggle('active',selected);if(selected)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
+    document.getElementById('bootstrap').textContent=JSON.stringify(data);
+    if(view==='settings'){await window.KindleSettings.mount(app,{api,toast,h});return;}
+    if(view==='playlist')renderPlaylist();else renderDashboard();progressLine();
+    pollTimer=setTimeout(pollPreviews,2000);
+  }
+  async function pollPreviews(){
+    if(view==='settings')return;
+    const generation=navigation;
+    try{
+      const next=await api('/admin/api/previews');if(generation!==navigation)return;
+      const changed=JSON.stringify(next)!==JSON.stringify(data.previews);data.previews=next;progressLine();
+      if(changed){
+        if(view==='playlist'){
+          for(const item of data.items){const p=next.pages.find(p=>p.page_id===item.page_id);if(!p)continue;item.preview_url=p.preview_url;item.display_preview_url=p.preview_url?`/admin/playlist/items/${encodeURIComponent(item.id)}/preview`:'';const row=document.querySelector(`[data-item-id="${CSS.escape(item.id)}"] .row-thumb`);if(row)row.innerHTML=screenPicture(item);}
+        }else if(!document.getElementById('render-current')?.disabled&&!overlay.children.length){
+          const fresh=await api('/admin/api/view/dashboard');if(generation!==navigation)return;data=fresh;renderDashboard();progressLine();
+        }
+      }
+    }catch(error){if(generation===navigation){const line=document.getElementById('preview-progress');if(line){line.hidden=false;line.textContent='预览进度暂不可用，正在重试…';}}}
+    finally{if(generation===navigation&&view!=='settings')pollTimer=setTimeout(pollPreviews,document.hidden?10000:2000);}
+  }
+  function mayLeave(){return !window.KindleSettings.hasUnsavedChanges()||confirm('有尚未保存的修改，放弃修改并离开？');}
+  async function navigate(next,popIndex=null){
+    if(next===view&&popIndex===null)return;
+    const generation=++navigation;clearTimeout(pollTimer);
+    try{
+      const fresh=await api('/admin/api/view/'+next);if(generation!==navigation)return;
+      data=fresh;view=next;
+      if(popIndex===null){historyIndex++;history.pushState({kindleIndex:historyIndex,view},'',routes[view]);}else historyIndex=popIndex;
+      await mount();window.scrollTo(0,0);app.querySelector('h1')?.setAttribute('tabindex','-1');app.querySelector('h1')?.focus({preventScroll:true});
+    }catch(error){toast(error.message,true);if(popIndex!==null){reverting=true;history.go(historyIndex-popIndex);}if(view!=='settings')pollTimer=setTimeout(pollPreviews,2000);}
+  }
+  document.addEventListener('click',event=>{
+    const a=event.target.closest('a[href]');if(!a||event.defaultPrevented||event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey||a.target||a.hasAttribute('download'))return;
+    const url=new URL(a.href,location.href),next=Object.keys(routes).find(key=>routes[key]===url.pathname);
+    if(url.origin!==location.origin||!next)return;event.preventDefault();if(next===view)return;if(mayLeave())navigate(next);
+  });
+  window.addEventListener('popstate',event=>{
+    if(reverting){reverting=false;return;}
+    const next=event.state?.view,index=event.state?.kindleIndex;if(!next||!(next in routes)){location.reload();return;}
+    if(!mayLeave()){reverting=true;history.go(historyIndex-index);return;}navigate(next,index);
+  });
+  window.addEventListener('beforeunload',event=>{if(window.KindleSettings.hasUnsavedChanges()){event.preventDefault();event.returnValue='';}});
+  mount().catch(error=>toast(error.message,true));
 })();

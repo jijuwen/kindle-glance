@@ -16,6 +16,7 @@ ICONS = {
 def admin_shell(view: str, title: str, bootstrap: dict[str, Any], csrf: str) -> str:
     payload = json.dumps(bootstrap, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
     dashboard_active = " active" if view == "dashboard" else ""
+    settings_active = " active" if view == "settings" else ""
     playlist_active = " active" if view == "playlist" else ""
     return f"""<!doctype html>
 <html lang="zh-CN">
@@ -25,7 +26,7 @@ def admin_shell(view: str, title: str, bootstrap: dict[str, Any], csrf: str) -> 
   <meta name="csrf-token" content="{html.escape(csrf, quote=True)}">
   <meta name="color-scheme" content="dark">
   <title>{html.escape(title)} · KindleGlance</title>
-  <link rel="stylesheet" href="/admin/static/admin.css?v=40">
+  <link rel="stylesheet" href="/admin/static/admin.css?v=41">
 </head>
 <body data-view="{html.escape(view, quote=True)}">
   <div class="ambient ambient-a"></div><div class="ambient ambient-b"></div>
@@ -39,12 +40,15 @@ def admin_shell(view: str, title: str, bootstrap: dict[str, Any], csrf: str) -> 
   <nav class="dock" aria-label="主导航">
     <a class="dock-item{dashboard_active}" href="/admin">{ICONS['dashboard']}<span>仪表盘</span></a>
     <a class="dock-item{playlist_active}" href="/admin/playlist">{ICONS['playlist']}<span>播放列表</span></a>
-    <a class="dock-item" href="/admin/settings"><span>设置</span></a>
+    <a class="dock-item{settings_active}" href="/admin/settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3"/><circle cx="15" cy="17" r="3"/></svg><span>设置</span></a>
   </nav>
   <div id="toast-region" class="toast-region" aria-live="assertive"></div>
   <div id="overlay-root"></div>
   <script id="bootstrap" type="application/json">{payload}</script>
-  <script src="/admin/static/admin.js?v=38" defer></script>
+  <link rel="stylesheet" href="/admin/static/password.css?v=1">
+  <script src="/admin/static/password.js?v=1" defer></script>
+  <script src="/admin/static/settings.js?v=1" defer></script>
+  <script src="/admin/static/admin.js?v=41" defer></script>
   <script src="/admin/static/codex-accounts.js?v=40" defer></script>
 </body>
 </html>"""

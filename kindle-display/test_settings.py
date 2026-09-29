@@ -53,7 +53,7 @@ class SettingsTest(unittest.TestCase):
 
     def test_empty_install_no_default_location_or_weather(self):
         self.assertIsNone(main.board_settings()["location"])
-        self.assertEqual(self.client.get('/admin', follow_redirects=False).headers['location'], '/admin/settings')
+        self.assertEqual(self.client.get('/admin', follow_redirects=False).headers['location'], '/admin/setup')
         with patch.object(main, 'get_weather') as fetch:
             response = self.client.get('/api/display', headers={'access-token': main.required_env('DEVICE_TOKEN')})
         self.assertEqual(response.status_code, 503)

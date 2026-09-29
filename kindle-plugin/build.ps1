@@ -2,7 +2,7 @@ $ErrorActionPreference = 'Stop'
 $pluginRoot = Join-Path $PSScriptRoot 'trmnl.koplugin'
 $outputDir = Join-Path $PSScriptRoot 'dist'
 New-Item -ItemType Directory -Path $outputDir -Force | Out-Null
-$zipPath = Join-Path $outputDir 'kindleglance-plugin-1.1.0-rc.1.zip'
+$zipPath = Join-Path $outputDir 'kindleglance-plugin-1.1.0.zip'
 $files = @('main.lua', 'trmnl_transport.lua', '_meta.lua', 'trmnl_i18n.lua', 'trmnl_menu.lua', 'trmnl_rtc_probe.lua', 'trmnl_rtc_refresh.lua', 'trmnl_diagnostics.lua', 'trmnl_loop.lua', 'trmnl_sleep_badge.lua', 'trmnl_dashboard.lua', 'trmnl_power_guard.lua', 'trmnl_journal.lua', 'LICENSE')
 Add-Type -AssemblyName System.IO.Compression
 Add-Type -AssemblyName System.IO.Compression.FileSystem

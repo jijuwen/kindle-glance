@@ -2,7 +2,7 @@ name: kindleglance
 services:
   board:
     build: ./kindle-display
-    image: kindleglance:0.2.0-rc.1
+    image: kindleglance:0.2.0
     restart: unless-stopped
     ports:
       - "${BIND_ADDRESS:-127.0.0.1}:${PORT:-3001}:8000"

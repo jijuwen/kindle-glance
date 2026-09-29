@@ -25,14 +25,16 @@ def archive(path, entries):
             assert zipfile.read(name) == source.read_bytes()
 
 
-archive(out/'kindleglance-deploy-0.2.0-rc.1.zip', [(p,p.relative_to(ROOT).as_posix()) for p in source_files()])
+deploy = out/'kindleglance-deploy-0.2.0.zip'
+archive(deploy, [(p,p.relative_to(ROOT).as_posix()) for p in source_files()])
 plugin=ROOT/'kindle-plugin'
 entries=[(p,'koreader/plugins/trmnl.koplugin/'+p.name) for p in (plugin/'trmnl.koplugin').glob('*.lua')]
 assert len(entries)==13
 entries.append((plugin/'LICENSE','koreader/plugins/trmnl.koplugin/LICENSE'))
-archive(out/'kindleglance-plugin-1.1.0-rc.1.zip', entries)
+plugin_zip = out/'kindleglance-plugin-1.1.0.zip'
+archive(plugin_zip, entries)
 subprocess.run([sys.executable,str(ROOT/'kindle-launcher-ab/build.py')], check=True)
 launcher=ROOT/'kindle-launcher-ab/dist/kindleglance-launcher-1.1.0.zip'
 (out/launcher.name).write_bytes(launcher.read_bytes())
-(out/'SHA256SUMS').write_text(''.join(f'{hashlib.sha256(p.read_bytes()).hexdigest()}  {p.name}\n' for p in sorted(out.glob('*.zip'))), encoding='ascii')
+(out/'SHA256SUMS').write_text(''.join(f'{hashlib.sha256(p.read_bytes()).hexdigest()}  {p.name}\n' for p in sorted((deploy, plugin_zip, out/launcher.name))), encoding='ascii')
 print('Built and verified deployment, plugin and A/B launcher archives')
