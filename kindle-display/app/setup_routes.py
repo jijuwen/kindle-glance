@@ -116,7 +116,7 @@ def install(app, g):
         g["require_csrf"](request)
         with g["STATE_LOCK"]:
             saved = settings.credentials(g["DATA_DIR"])
-            saved["DEVICE_TOKEN"] = secrets.token_urlsafe(32)
+            saved["DEVICE_TOKEN"] = settings.generate_device_token(settings.secret(g["DATA_DIR"], "DEVICE_TOKEN"))
             settings.atomic_json(g["DATA_DIR"] / "credentials.json", saved)
         return JSONResponse({"token": saved["DEVICE_TOKEN"]}, headers={"Cache-Control": "no-store"})
 

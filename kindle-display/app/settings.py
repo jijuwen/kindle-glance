@@ -169,13 +169,23 @@ def secret(directory, name):
     return saved.get(name) or os.getenv(name, "").strip()
 
 
+def generate_device_token(previous=None):
+    """Six characters for Kindle entry; omit easily confused 0/O and 1/I."""
+    alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
+    while True:
+        token = "".join(secrets.choice(alphabet) for _ in range(6))
+        if token != previous:
+            return token
+
+
 def bootstrap(directory):
     value = credentials(directory)
     for name in ("DEVICE_TOKEN", "IMAGE_SIGNING_KEY", "ADMIN_SESSION_KEY"):
         old = os.getenv(name, "").strip()
         if old.startswith("replace-with-"):
             raise SettingsError(f"请移除 {name} 的占位值，或设置独立随机密钥")
-        value.setdefault(name, old or secrets.token_urlsafe(32))
+        if name not in value:
+            value[name] = old or (generate_device_token() if name == "DEVICE_TOKEN" else secrets.token_urlsafe(32))
     atomic_json(directory / "credentials.json", value)
     if not value.get("ADMIN_PASSWORD_HASH") and not os.getenv("ADMIN_PASSWORD") and not (directory / "setup-code.json").exists():
         renew_setup_code(directory)
