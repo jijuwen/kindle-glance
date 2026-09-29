@@ -141,15 +141,15 @@ def save(directory, candidate, revision):
 
 
 def password_hash(password):
-    if not isinstance(password, str) or not 12 <= len(password) <= 256:
-        raise SettingsError("管理员密码须为 12–256 个字符")
+    if not isinstance(password, str) or len(password) < 6:
+        raise SettingsError("管理员密码至少 6 个字符，不限制字符类型")
     salt = secrets.token_hex(16)
     digest = hashlib.scrypt(password.encode(), salt=salt.encode(), n=16384, r=8, p=1).hex()
     return f"scrypt${salt}${digest}"
 
 
 def password_matches(password, stored):
-    if not isinstance(password, str) or len(password) > 256:
+    if not isinstance(password, str):
         return False
     if not stored.startswith("scrypt$"):
         return hmac.compare_digest(password.encode(), stored.encode())

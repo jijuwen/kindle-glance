@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- 管理密码改为至少 6 个字符，不限制字符类型或要求字符组合，移除原 256 字符上限。
+- 首次设置、登录和修改密码输入框增加显示／隐藏按钮；明文显示时仍不会写入表单草稿。
+
 ## v0.2.0-rc.1 — first public candidate
 
 - Server 0.2.0-rc.1: persistent location/timezone, secure first-run setup, preference controls, migration and revision-aware cache; independent optional Codex collector.

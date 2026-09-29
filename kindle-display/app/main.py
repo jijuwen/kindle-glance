@@ -949,9 +949,9 @@ def login_page(message: str = "") -> HTMLResponse:
 * {{ box-sizing: border-box; }} body {{ margin: 0; min-height: 100vh; display:grid; place-items:center; background:#101312; color:#f4f6f1; }}
 .card {{ width:min(92vw, 400px); padding:2.4rem; border:1px solid #343b37; border-radius:22px; background:#1a1f1c; box-shadow:0 24px 70px #0008; }}
 .eyebrow {{ color:#91b9a2; font-size:.85rem; letter-spacing:.12em; text-transform:uppercase; }} h1 {{ margin:.35rem 0 .5rem; font-size:2rem; }} p {{ color:#b9c0bc; line-height:1.6; }} label {{ display:block; margin:1.5rem 0 .5rem; font-size:.9rem; }} input {{ width:100%; padding:.85rem 1rem; border:1px solid #4a544d; border-radius:10px; background:#0f1211; color:#fff; font-size:1rem; }} button {{ width:100%; margin-top:1rem; padding:.85rem; border:0; border-radius:10px; background:#b5e8c9; color:#102216; font-size:1rem; font-weight:700; cursor:pointer; }} .notice {{ color:#ffb4a9; }} .hint {{ font-size:.82rem; }}
-</style></head><body><main class="card"><div class="eyebrow">Kindle Display</div><h1>个人控制台</h1><p>查看当前画面和服务状态。</p>{notice}<form id="login-form"><label for="password">管理密码</label><input id="password" type="password" autocomplete="current-password" required autofocus><button type="submit">登录</button></form><p id="error" class="notice" role="alert"></p><p class="hint">此入口仅供管理员使用。</p></main><script>
+</style><link rel="stylesheet" href="/admin/static/password.css?v=1"></head><body><main class="card"><div class="eyebrow">Kindle Display</div><h1>个人控制台</h1><p>查看当前画面和服务状态。</p>{notice}<form id="login-form"><label for="password">管理密码</label><input id="password" type="password" autocomplete="current-password" required autofocus><button type="submit">登录</button></form><p id="error" class="notice" role="alert"></p><p class="hint">此入口仅供管理员使用。</p></main><script>
 document.getElementById('login-form').addEventListener('submit', async (event) => {{ event.preventDefault(); const response = await fetch('/admin/login', {{method:'POST', headers:{{'Content-Type':'application/json'}}, body:JSON.stringify({{password:document.getElementById('password').value}})}}); if (response.ok) location.href='/admin'; else document.getElementById('error').textContent='密码不正确或服务暂不可用。'; }});
-</script></body></html>"""
+</script><script src="/admin/static/password.js?v=1" defer></script></body></html>"""
     )
 
 

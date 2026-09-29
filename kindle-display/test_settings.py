@@ -85,6 +85,26 @@ class SettingsTest(unittest.TestCase):
         self.assertEqual(self.claim().status_code, 200)
         self.assertEqual(self.client.post('/admin/api/setup/claim', json={'code':'bad','password':'another password'}).status_code, 409)
 
+    def test_six_character_passwords_and_unrestricted_characters(self):
+        for password in ('123456', 'abcdef', '!@#$%^', '中文密码测试', ' 1234 ', 'x' * 300):
+            with self.subTest(password=password):
+                stored = settings.password_hash(password)
+                self.assertTrue(settings.password_matches(password, stored))
+                self.assertFalse(settings.password_matches(password + 'x', stored))
+        for password in ('', '12345', None, 123456):
+            with self.subTest(password=password), self.assertRaises(settings.SettingsError):
+                settings.password_hash(password)
+
+    def test_short_password_claim_change_and_login(self):
+        code = settings.read_json(self.directory / 'setup-code.json')['code']
+        self.assertEqual(self.client.post('/admin/api/setup/claim', json={'code':code,'password':'12345'}).status_code, 400)
+        self.assertEqual(self.client.post('/admin/api/setup/claim', json={'code':code,'password':'123456'}).status_code, 200)
+        headers = self.csrf()
+        self.assertEqual(self.client.post('/admin/api/password', headers=headers, json={'current':'123456','password':'abcde'}).status_code, 400)
+        self.assertEqual(self.client.post('/admin/api/password', headers=headers, json={'current':'123456','password':'!@#$%^'}).status_code, 200)
+        self.assertEqual(self.client.post('/admin/login', json={'password':'!@#$%^'}).status_code, 200)
+        self.assertEqual(self.client.post('/admin/login', json={'password':'123456'}).status_code, 401)
+
     def test_simultaneous_initialization_has_one_winner(self):
         code = settings.read_json(self.directory / 'setup-code.json')['code']
         def claim():

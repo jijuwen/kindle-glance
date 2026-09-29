@@ -11,7 +11,7 @@ docker compose up -d --build
 docker compose exec board python -m app.manage setup-code
 ```
 
-打开 `http://localhost:3001/admin`，使用本机输出的一次性码设置至少 12 字符的管理密码。初始化码一小时过期；若未建立管理员，可运行 `docker compose exec board python -m app.manage renew-setup-code` 重发。内部密钥自动生成，只有管理员建立后初始化入口才关闭。
+打开 `http://localhost:3001/admin`，使用本机输出的一次性码设置至少 6 字符的管理密码（不限制字符类型，不要求数字、字母或标点组合）。初始化码一小时过期；若未建立管理员，可运行 `docker compose exec board python -m app.manage renew-setup-code` 重发。内部密钥自动生成，只有管理员建立后初始化入口才关闭。
 
 向导依次设置地区、IANA 时区、显示偏好、内容和 Kindle 连接。未选地点前不会请求天气。搜索不可用时手动填写经纬度和时区。无设备也可以完成服务器设置。
 
