@@ -4,14 +4,12 @@ import copy
 import json
 import secrets
 import time
-import urllib.parse
-import urllib.request
 from datetime import datetime
 
 from fastapi import HTTPException, Request
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 
-from app import settings
+from app import settings, locations as place_search
 
 
 async def body(request):
@@ -159,7 +157,7 @@ def install(app, g):
     @app.get("/admin/api/locations")
     async def locations(request: Request, q: str = ""):
         g["require_admin"](request)
-        q = q.strip()
+        q = place_search.normalize(q)
         if not 2 <= len(q) <= 100:
             raise HTTPException(400, detail="请输入 2–100 个字符")
         now = time.monotonic()
@@ -172,20 +170,14 @@ def install(app, g):
             search_times[address] = now
             cached = search_cache.get(q)
             if cached and now - cached[0] < 3600:
-                return {"results": cached[1]}
-        def search():
-            url = "https://geocoding-api.open-meteo.com/v1/search?" + urllib.parse.urlencode({"name": q, "count": 8, "language": "zh", "format": "json"})
-            with urllib.request.urlopen(url, timeout=8) as response:
-                result = json.loads(response.read(256000))
-            return [{"id": str(item["id"]), "name": item["name"], "label": " / ".join(filter(None, [item["name"], item.get("admin1"), item.get("country")])),
-                     "latitude": item["latitude"], "longitude": item["longitude"], "timezone": item["timezone"]}
-                    for item in result.get("results", []) if item.get("timezone")]
+                return cached[1]
         try:
-            found = await asyncio.to_thread(search)
+            found = await asyncio.to_thread(place_search.search, q)
         except (OSError, ValueError, KeyError):
             raise HTTPException(503, detail="城市搜索暂不可用，请手动输入地点与坐标")
         with g["STATE_LOCK"]:
             if len(search_cache) >= 128:
                 search_cache.clear()
-            search_cache[q] = (now, found)
-        return {"results": found}
+            if not found['partial']:
+                search_cache[q] = (now, found)
+        return found

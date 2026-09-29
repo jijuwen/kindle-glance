@@ -11,3 +11,5 @@
 | Natural Earth 地图 | [NOTICE](kindle-display/app/assets/natural-earth/NOTICE.md)，公有领域数据 |
 
 Lupa 等 Python 依赖按 requirements 安装至本地虚拟环境，其发行包保留各自授权，不随 Git 提交平台二进制。插件发布包只携带插件代码及其 LICENSE，不包含 KOReader 测试夹具。
+
+城市搜索使用 Open-Meteo 地名服务（数据来源 GeoNames），见 [接口与数据来源](https://open-meteo.com/en/docs/geocoding-api)。简繁转换使用 [opencc-python-reimplemented](https://pypi.org/project/opencc-python-reimplemented/)（Apache-2.0），拼音别名使用 [pypinyin](https://pypi.org/project/pypinyin/)（MIT）；版本固定在服务端 requirements，安装包保留原许可。

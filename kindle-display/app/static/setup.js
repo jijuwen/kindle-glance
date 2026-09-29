@@ -2,7 +2,7 @@
   'use strict';
   const area=document.querySelector('#form-area'), feedback=document.querySelector('#feedback');
   const csrf=document.querySelector('meta[name="csrf-token"]').content;
-  let state, step=0, busy=false;
+  let state, step=0, busy=false, chosenLocation=null;
   const draftKey='kindleglance-setup-draft-v1';
   const names=['管理员','你的地区','选择内容','连接 Kindle','完成'];
   const h=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -12,31 +12,70 @@
   async function save(data){state=await api('/admin/api/settings',{...data,revision:state.revision});feedback.textContent='已保存';}
   function nav(){return `<div class="actions">${step>1?'<button data-action="back">上一步</button>':''}<button class="primary" data-action="next">${step===4?'完成设置':'保存并继续'}</button></div>`;}
   function draft(){try{return JSON.parse(localStorage.getItem(draftKey)||'null');}catch{return null;}}
-  function remember(){if(!state||step===0)return;const fields={};area.querySelectorAll('input,select').forEach(e=>{if(e.type==='password'||e.hasAttribute('data-password-field')||e.type==='file'||e.id==='code'||e.id==='search')return;fields[e.id||'page:'+e.value]=e.type==='checkbox'?e.checked:e.value;});try{localStorage.setItem(draftKey,JSON.stringify({revision:state.revision,step,fields}));}catch{}}
+  function remember(){if(!state||step===0)return;const fields={};area.querySelectorAll('input,select').forEach(e=>{if(e.type==='password'||e.hasAttribute('data-password-field')||e.type==='file'||e.id==='code'||e.id==='search')return;fields[e.id||'page:'+e.value]=e.type==='checkbox'?e.checked:e.value;});try{localStorage.setItem(draftKey,JSON.stringify({revision:state.revision,step,fields,locationChoice:step===1?chosenLocation:null}));}catch{}}
   function render(){
     document.querySelector('#steps').innerHTML=names.map((n,i)=>`<li ${i===step?'aria-current="step"':''}>${i+1} · ${n}</li>`).join('');
     if(step===0){area.innerHTML=`<h2>建立你的管理员账号</h2><p>在服务器本机查看一次性初始化码。它仅用于这次设置，一小时内有效。</p><form id="claim">${field('code','初始化码','','text','required autocomplete="off"')}${field('password','管理密码','','password','required minlength="6" autocomplete="new-password"')}<p class="hint">至少 6 个字符，数字、字母、标点均可，无需组合。此密码用于管理看板。</p><div class="actions"><button class="primary" type="submit">开始设置</button></div></form>`;return;}
-    if(step===1){const l=state.location||{},p=state.display_preferences;area.innerHTML=`<h2>看板放在哪里？</h2><p>城市用于天气，时区决定日期和播放时段。电脑的时区不会覆盖这里的选择。</p>${state.migration?`<p class="hint">${h(state.migration.message)}</p>`:''}${field('search','搜索城市（中文或英文）','','search','maxlength="100"')}<div class="actions"><button data-action="search">搜索城市</button></div><div class="search-results" id="results"></div>${field('city','地点名称',l.name||'','text','maxlength="100" required')}<div class="pair"><div>${field('lat','纬度',l.latitude??'','number','step="any" min="-90" max="90" required')}</div><div>${field('lon','经度',l.longitude??'','number','step="any" min="-180" max="180" required')}</div></div>${field('timezone','IANA 时区',state.timezone,'text','required placeholder="例如 Asia/Shanghai"')}<p class="hint" id="local-time">该时区当前时间：${h(state.local_time)}</p><details><summary>显示偏好</summary><label for="unit">温度单位</label><select id="unit"><option value="celsius">摄氏 °C</option><option value="fahrenheit">华氏 °F</option></select><label for="week">一周起始日</label><select id="week"><option value="0">周一</option><option value="6">周日</option></select><label for="hours">时间格式</label><select id="hours"><option value="24">24 小时制</option><option value="12">12 小时制</option></select><label><input id="mask" type="checkbox" ${p.mask_email?'checked':''}>在用量看板中遮罩邮箱</label></details>${nav()}`;document.querySelector('#unit').value=p.temperature_unit;document.querySelector('#week').value=p.week_start;document.querySelector('#hours').value=p.hour_format;}
+    if(step===1){const l=state.location||{},p=state.display_preferences;chosenLocation=state.location;area.innerHTML=`<h2>看板放在哪里？</h2><p>城市用于天气，时区决定日期和播放时段。电脑的时区不会覆盖这里的选择。</p>${state.migration?`<p class="hint">${h(state.migration.message)}</p>`:''}${field('search','搜索城市、区县（中文／拼音／英文）','','search','maxlength="100" placeholder="例如：厦门、廈門、xiamen" enterkeyhint="search" aria-controls="results"')}<div class="actions"><button data-action="search">搜索城市</button></div><div class="search-results" id="results" aria-live="polite"></div><div class="selected-location" role="status"><span>当前已选地点</span><strong id="selected-location-name"></strong><small id="selected-location-detail"></small></div><details id="location-advanced"><summary>高级设置 · 手动修改地点、经纬度与时区</summary><p class="hint">选择搜索结果后会自动填写。找不到地点时，也可以在这里手动设置。</p>${field('city','地点名称',l.name||'','text','maxlength="100" required')}<div class="pair"><div>${field('lat','纬度',l.latitude??'','number','step="any" min="-90" max="90" required')}</div><div>${field('lon','经度',l.longitude??'','number','step="any" min="-180" max="180" required')}</div></div>${field('timezone','IANA 时区',state.timezone,'text','required placeholder="例如 Asia/Shanghai"')}<p class="hint" id="local-time">该时区当前时间：${h(state.local_time)}</p></details><details><summary>显示偏好</summary><label for="unit">温度单位</label><select id="unit"><option value="celsius">摄氏 °C</option><option value="fahrenheit">华氏 °F</option></select><label for="week">一周起始日</label><select id="week"><option value="0">周一</option><option value="6">周日</option></select><label for="hours">时间格式</label><select id="hours"><option value="24">24 小时制</option><option value="12">12 小时制</option></select><label><input id="mask" type="checkbox" ${p.mask_email?'checked':''}>在用量看板中遮罩邮箱</label></details>${nav()}`;document.querySelector('#unit').value=p.temperature_unit;document.querySelector('#week').value=p.week_start;document.querySelector('#hours').value=p.hour_format;}
     if(step===2){area.innerHTML=`<h2>选择想看的内容</h2><p>先从几张日常看板开始，之后可以在播放列表中调整。</p><div class="choices">${state.page_types.map(p=>`<label><input type="checkbox" name="page" value="${h(p.id)}" ${state.selected_pages.includes(p.id)?'checked':''}>${h(p.title)}</label>`).join('')}</div><div class="actions"><button data-action="preview">保存并生成预览</button></div><p class="hint">首次生成可能需要稍等。天气不可用时会显示明确提示。</p>${nav()}`;}
     if(step===3){area.innerHTML=`<h2>把画面送到 Kindle</h2><p>安装看板插件和 KUAL 入口后，在插件的“服务器与设备”填写下面的信息。</p>${field('url','Kindle 能访问的服务地址',state.external_base_url,'url','placeholder="http://192.168.1.20:3001"')}<p class="hint">局域网填写服务器地址；公网请使用 HTTPS。不要填写 localhost。</p><div class="actions"><button data-action="token">显示设备令牌</button><button data-action="copy">复制连接信息</button></div><p class="token" id="token" hidden></p><details><summary>启动与省电说明</summary><p>A 是普通阅读入口。B 以 no framework 模式启动 KOReader，再进入工具 → Kindle 看板 → 开始看板。停止看板返回 KOReader，正常退出 KOReader 后恢复原生界面。</p><p>设备端可独立设置间隔；RTC 模式取图后关闭 Wi-Fi 并休眠，常驻模式保持联网。12/24 小时深睡仍需真机验证。</p></details><p id="device-state">${state.device?'最近成功取图：'+h(new Date(state.device.at*1000).toLocaleString('zh-CN',{timeZone:state.timezone})):'尚未收到设备取图。可以稍后连接。'}</p><button data-action="device">检查连接</button>${nav()}`;}
     if(step===4){area.innerHTML=`<h2>你的看板准备好了</h2><p>${h(state.location?.name)} · ${h(state.timezone)}</p><p>已选择 ${state.selected_pages.length} 种内容。${state.device?'Kindle 已取图。':'服务端设置可以先完成，之后再连接 Kindle。'}</p><p class="hint">已有播放列表会保留。日常调整内容请进入播放列表。</p>${nav()}<details><summary>管理维护</summary><p><a href="/admin/api/settings/export">导出可分享的显示偏好</a> · <a href="/admin/api/diagnostics">脱敏诊断</a></p><label for="import">导入显示偏好（不会导入地点、地址或凭据）</label><input id="import" type="file" accept="application/json"><button data-action="import">导入偏好</button>${field('current-password','当前管理密码','','password','autocomplete="current-password"')}${field('new-password','新管理密码','','password','minlength="6" autocomplete="new-password"')}<div class="actions"><button data-action="password">更改密码并重新登录</button><button data-action="rotate">轮换设备令牌</button></div></details>`;}
     const d=draft();if(d&&d.revision===state.revision&&d.step===step){area.querySelectorAll('input,select').forEach(e=>{const v=d.fields[e.id||'page:'+e.value];if(v!==undefined){if(e.type==='checkbox')e.checked=v;else e.value=v;}});}
-    if(step===1){try{document.querySelector('#local-time').textContent='该时区当前时间：'+new Intl.DateTimeFormat('zh-CN',{dateStyle:'medium',timeStyle:'short',timeZone:val('timezone')}).format(new Date());}catch{}}
+    if(step===1){if(d?.revision===state.revision&&d.step===1&&d.locationChoice)chosenLocation=d.locationChoice;updateLocationSummary();try{document.querySelector('#local-time').textContent='该时区当前时间：'+new Intl.DateTimeFormat('zh-CN',{dateStyle:'medium',timeStyle:'short',timeZone:val('timezone')}).format(new Date());}catch{}}
     const lockMap={location:['city','lat','lon','search'],timezone:['timezone'],display_preferences:['unit','week','hours','mask'],external_base_url:['url'],selected_pages:[]};
     for(const key of state.locked_fields||[]){for(const id of lockMap[key]||[]){const e=document.getElementById(id);if(e)e.disabled=true;}if(key==='selected_pages')area.querySelectorAll('[name="page"]').forEach(e=>e.disabled=true);}
     if(state.locked_fields?.length){const note=document.createElement('p');note.className='hint';note.textContent='部署配置锁定：'+state.locked_fields.join('、')+'。禁用字段需由服务器管理员解锁。';area.prepend(note);}
   }
-  function region(){if(!val('city').trim()||!val('lat')||!val('lon'))throw Error('请填写地点与经纬度');return {location:{id:state.location?.id||'manual',name:val('city'),latitude:Number(val('lat')),longitude:Number(val('lon'))},timezone:val('timezone'),display_preferences:{temperature_unit:val('unit'),week_start:Number(val('week')),hour_format:val('hours'),mask_email:document.querySelector('#mask').checked}};}
+  function matchesChoice(){return chosenLocation&&val('city')===chosenLocation.name&&val('lat')!==''&&val('lon')!==''&&Number(val('lat'))===chosenLocation.latitude&&Number(val('lon'))===chosenLocation.longitude;}
+  function updateLocationSummary(){
+    const name=document.querySelector('#selected-location-name');if(!name)return;
+    name.textContent=val('city').trim()||'尚未选择地点';
+    document.querySelector('#selected-location-detail').textContent=val('city').trim()?(matchesChoice()?(chosenLocation.label||chosenLocation.name):'手动设置')+' · '+val('timezone'):'搜索并点选结果后，天气位置和时区会自动填写。';
+  }
+  function resultButton(item){
+    const button=document.createElement('button');button.type='button';button.className='location-result';
+    const name=document.createElement('strong');name.textContent=item.name;
+    const label=document.createElement('small');label.textContent=item.label.startsWith(item.name+' · ')?item.label.slice(item.name.length+3):item.label;
+    button.append(name,label);
+    button.addEventListener('click',()=>{
+      if((state.locked_fields||[]).some(k=>k==='location'||k==='timezone'))return;
+      chosenLocation=item;
+      for(const [id,value] of Object.entries({city:item.name,lat:item.latitude,lon:item.longitude,timezone:item.timezone}))document.getElementById(id).value=value;
+      document.querySelector('#timezone').dispatchEvent(new Event('change',{bubbles:true}));
+      document.querySelector('#results').replaceChildren();updateLocationSummary();remember();
+      feedback.textContent='已选择 '+item.label+'，保存并继续后生效';
+    });
+    return button;
+  }
+  async function searchLocations(){
+    if((state.locked_fields||[]).some(k=>k==='location'||k==='timezone'))throw Error('地点或时区已由部署配置锁定');
+    const query=val('search').trim(),results=document.querySelector('#results');
+    results.replaceChildren();
+    if(query.length<2)throw Error('请输入至少 2 个字符');
+    results.textContent='正在搜索…';
+    try{
+      const data=await api('/admin/api/locations?q='+encodeURIComponent(query));
+      if(val('search').trim()!==query){results.replaceChildren();feedback.textContent='搜索词已更改，请重新搜索';return;}
+      results.replaceChildren();
+      const main=data.results||[],more=data.more_results||[];
+      if(!main.length){const note=document.createElement('p');note.className='hint';note.textContent=more.length?'没有匹配的城市或区县，请展开更多地点查看。':'没有找到匹配地点。可用逗号补充省份／国家（例如：厦门, 福建省），或在高级设置中手动输入；当前已选地点保持不变。';results.append(note);}
+      main.forEach(item=>results.append(resultButton(item)));
+      if(more.length){const details=document.createElement('details'),summary=document.createElement('summary');summary.textContent='更多地点（'+more.length+'）';details.append(summary);more.forEach(item=>details.append(resultButton(item)));results.append(details);}
+      feedback.textContent=data.partial?'部分搜索请求未完成，已显示可用结果，可稍后重试。':main.length||more.length?'请选择匹配地点；搜索本身不会改变已选位置。':'搜索完成，未找到匹配地点。';
+    }catch(error){results.textContent='搜索暂时失败，当前已选地点保持不变。请重试，或在高级设置中手动输入。';throw error;}
+  }
+  function region(){if(!val('city').trim()||!val('lat')||!val('lon'))throw Error('请先搜索并选择地点，或在高级设置中手动填写地点与经纬度');return {location:{id:matchesChoice()?chosenLocation.id:'manual',name:val('city'),latitude:Number(val('lat')),longitude:Number(val('lon'))},timezone:val('timezone'),display_preferences:{temperature_unit:val('unit'),week_start:Number(val('week')),hour_format:val('hours'),mask_email:document.querySelector('#mask').checked}};}
   async function saveStep(){if(step===1)await save(region());if(step===2)await save({selected_pages:[...document.querySelectorAll('[name="page"]:checked')].map(e=>e.value)});if(step===3)await save({external_base_url:val('url')});}
   async function run(fn){if(busy)return;busy=true;feedback.textContent='正在处理…';area.querySelectorAll('button').forEach(b=>b.disabled=true);try{await fn();}catch(e){feedback.textContent=e.message;}finally{busy=false;area.querySelectorAll('button').forEach(b=>b.disabled=false);}}
   area.addEventListener('submit',e=>{e.preventDefault();run(async()=>{await api('/admin/api/setup/claim',{code:val('code'),password:val('password')});location.reload();});});
-  area.addEventListener('input',remember);
+  area.addEventListener('input',e=>{if(e.target.id==='search'){document.querySelector('#results')?.replaceChildren();return;}if(['city','lat','lon','timezone'].includes(e.target.id))updateLocationSummary();remember();});
+  area.addEventListener('keydown',e=>{if(e.target.id==='search'&&e.key==='Enter'&&!e.isComposing){e.preventDefault();area.querySelector('[data-action=search]').click();}});
   area.addEventListener('change',remember);
-  area.addEventListener('change',e=>{if(e.target.id==='timezone'){try{document.querySelector('#local-time').textContent='该时区当前时间：'+new Intl.DateTimeFormat('zh-CN',{dateStyle:'medium',timeStyle:'short',timeZone:val('timezone')}).format(new Date());}catch{document.querySelector('#local-time').textContent='时区无效';}}});
+  area.addEventListener('change',e=>{if(e.target.id==='timezone'){updateLocationSummary();try{document.querySelector('#local-time').textContent='该时区当前时间：'+new Intl.DateTimeFormat('zh-CN',{dateStyle:'medium',timeStyle:'short',timeZone:val('timezone')}).format(new Date());}catch{document.querySelector('#local-time').textContent='时区无效';}}});
   area.addEventListener('click',e=>{const a=e.target.closest('[data-action]')?.dataset.action;if(!a)return;run(async()=>{
     if(a==='back'){await saveStep();step--;try{localStorage.removeItem(draftKey);}catch{}render();remember();}
     if(a==='next'){if(step===4){await api('/admin/api/setup/finish',{revision:state.revision});try{localStorage.removeItem(draftKey);}catch{}location.href='/admin';return;}await saveStep();step++;try{localStorage.removeItem(draftKey);}catch{}render();remember();}
-    if(a==='search'){const data=await api('/admin/api/locations?q='+encodeURIComponent(val('search')));const results=document.querySelector('#results');results.replaceChildren();if(!data.results.length)results.textContent='没有找到匹配城市，请手动输入。';data.results.forEach(item=>{const b=document.createElement('button');b.textContent=item.label;b.type='button';b.onclick=()=>{document.querySelector('#city').value=item.name;document.querySelector('#lat').value=item.latitude;document.querySelector('#lon').value=item.longitude;document.querySelector('#timezone').value=item.timezone;state.location={...item};document.querySelector('#timezone').dispatchEvent(new Event('change',{bubbles:true}));results.replaceChildren();remember();};results.append(b);});feedback.textContent='城市搜索完成';}
+    if(a==='search')await searchLocations();
     if(a==='preview'){await saveStep();feedback.textContent='正在生成预览…';const page=state.selected_pages[0];await api('/admin/api/pages/'+page+'/render',{});const image=document.querySelector('#preview');image.onload=()=>{image.hidden=false;document.querySelector('#preview-empty').hidden=true;feedback.textContent='预览已更新，设备将在下次取图时更新';};image.onerror=()=>{feedback.textContent='预览加载失败，请重试';};image.src='/admin/pages/'+page+'/preview?v='+Date.now();}
     if(a==='token'||a==='copy'){const data=await api('/admin/api/device/token');document.querySelector('#token').textContent=data.token;document.querySelector('#token').hidden=false;if(a==='copy'){await navigator.clipboard.writeText(val('url')+'\n'+data.token);feedback.textContent='连接信息已复制';}else feedback.textContent='设备令牌已显示，请妥善保管';}
     if(a==='device'){await saveStep();state=await api('/admin/api/settings');render();feedback.textContent=state.device?'已收到成功取图记录':'设备还未成功取图，请检查地址、令牌与网络';}
