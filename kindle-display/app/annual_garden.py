@@ -9,18 +9,19 @@ import math
 from pathlib import Path
 import random
 
-from PIL import Image, ImageChops, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont
 
-RENDER_REVISION = 4
+RENDER_REVISION = 6
 SIZE = (1648, 1236)
 ASSETS = Path(__file__).with_name('assets') / 'annual-garden'
 INK = 0
 PAPER = 255
-SEED_INK = 176
+SEED_INK = 80
 SECONDARY_INK = 96
 WEEKDAYS = '一二三四五六日'
 GRID = (44, 174, 1604, 1176)
 COLUMNS = 25
+OUTLINE_GAP = 2
 
 
 @lru_cache(maxsize=1)
@@ -105,21 +106,130 @@ def plant_size(subject: str, rng, row_height: float):
     return rng.uniform(1.08,1.30)*row_height, 82, 'flower'
 
 
+@lru_cache(maxsize=4096)
+def silhouette_rows(asset_id: str, width: int, height: int):
+    """Protect the whole drawing, including white interiors and open branches.
+
+    Fill the span between the outermost ink pixels on each scanline. Unlike a
+    bounding rectangle this retains the narrower stem and concave sides, while
+    preventing another plant from entering a flower, rainbow or bamboo clump.
+    Include antialiasing, the future seed and the possible today underline.
+    """
+    original = asset_mask(asset_id)
+    mask = original.crop(original.getbbox()).resize((width, height), Image.Resampling.LANCZOS)
+    pixels = mask.tobytes()
+    spans = {}
+
+    def reserve(y, left, right):
+        if y in spans:
+            previous = spans[y]
+            left, right = min(left, previous[0]), max(right, previous[1])
+        spans[y] = (left, right)
+
+    for y in range(height):
+        row = pixels[y*width:(y+1)*width]
+        left = width-len(row.lstrip(b'\0'))
+        right = len(row.rstrip(b'\0'))
+        if right > left:
+            reserve(y, left, right)
+    cx, cy = width//2, height//2
+    for y in range(cy-2, cy+3):
+        reserve(y, cx-2, cx+3)
+    for y in range(height+1, height+5):
+        reserve(y, cx-7, cx+8)
+    return tuple((y, left, right) for y, (left, right) in sorted(spans.items()))
+
+
+def row_bits(spans):
+    """Pack occupied scanlines into integers for inexpensive exact collisions."""
+    origin = min(left for _, left, _ in spans)
+    return origin, tuple((y, ((1 << (right-left))-1) << (left-origin))
+                         for y, left, right in spans)
+
+
+def spaced_rows(spans):
+    expanded = {}
+    for y, left, right in spans:
+        for yy in range(y-OUTLINE_GAP, y+OUTLINE_GAP+1):
+            a, b = expanded.get(yy, (left-OUTLINE_GAP, right+OUTLINE_GAP))
+            expanded[yy] = min(a, left-OUTLINE_GAP), max(b, right+OUTLINE_GAP)
+    return tuple((y, left, right) for y, (left, right) in sorted(expanded.items()))
+
+
+POSITION_OFFSETS = tuple(sorted(
+    ((dx, dy) for dx in range(-24, 25, 3) for dy in range(-30, 31, 3)),
+    key=lambda offset: (abs(offset[0])*.09+abs(offset[1])*.07,
+                        abs(offset[1]), abs(offset[0]), offset)))
+
+
+def occupy(slot, occupied, *, remove=False):
+    spans = silhouette_rows(slot['asset_id'], slot['width'], slot['height'])
+    origin, bits = row_bits(spans)
+    for yy, line in bits:
+        value = line << (slot['x']+origin)
+        if remove:
+            occupied[slot['y']+yy] ^= value
+        else:
+            occupied[slot['y']+yy] |= value
+
+
+def place_plant(plant, cx, cy, occupied, row_top, row_bottom, fallback):
+    """Accept only collision-free candidates; movement and scale rank those."""
+    left, top, right, bottom = GRID
+    best = (12*(1-fallback['scale'])+abs(fallback['x']+fallback['width']/2-cx)*.09
+            +abs(fallback['y']+fallback['height']/2-cy)*.07,
+            fallback['x'], fallback['y'], fallback['width'], fallback['height'], fallback['scale'])
+    for reduction in (1, .96, .92, .88, .84, .80, .76, .72, .68, .64, .60, .56):
+        if reduction < fallback['scale']:
+            break
+        shrink_cost = (1-reduction)*12
+        if shrink_cost >= best[0]:
+            break
+        w, h = max(1, round(plant['width']*reduction)), max(1, round(plant['height']*reduction))
+        safe_spans = spaced_rows(silhouette_rows(plant['asset_id'], w, h))
+        origin, bits = row_bits(safe_spans)
+        min_x = min(a for _, a, _ in safe_spans)
+        max_x = max(b for _, _, b in safe_spans)
+        min_y, max_y = safe_spans[0][0], safe_spans[-1][0]+1
+        x_low, x_high = left-min_x, right-max_x
+        y_low = math.ceil(max(top, row_top-14)-min_y)
+        y_high = math.floor(min(bottom, row_bottom+14)-max_y)
+        if x_high < x_low or y_high < y_low:
+            continue
+        for dx, dy in POSITION_OFFSETS:
+            score = shrink_cost+abs(dx)*.09+abs(dy)*.07
+            if score >= best[0]:
+                break
+            x = max(x_low, min(round(cx-w/2+dx), x_high))
+            y = max(y_low, min(round(cy-h/2+dy), y_high))
+            shift = x+origin
+            if any((line << shift) & occupied[y+yy] for yy, line in bits):
+                continue
+            best = (score, x, y, w, h, reduction)
+            break
+    _, x, y, w, h, reduction = best
+    slot = {**plant, 'x': x, 'y': y, 'width': w, 'height': h,
+            'seed_x': x+w//2, 'seed_y': y+h//2, 'scale': reduction,
+            'overlap_fraction': 0.0}
+    occupy(slot, occupied)
+    return slot
+
+
 @lru_cache(maxsize=32)
 def planned_slots(year: int, seed: str):
     """Compose the whole year once; daily growth never moves existing plants.
 
     Unequal widths drive horizontal positions. Small groups sit closer together
-    with wider pockets between them, and their baselines rise and fall. A modest
-    ink-aware vertical adjustment prevents dense strokes merging into a blob.
+    with wider pockets between them, and their baselines rise and fall.
+    Silhouette-aware placement forbids overlaps, including white interiors.
     """
     order = order_for_year(year, seed)
     left,top,right,bottom = GRID
     rows=math.ceil(len(order)/COLUMNS)
     sy=(bottom-top)/rows
     rng=random.Random(hashlib.sha256(f'positions:v3:{year}:{seed}'.encode()).digest())
-    occupied=Image.new('L',SIZE,0)
-    slots=[]
+    occupied=[0]*SIZE[1]
+    anchors=[]
     for row in range(rows):
         row_order=order[row*COLUMNS:(row+1)*COLUMNS]
         plants=[]; gaps=[]; group_remaining=0; phase=rng.uniform(0,math.tau)
@@ -134,17 +244,17 @@ def planned_slots(year: int, seed: str):
             if column:
                 # Short, irregular clusters, with pockets that do not form
                 # continuous vertical channels through the garden.
-                gaps.append(rng.uniform(13,21) if group_remaining==0 else rng.uniform(-5,4))
+                gaps.append(rng.uniform(13,21) if group_remaining==0 else rng.uniform(2,5))
             if group_remaining==0:group_remaining=rng.randint(3,5)
             group_remaining-=1
         count=len(plants)
         span=(right-left)*min(1,count/COLUMNS)
-        margins=rng.uniform(0,12)
+        margins=rng.uniform(OUTLINE_GAP+1,12)
         available=span-margins*2
         widths=sum(p['width'] for p in plants)
         scale=min(1.08,(available-sum(gaps))/widths)
         for plant in plants:
-            plant['width']=max(1,round(plant['width']*scale))
+            plant['width']=max(18,round(plant['width']*scale))
             plant['height']=max(1,round(plant['height']*scale))
         # Add spare room mainly to the breathing pockets. Preserve close local
         # neighbours instead of diluting all gaps into the same spacing.
@@ -160,29 +270,39 @@ def planned_slots(year: int, seed: str):
             cy=top+(row+.5)*sy+math.sin(column*.83+phase)*9+rng.uniform(-3,3)
             if plant['role']=='accent':cy+=6
             elif plant['role']=='canopy':cy-=3
-            proposed=round(cy-h/2)
-            choices=[]
-            original=asset_mask(plant['asset_id']).crop(plant['bounds'])
-            for reduction in (1,.94,.88,.82,.76):
-                trial_w,trial_h=round(w*reduction),round(h*reduction)
-                mask=original.resize((trial_w,trial_h),Image.Resampling.LANCZOS)
-                solid=mask.point(lambda value:255 if value>=192 else 0)
-                ink=max(1,solid.histogram()[255])
-                for dx in ((0,) if reduction==1 else (0,-4,4)):
-                    x=round(max(left,min(cx-trial_w/2+dx,right-trial_w)))
-                    for offset in ((0,-5,5,-10,10) if reduction==1 else (0,-5,5,-10,10,-15,15)):
-                        y=round(max(top-18,min(proposed+(h-trial_h)/2+offset,bottom+8-trial_h)))
-                        overlap=ImageChops.multiply(solid,occupied.crop((x,y,x+trial_w,y+trial_h))).histogram()[255]/ink
-                        score=overlap*240+abs(offset)*.04+abs(dx)*.04+(1-reduction)*8
-                        choices.append((score,x,y,trial_w,trial_h,overlap,solid))
-                # Keep the intended scale whenever its strokes are legible.
-                # Only crowded silhouettes need a small local reduction.
-                if min(choice[5] for choice in choices)<=.07:break
-            _,x,y,w,h,overlap,solid=min(choices,key=lambda choice:choice[0])
-            occupied.paste(ImageChops.lighter(solid,occupied.crop((x,y,x+w,y+h))),(x,y))
-            slots.append({**plant,'x':x,'y':y,'width':w,'height':h,'seed_x':round(x+w/2),'seed_y':round(y+h/2),
-                          'overlap_fraction':overlap})
+            anchors.append((plant, cx, cy, top+row*sy, top+(row+1)*sy))
             if column<len(gaps):cursor+=allocated_width+gaps[column]
+    # Reserve a readable minimum silhouette for every day before enlarging any
+    # of them. This prevents large early plants from consuming the space needed
+    # by smaller neighbours or the last row. The placeholders are disjoint.
+    slots = [None]*len(order)
+    for plant, cx, cy, row_top, row_bottom in anchors:
+        reduction = min(.76, math.floor(sy-12)/plant['height'])
+        w, h = round(plant['width']*reduction), round(plant['height']*reduction)
+        x, y = round(cx-w/2), round(row_top+(sy-h-5)/2)
+        slot = {**plant, 'x': x, 'y': y, 'width': w, 'height': h,
+                'seed_x': x+w//2, 'seed_y': y+h//2, 'scale': reduction,
+                'overlap_fraction': 0.0}
+        safe = spaced_rows(silhouette_rows(plant['asset_id'], w, h))
+        origin, bits = row_bits(safe)
+        if (x+min(a for _, a, _ in safe) < left or x+max(b for _, _, b in safe) > right
+                or y+safe[0][0] < top or y+safe[-1][0] >= bottom):
+            raise RuntimeError('年度花园最小轮廓超出画布')
+        if any((line << (x+origin)) & occupied[y+yy] for yy, line in bits):
+            raise RuntimeError('年度花园最小轮廓预留空间不足')
+        slots[plant['index']] = slot
+        occupy(slot, occupied)
+    # Compose structural foliage first, then fit flowers and smaller accents
+    # around it. A final pass reclaims remaining pockets for crowded plants.
+    priority = {'canopy': 0, 'flower': 1, 'small': 2, 'accent': 3}
+    for plant, cx, cy, row_top, row_bottom in sorted(anchors, key=lambda a: (priority[a[0]['role']], a[0]['index'])):
+        old = slots[plant['index']]
+        occupy(old, occupied, remove=True)
+        slots[plant['index']] = place_plant(plant, cx, cy, occupied, row_top, row_bottom, old)
+    for plant, cx, cy, row_top, row_bottom in sorted(anchors, key=lambda a: (slots[a[0]['index']]['scale'], a[0]['index'])):
+        old = slots[plant['index']]
+        occupy(old, occupied, remove=True)
+        slots[plant['index']] = place_plant(plant, cx, cy, occupied, row_top, row_bottom, old)
     return tuple(slots)
 
 
@@ -202,8 +322,7 @@ def draw_annual_garden(now, seed: str, *, full: bool = False) -> Image.Image:
 
     grown=total if full else ordinal
     slots=list(garden_slots(now.year,seed))
-    # Lay future seeds down first, so they cannot paint gray over the new,
-    # intentionally larger neighbouring leaves.
+    # Each future seed and today marker has space reserved by the annual plan.
     for slot in slots[grown:]:
         cx,cy=slot['seed_x'],slot['seed_y']
         draw.ellipse((cx-2,cy-2,cx+2,cy+2),fill=SEED_INK)

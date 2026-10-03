@@ -1,11 +1,10 @@
 {
   "source": "current main",
-  "rendered_at": "2026-10-02T12:00:00+08:00",
+  "rendered_at": "2026-10-03T12:00:00+08:00",
   "weather": "synthetic demonstration",
   "city": "厦门市",
   "pages": [
-    "annual-garden",
-    "year-progress"
+    "annual-garden"
   ],
   "garden_seed": "public-example-garden",
   "private_data": false

@@ -12,11 +12,11 @@
 | 逐时天气 | [hourly-weather.png](hourly-weather.png) |
 | 山水长卷 | [shan-shui.png](shan-shui.png) |
 | 年度进度（2026-10-02 新布局） | [year-progress.png](year-progress.png) |
-| 年度花园（2026-10-02 新增） | [annual-garden.png](annual-garden.png) |
+| 年度花园（2026-10-03 轮廓优化） | [annual-garden.png](annual-garden.png) |
 | 每日概览 | [daily-overview.png](daily-overview.png) |
 | 时间刻度 | [time-scales.png](time-scales.png) |
 
-年度进度和年度花园单图由 2026-10-02 当前源码重新生成，原生横屏 1648×1236；花园使用固定公开示例种子，与私人安装实例无关。参数见 [selected-render-manifest.json](selected-render-manifest.json)。上方历史拼图仍保留原年度进度，不包含年度花园。
+年度进度单图于 2026-10-02 重新生成；年度花园于 2026-10-03 更新为 R6 轮廓避让版，种子灰度 80。两者均为原生横屏 1648×1236；花园使用固定公开示例种子，与私人安装实例无关。最新花园参数见 [selected-render-manifest.json](selected-render-manifest.json)。上方历史拼图仍保留原年度进度，不包含年度花园。
 
 `setup-desktop.png` 来自 v0.2.0 隔离测试实例的日常设置，使用保留示例域名，没有显示设备码或账号资料。
 
@@ -32,4 +32,10 @@ python tools/render_public_previews.py --at 2026-09-30T00:05:00+08:00
 
 ```sh
 python tools/render_public_previews.py --at 2026-10-02T12:00:00+08:00 --images-only --pages annual-garden year-progress
+```
+
+只重现当前年度花园示例：
+
+```sh
+python tools/render_public_previews.py --at 2026-10-03T12:00:00+08:00 --images-only --pages annual-garden
 ```

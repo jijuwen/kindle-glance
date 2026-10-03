@@ -9,7 +9,7 @@ import unittest
 from unittest.mock import patch
 from zoneinfo import ZoneInfo
 
-from PIL import Image
+from PIL import Image, ImageChops, ImageDraw, ImageFilter
 
 from fastapi import HTTPException
 from app import annual_garden as garden, main
@@ -54,12 +54,11 @@ class AnnualGardenTest(unittest.TestCase):
         second=garden.draw_annual_garden(datetime(2026,1,2),seed)
         slots=list(garden.garden_slots(2026,seed))
         slot=slots[0];x,y,w,h=(slot[k] for k in ('x','y','width','height'))
-        # Adjacent leaves now intentionally share some space. New ink can enter
-        # the old drawing's bounds, but cannot erase its existing black strokes.
+        # Growth preserves yesterday's strokes and uses its reserved space.
         before=first.crop((x,y,x+w,y+h));after=second.crop((x,y,x+w,y+h))
         self.assertTrue(all(b==0 for a,b in zip(before.tobytes(),after.tobytes()) if a==0))
         slot=slots[1];x,y,w,h=(slot[k] for k in ('x','y','width','height'))
-        self.assertEqual(first.getpixel((slot['seed_x'],slot['seed_y'])),176)
+        self.assertEqual(first.getpixel((slot['seed_x'],slot['seed_y'])),80)
         self.assertEqual(second.crop((x,y,x+w,y+h)).getextrema()[0],0)
         self.assertEqual(first.mode,'L')
         self.assertEqual(first.size,(1648,1236))
@@ -94,7 +93,8 @@ class AnnualGardenTest(unittest.TestCase):
         slots=list(garden.garden_slots(2026,'density'))
         close=sum(b['x']-a['x']-a['width']<=8 for a,b in zip(slots,slots[1:])
                   if a['index']//garden.COLUMNS==b['index']//garden.COLUMNS)
-        self.assertGreater(close,200)
+        # Clear contours need positive gaps; retain substantial close grouping.
+        self.assertGreater(close,120)
         self.assertGreater(max(s['height'] for s in slots)-min(s['height'] for s in slots),15)
 
     def test_daily_growth_is_stable_with_touching_neighbours(self):
@@ -122,16 +122,47 @@ class AnnualGardenTest(unittest.TestCase):
         self.assertGreater(max(s['height'] for s in slots)-min(s['height'] for s in slots),40)
         gaps=[b['x']-a['x']-a['width'] for a,b in zip(slots,slots[1:])
               if a['index']//garden.COLUMNS==b['index']//garden.COLUMNS]
-        self.assertGreater(sum(g<=8 for g in gaps),150)
+        self.assertGreater(sum(g<=8 for g in gaps),120)
         self.assertGreater(sum(g>=14 for g in gaps),40)
         # Variable-width composition must not settle back into equal-pitch rows.
         pitches={b['seed_x']-a['seed_x'] for a,b in zip(slots,slots[1:])
                  if a['index']//garden.COLUMNS==b['index']//garden.COLUMNS}
         self.assertGreater(max(pitches)-min(pitches),35)
-        self.assertLess(max(s['overlap_fraction'] for s in slots),.16)
         self.assertEqual(tuple(s['asset_id'] for s in slots),garden.order_for_year(2026,'composition'))
         slots[0]['x']=-999
         self.assertGreaterEqual(next(garden.garden_slots(2026,'composition'))['x'],0)
+
+    def test_complete_year_contours_seeds_and_markers_have_clearance(self):
+        # Rebuild the visible envelopes independently with Pillow. Test the
+        # actual resized ink (including faint antialiasing), enclosed white
+        # space, future seeds and today's underline, rather than planner scores.
+        for year,seed in ((2024,'public-example-garden'),(2026,'public-example-garden'),
+                          (2026,'touching'),(2027,'composition')):
+            with self.subTest(year=year,seed=seed):
+                occupied=Image.new('L',garden.SIZE,0)
+                for slot in garden.garden_slots(year,seed):
+                    x,y,w,h=(slot[k] for k in ('x','y','width','height'))
+                    mask=garden.asset_mask(slot['asset_id']).crop(slot['bounds']).resize((w,h),Image.Resampling.LANCZOS)
+                    envelope=Image.new('L',(w+16,h+12),0)
+                    draw=ImageDraw.Draw(envelope)
+                    for yy in range(h):
+                        xs=[xx for xx,value in enumerate(mask.crop((0,yy,w,yy+1)).tobytes()) if value]
+                        if xs:draw.line((8+min(xs),2+yy,8+max(xs),2+yy),fill=255)
+                    cx,cy=8+w//2,2+h//2
+                    draw.ellipse((cx-2,cy-2,cx+2,cy+2),fill=255)
+                    middle=8+w/2;bottom=2+h+2
+                    draw.line([(middle-6,bottom),(middle-1,bottom+1),(middle+6,bottom)],fill=255,width=2)
+                    spaced=envelope.filter(ImageFilter.MaxFilter(2*garden.OUTLINE_GAP+1))
+                    rectangle=(x-8,y-2,x+w+8,y+h+10)
+                    old=occupied.crop(rectangle)
+                    self.assertIsNone(ImageChops.multiply(spaced,old).getbbox(),slot['asset_id'])
+                    occupied.paste(ImageChops.lighter(envelope,old),(x-8,y-2))
+                left,top,right,bottom=garden.GRID
+                bounds=occupied.getbbox()
+                self.assertGreaterEqual(bounds[0],left+garden.OUTLINE_GAP)
+                self.assertGreaterEqual(bounds[1],top+garden.OUTLINE_GAP)
+                self.assertLessEqual(bounds[2],right-garden.OUTLINE_GAP)
+                self.assertLessEqual(bounds[3],bottom-garden.OUTLINE_GAP)
 
     def test_persistent_identity_concurrent_calls_and_corruption(self):
         with tempfile.TemporaryDirectory() as directory,patch.object(main,'DATA_DIR',Path(directory)):
