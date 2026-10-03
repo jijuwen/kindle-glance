@@ -26,14 +26,16 @@ from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, Redirect
 from fastapi.staticfiles import StaticFiles
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 
+from app.preview import preview_response
 from app.admin_ui import admin_shell
 from app import settings as persistent
 from app.display_context import preferences
 from app.codex_bridge import install_routes as install_codex_routes
 from app.ai_accounts import draw_ai_accounts, load_snapshot as load_ai_snapshot, snapshot_revision as ai_snapshot_revision, REVISION as AI_REVISION
+from app.annual_garden import draw_annual_garden, RENDER_REVISION as ANNUAL_GARDEN_REVISION
 from app.day_night import draw_day_night, RENDER_REVISION as DAY_NIGHT_REVISION
 from app.hourly_weather import draw_hourly_weather
-from app.kindle_classics import draw_calendar, draw_time_scales, draw_weather_glance, draw_year_progress
+from app.kindle_classics import YEAR_PROGRESS_REVISION, draw_calendar, draw_time_scales, draw_weather_glance, draw_year_progress
 from app.shan_shui import apply_render_mode, render_original, scene_seed
 from app.weather_overview import draw_overview, normalize_weather
 
@@ -131,6 +133,7 @@ PAGE_DEFINITIONS: dict[str, dict[str, Any]] = {
     "hourly-weather": {"title": "逐时天气", "orientation": "landscape", "size": (1648, 1236)},
     "day-night": {"title": "世界昼夜", "orientation": "landscape", "size": (1648, 1236), "render_interval": 900},
     "year-progress": {"title": "年度进度", "orientation": "landscape", "size": (1648, 1236), "render_interval": 86400},
+    "annual-garden": {"title": "年度花园", "orientation": "landscape", "size": (1648, 1236), "render_interval": 86400},
     "time-scales": {"title": "时间刻度", "orientation": "landscape", "size": (1648, 1236)},
     "daily-overview": {"title": "每日概览", "orientation": "landscape", "size": (1648, 1236)},
     "shan-shui": {
@@ -669,6 +672,20 @@ def current_ai_snapshot():
     return load_ai_snapshot(official if official.exists() else DATA_DIR / "ai-accounts.json")
 
 
+def annual_garden_seed() -> str:
+    """Persist this installation's garden identity without touching credentials."""
+    with STATE_LOCK:
+        path = DATA_DIR / "annual-garden.json"
+        payload = cached_json(path)
+        if not path.exists():
+            payload = {"version": 1, "seed": uuid.uuid4().hex}
+            persistent.atomic_json(path, payload)
+            invalidate_json(path)
+        if not isinstance(payload, dict) or payload.get("version") != 1 or not isinstance(payload.get("seed"), str) or not 1 <= len(payload["seed"]) <= 128:
+            raise HTTPException(503, detail="花园配置无法读取，请从备份恢复")
+        return payload["seed"]
+
+
 def page_needs_render(page_id: str, page: dict[str, Any], now: datetime | None = None) -> bool:
     if page.get("config_revision") != board_settings()["revision"]:
         return True
@@ -676,12 +693,16 @@ def page_needs_render(page_id: str, page: dict[str, Any], now: datetime | None =
         return True
     if page_id == "day-night" and page.get("render_revision") != DAY_NIGHT_REVISION:
         return True
+    if page_id == "year-progress" and page.get("render_revision") != YEAR_PROGRESS_REVISION:
+        return True
+    if page_id == "annual-garden" and page.get("render_revision") != ANNUAL_GARDEN_REVISION:
+        return True
     if page_id == "ai-accounts":
         snapshot = current_ai_snapshot()
         if page.get("render_revision") != AI_REVISION or page.get("source_revision") != ai_snapshot_revision(snapshot):
             return True
     current = now or datetime.now(display_timezone())
-    if page_id in {"simple-calendar", "year-progress"}:
+    if page_id in {"simple-calendar", "year-progress", "annual-garden"}:
         return datetime.fromtimestamp(page.get("rendered_at", 0), tz=current.tzinfo).date() != current.date()
     if page_id == "shan-shui" and page.get("scene_seed") != current_shan_shui_seed(current):
         return True
@@ -754,6 +775,8 @@ def _render_page_impl(page_id: str, settings: dict[str, Any]) -> dict[str, Any]:
         image = draw_day_night(now, font, settings["latitude"], settings["longitude"], settings["city"])
     elif page_id == "year-progress":
         image = draw_year_progress(now, font)
+    elif page_id == "annual-garden":
+        image = draw_annual_garden(now, annual_garden_seed())
     elif page_id == "time-scales":
         image = draw_time_scales(now, font)
     elif page_id == "daily-overview":
@@ -782,6 +805,8 @@ def _render_page_impl(page_id: str, settings: dict[str, Any]) -> dict[str, Any]:
             "weather_status": weather_status, "config_revision": settings["revision"],
             **({"scene_seed": scene_key} if scene_key else {}),
             **({"render_revision": DAY_NIGHT_REVISION} if page_id == "day-night" else {}),
+            **({"render_revision": YEAR_PROGRESS_REVISION} if page_id == "year-progress" else {}),
+            **({"render_revision": ANNUAL_GARDEN_REVISION} if page_id == "annual-garden" else {}),
             **({"render_revision": AI_REVISION, "source_revision": ai_snapshot_revision(ai_snapshot)} if page_id == "ai-accounts" else {}),
         }
         write_pages_state(pages_state)
@@ -1078,6 +1103,7 @@ def admin_bootstrap(view: str) -> dict[str, Any]:
         "preview_url": f"/admin/preview?v={state.get('rendered_at', '')}" if state.get("filename") else current.get("display_preview_url", ""),
         "display_preview_url": f"/admin/preview?v={state.get('rendered_at', '')}" if state.get("filename") else current.get("display_preview_url", ""),
         "rendered_at": state.get("rendered_at") or current.get("rendered_at"),
+        "rotation": state.get("rotation", current.get("rotation", 0)) if state.get("filename") else current.get("rotation", 0),
     })
     up_next: list[dict[str, Any]] = []
     for segment in timeline:
@@ -1364,7 +1390,7 @@ def admin_view(view: str, request: Request):
 
 
 @app.get("/admin/preview")
-def admin_preview(request: Request) -> FileResponse:
+def admin_preview(request: Request, upright: bool = False) -> Response:
     require_admin(request)
     state = read_state()
     if not state:
@@ -1374,7 +1400,7 @@ def admin_preview(request: Request) -> FileResponse:
     path = DATA_DIR / state.get("filename", "")
     if not path.is_file():
         raise HTTPException(status_code=404, detail="rendered image is unavailable")
-    return FileResponse(path, media_type="image/png", headers={"Cache-Control": "no-store"})
+    return preview_response(path, state.get("rotation", 0), upright)
 
 
 @app.get("/admin/pages/{page_id}/preview")
@@ -1391,13 +1417,13 @@ def admin_page_preview(page_id: str, request: Request) -> FileResponse:
 
 
 @app.get("/admin/playlist/items/{item_id}/preview")
-def admin_playlist_item_preview(item_id: str, request: Request) -> FileResponse:
+def admin_playlist_item_preview(item_id: str, request: Request, upright: bool = False) -> Response:
     require_admin(request)
     item = playlist_item(item_id)
     if not item:
         raise HTTPException(status_code=404, detail="unknown playlist item")
     rendered = compose_playlist_item(item)
-    return FileResponse(DATA_DIR / rendered["filename"], media_type="image/png", headers={"Cache-Control": "no-store"})
+    return preview_response(DATA_DIR / rendered["filename"], rendered["rotation"], upright)
 
 
 @app.post("/admin/api/actions/render")

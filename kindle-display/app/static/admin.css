@@ -156,8 +156,11 @@ h2, h3, p { margin-top: 0; }
 .check-days span { display: grid; place-items: center; width: 2.1rem; height: 2.1rem; border-radius: 50%; background: #303532; color: var(--muted); }
 .check-days input:checked + span { color: #102017; background: var(--green); }
 .sheet-actions { display: flex; justify-content: flex-end; gap: .55rem; margin-top: 1rem; }
-.preview-dialog { width: min(75rem, 96vw); }
-.preview-dialog img { display: block; max-width: 100%; max-height: 70vh; margin: 1rem auto 0; background: #fff; }
+.preview-dialog { width: min(75rem, 96vw); max-height: calc(100dvh - 2rem); }
+.preview-dialog .panel-head { margin-bottom: 0; }
+.preview-dialog.portrait { width: min(48rem, 96vw); }
+.screen-image.landscape { max-width: 100%; }
+.preview-dialog img { display: block; max-width: 100%; max-height: calc(100dvh - 10rem); width: auto; height: auto; object-fit: contain; margin: 1rem auto 0; background: #fff; }
 .toast-region { position: fixed; z-index: 100; right: 1rem; bottom: 7rem; display: grid; gap: .5rem; }
 .toast { max-width: 22rem; padding: .8rem 1rem; border: 1px solid rgba(255,255,255,.12); border-radius: 14px; background: rgba(35,39,36,.94); box-shadow: 0 16px 40px #000a; animation: toast-in .25s ease-out; }
 .toast.error { color: #ffd0cb; }
@@ -233,11 +236,11 @@ h2, h3, p { margin-top: 0; }
 .codex-auth-box p { margin: .6rem 0 0; font-size: .8rem; color: var(--muted); }
 .codex-device-code { display: flex; align-items: center; flex-wrap: wrap; gap: .7rem; margin-top: .85rem; }
 .codex-device-code code { font-size: 1.65rem; letter-spacing: .1em; font-weight: 700; font-variant-numeric: tabular-nums; user-select: all; }
-.codex-metadata { margin-top: .85rem; border-top: 1px solid var(--line); padding-top: .6rem; }
-.codex-metadata .field { min-width: 0; }
-.codex-metadata input { min-width: 0; max-width: 100%; }
-.codex-metadata .codex-plan-field { margin-top: .85rem; }
-.codex-metadata label .codex-hint { white-space: nowrap; }
+.codex-subscription { margin-top: 1rem; border-top: 1px solid var(--line); padding-top: .75rem; }
+.codex-subscription dl { display: flex; flex-wrap: wrap; gap: .75rem 2rem; margin: 0; }
+.codex-subscription dt { color: var(--muted); font-size: .74rem; }
+.codex-subscription dt span { display: inline-block; }
+.codex-subscription dd { margin: .35rem 0 0; color: var(--ink); font-size: .9rem; font-weight: 650; font-variant-numeric: tabular-nums; }
 .codex-activate { padding-top: 1rem; }
 .codex-activate p { color: var(--muted); font-size: .8rem; }
 .codex-settings :is(button, a, summary):focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }

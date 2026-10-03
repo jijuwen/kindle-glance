@@ -1,6 +1,7 @@
 # Private recovery archives and machine-specific configuration
 /backups/
 /.local/
+/.cloudflare/
 *.local.md
 *.local.json
 **/.env

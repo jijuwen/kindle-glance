@@ -17,6 +17,9 @@ from app.weather_overview import icon_name, icon_tile, parse_time, number
 
 SIZE = (1648, 1236)
 WEEKDAYS = '一二三四五六日'
+YEAR_PROGRESS_REVISION = 3
+YEAR_LABEL_INK = 96
+YEAR_FUTURE_INK = 192
 
 
 class Canvas:
@@ -179,26 +182,38 @@ def progress_cell(canvas, box, state):
 def draw_year_progress(now, font):
     canvas = Canvas(font)
     ordinal, total, fraction = year_progress(now)
-    canvas.text(78, 76, now.year, 142, True, align='left')
-    canvas.text(1568, 95, f'{fraction*100:.1f}%', 74, True, align='right')
-    canvas.text(1568, 181, '今年已过', 29, fill=INK_TERTIARY, align='right')
+    canvas.text(78, 76, now.year, 128, True, align='left')
+    canvas.text(1568, 76, f'{fraction*100:.1f}%', 128, True, align='right')
+    canvas.text(78, 228, f'{now.month}月{now.day}日 · 星期{WEEKDAYS[now.weekday()]}',
+                30, fill=YEAR_LABEL_INK, align='left')
 
-    grid_left, grid_top = 324, 270
-    cell, column_step, row_step = 25, 39, 64
+    # Keep the day numbers black while their explanatory labels are quieter.
+    summary = [('今年已过 · 第 ', False), (str(ordinal), True), (' 天 / ', False),
+               (str(total), True), (' · 还剩 ', False), (str(total-ordinal), True),
+               (' 天', False)]
+    runs = [(value, font(30, important), INK_PRIMARY if important else YEAR_LABEL_INK)
+            for value, important in summary]
+    x = 1568 - sum(face.getlength(value) for value, face, _ in runs)
+    for value, face, fill in runs:
+        canvas.draw.text((x, 257), value, font=face, fill=fill, anchor='ls')
+        x += face.getlength(value)
+
+    grid_left, grid_top = 224, 336
+    cell, column_step, row_step, quarter_gap = 28, 42, 64, 24
     for month in range(1, 13):
-        canvas.text(254, grid_top+(month-1)*row_step+1, f'{month}月', 30, True,
-                    fill=INK_SECONDARY, align='right')
+        y = grid_top+(month-1)*row_step+((month-1)//3)*quarter_gap
+        canvas.text(164, y-2, f'{month}月', 32, month == now.month,
+                    fill=YEAR_LABEL_INK, align='right')
         days = calendar.monthrange(now.year, month)[1]
         for day in range(1, days+1):
             date = now.date().replace(month=month, day=day)
-            state = 'elapsed' if date < now.date() else 'current' if date == now.date() else 'future'
             x = grid_left+(day-1)*column_step
-            y = grid_top+(month-1)*row_step
-            progress_cell(canvas, (x, y, x+cell, y+cell), state)
-
-    canvas.text(1532, 1032, f'第 {ordinal} 天', 31, True, align='right')
-    canvas.text(1568, 1035, f'/ {total}', 28, fill=INK_TERTIARY, align='left')
-    canvas.footer('年度', f'{now.year}年')
+            canvas.capsule((x, y, x+cell, y+cell), radius=8,
+                           fill=INK_PRIMARY if date <= now.date() else YEAR_FUTURE_INK)
+            if date == now.date():
+                # Shape, rather than a different gray, identifies today's black dot.
+                canvas.draw.rounded_rectangle((x-6, y-6, x+cell+5, y+cell+5),
+                                              radius=13, outline=INK_PRIMARY, width=3)
     return canvas.image
 
 

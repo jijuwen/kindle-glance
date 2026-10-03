@@ -45,7 +45,7 @@ def install_routes(app, require_admin, require_csrf, board_settings):
     @app.post("/admin/api/codex/accounts/{slot}/{action}")
     async def codex_action(slot: int, action: str, request: Request):
         require_csrf(request)
-        if slot not in range(1, 5) or action not in {"login", "cancel", "confirm", "sync", "metadata", "unlink"}:
+        if slot not in range(1, 5) or action not in {"login", "cancel", "confirm", "sync", "unlink"}:
             raise HTTPException(404, detail="操作不存在")
         raw = await request.body()
         if len(raw) > 4096:
@@ -56,10 +56,6 @@ def install_routes(app, require_admin, require_csrf, board_settings):
             raise HTTPException(400, detail="请求格式无效")
         if not isinstance(body, dict):
             raise HTTPException(400, detail="请求格式无效")
-        if action == "metadata" and "expires_local" in body:
-            from app.settings import local_timestamp
-            body["expires_at"] = local_timestamp(body.pop("expires_local"), board_settings()["timezone"], body.pop("fold", None)) if body["expires_local"] else None
-            body.pop("expires_local", None)
         import asyncio
         result = await asyncio.to_thread(collector_request, f"/slots/{slot}/{action}", body)
         return JSONResponse(result, headers={"Cache-Control": "no-store"})

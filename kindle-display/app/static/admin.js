@@ -17,8 +17,16 @@
       : {month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit", hour12:data.settings?.display_preferences?.hour_format === "12", timeZone:data.settings?.timezone || "UTC"}
     ).format(date);
   };
+  const orientationClass = item => [90, 270].includes(item?.rotation) ? "landscape" : "portrait";
+  const previewSource = item => {
+    const source = item?.display_preview_url || item?.preview_url;
+    if (!source) return "";
+    const url = new URL(source, location.href);
+    url.searchParams.set("upright", "true");
+    return url.pathname + url.search + url.hash;
+  };
   const orientationLabel = item => item.rotation === 90 ? "横屏 · 向右转" : item.rotation === 270 ? "横屏 · 向左转" : "竖屏";
-  const iconFor = page => ({"simple-calendar":"日", "weather-glance":"☀", "hourly-weather":"时", "year-progress":"年", "time-scales":"刻", "daily-overview":"▤", "shan-shui":"山"})[page] || "◇";
+  const iconFor = page => ({"simple-calendar":"日", "weather-glance":"☀", "hourly-weather":"时", "year-progress":"年", "annual-garden":"花", "time-scales":"刻", "daily-overview":"▤", "shan-shui":"山"})[page] || "◇";
   const renderModeLabel = item => item.page_id === "shan-shui"
     ? (item.config?.render_mode === "kindle_gray" ? "Kindle 优化灰阶" : "原版灰阶")
     : "";
@@ -47,11 +55,11 @@
   }
 
   function screenPicture(item, className = "") {
-    if (!item?.preview_url) {
+    if (!previewSource(item)) {
       const job=data.previews?.pages.find(p=>p.page_id===item?.page_id);
       return `<div class="screen-empty">${job?.status==='error'?'生成失败，可重试':job?.status==='running'?'正在生成…':'等待生成…'}</div>`;
     }
-    return `<img class="${className}" src="${h(item.preview_url)}" alt="${h(item.name)}预览">`;
+    return `<img class="${className} ${orientationClass(item)}" src="${h(previewSource(item))}" alt="${h(item.name)}预览">`;
   }
 
   function renderDashboard() {
@@ -71,7 +79,7 @@
       </section>
       <section class="hero-grid">
         <article class="panel current-panel">
-          <div class="panel-head"><div><h2>当前画面</h2><p>服务器准备的 1236 × 1648 图片；设备连接见最近取图记录</p></div></div>
+          <div class="panel-head"><div><h2>当前画面</h2><p>按看板方向正向展示；设备连接见最近取图记录</p></div></div>
           <div class="screen-stage">${screenPicture(current, "screen-image")}<span class="screen-badge">${h(orientationLabel(current))}</span></div>
           <div class="current-meta"><div><h2>${h(current?.name || "尚未生成")}</h2><p>${h(current?.page_title || "等待首次渲染")} · 更新于 ${formatTime(current?.rendered_at)}</p></div></div>
           <div class="button-row"><button id="render-current" class="primary-button">立即重新渲染</button><button id="preview-current" class="secondary-button">大图预览</button></div>
@@ -174,7 +182,7 @@
   }
 
   function showPreview(item) {
-    overlay.innerHTML = `<div class="sheet-backdrop"><section class="sheet preview-dialog" role="dialog" aria-modal="true"><div class="panel-head"><div><h2>${h(item?.name || "图片预览")}</h2><p>${h(orientationLabel(item || {rotation:0}))}</p></div><button class="icon-button close-sheet">×</button></div>${item?.display_preview_url || item?.preview_url ? `<img src="${h(item.display_preview_url || item.preview_url)}" alt="${h(item.name)}大图预览">` : '<div class="empty-state">暂无图片</div>'}</section></div>`;
+    overlay.innerHTML = `<div class="sheet-backdrop"><section class="sheet preview-dialog ${orientationClass(item)}" role="dialog" aria-modal="true"><div class="panel-head"><div><h2>${h(item?.name || "图片预览")}</h2><p>${h(orientationLabel(item || {rotation:0}))}</p></div><button class="icon-button close-sheet">×</button></div>${previewSource(item) ? `<img src="${h(previewSource(item))}" alt="${h(item.name)}大图预览">` : '<div class="empty-state">暂无图片</div>'}</section></div>`;
     bindSheetClose();
   }
 

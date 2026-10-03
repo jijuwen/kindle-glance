@@ -6,8 +6,8 @@ from datetime import datetime, timedelta, timezone
 from unittest.mock import patch
 from app import main
 from app.kindle_classics import (draw_calendar, draw_time_scales, draw_weather_glance,
-    draw_year_progress, month_grid, period_progress, seven_days, temperature_extent, year_progress)
-from app.ink_palette import INK_PRIMARY, PROGRESS_ELAPSED, PROGRESS_FUTURE
+    draw_year_progress, month_grid, period_progress, seven_days, temperature_extent, year_progress,
+    YEAR_PROGRESS_REVISION)
 
 cached_weather = main.get_weather
 
@@ -46,7 +46,8 @@ class ClassicsTest(unittest.TestCase):
             file.touch()
             now=datetime(2026,9,5,0,1,tzinfo=timezone(timedelta(hours=8)))
             previous=now-timedelta(minutes=2)
-            page={'filename':file.name,'rendered_at':previous.timestamp(), 'config_revision':main.board_settings()['revision']}
+            page={'filename':file.name,'rendered_at':previous.timestamp(),
+                  'config_revision':main.board_settings()['revision'], 'render_revision':YEAR_PROGRESS_REVISION}
             self.assertTrue(main.page_needs_render('simple-calendar',page,now))
             self.assertTrue(main.page_needs_render('year-progress',page,now))
             page['rendered_at']=now.timestamp()
@@ -65,11 +66,47 @@ class ClassicsTest(unittest.TestCase):
             self.assertLessEqual(fraction,1)
             self.assertEqual(draw_year_progress(now,main.font).size,(1648,1236))
 
-    def test_year_grid_uses_semantic_progress_palette(self):
+    def test_year_primary_information_and_today_are_pure_black(self):
         image=draw_year_progress(datetime(2026,9,5,13,30),main.font)
-        self.assertEqual(image.getpixel((336,282)),PROGRESS_ELAPSED)
-        self.assertEqual(image.getpixel((492,794)),INK_PRIMARY)
-        self.assertEqual(image.getpixel((1506,986)),PROGRESS_FUTURE)
+        self.assertEqual(image.getpixel((238,350)),0)  # Past date.
+        self.assertEqual(image.getpixel((406,910)),0)  # Today.
+        self.assertEqual(image.getpixel((406,890)),0)  # Today's outer ring.
+        self.assertEqual(image.getpixel((406,893)),255)  # White gap inside ring.
+        self.assertEqual(image.getpixel((364,890)),255)  # Past date has no ring.
+        self.assertEqual(image.getpixel((1498,1126)),192)  # Future date.
+        self.assertEqual(image.crop((78,76,600,206)).getextrema()[0],0)  # Year.
+        self.assertEqual(image.crop((900,76,1568,206)).getextrema()[0],0)  # Percent.
+        self.assertEqual(image.crop((900,220,1568,266)).getextrema()[0],0)  # Day numbers.
+        self.assertEqual(image.crop((66,330,165,374)).getextrema()[0],96)  # Month.
+        self.assertEqual(image.crop((78,228,580,266)).getextrema()[0],96)  # Date caption.
+        self.assertEqual(image.crop((78,278,1580,326)).getextrema(),(255,255))  # No date axis.
+        self.assertEqual(image.crop((0,1150,1648,1236)).getextrema(),(255,255))  # No footer.
+
+    def test_year_grid_respects_month_lengths_and_boundary_today_markers(self):
+        for now in (datetime(2026,1,1),datetime(2026,12,31),datetime(2024,2,29)):
+            with self.subTest(date=now.date()):
+                image=draw_year_progress(now,main.font)
+                y=336+(now.month-1)*64+((now.month-1)//3)*24
+                x=224+(now.day-1)*42
+                self.assertEqual(image.getpixel((x+14,y+14)),0)
+                self.assertEqual(image.getpixel((x+14,y-6)),0)
+                self.assertEqual(image.getpixel((x+14,y-3)),255)
+                self.assertEqual(image.getpixel((1498,414)),255)  # February has no 31st.
+        common=draw_year_progress(datetime(2026,2,28),main.font)
+        self.assertEqual(common.getpixel((1414,414)),255)  # No February 29th.
+
+    def test_year_layout_revision_invalidates_same_day_cache(self):
+        with tempfile.TemporaryDirectory() as root, patch.object(main,'DATA_DIR',Path(root)):
+            image=Path(root)/'year.png'
+            image.touch()
+            now=datetime.now(main.display_timezone())
+            page={'filename':image.name,'rendered_at':now.timestamp(),
+                  'config_revision':main.board_settings()['revision']}
+            self.assertTrue(main.page_needs_render('year-progress',page,now))
+            page['render_revision']=YEAR_PROGRESS_REVISION
+            self.assertFalse(main.page_needs_render('year-progress',page,now))
+            page['render_revision']=YEAR_PROGRESS_REVISION-1
+            self.assertTrue(main.page_needs_render('year-progress',page,now))
 
     def test_time_scales_use_current_units_and_render(self):
         now=datetime(2026,9,5,13,30)

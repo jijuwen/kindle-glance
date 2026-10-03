@@ -26,7 +26,7 @@ def admin_shell(view: str, title: str, bootstrap: dict[str, Any], csrf: str) -> 
   <meta name="csrf-token" content="{html.escape(csrf, quote=True)}">
   <meta name="color-scheme" content="dark">
   <title>{html.escape(title)} · KindleGlance</title>
-  <link rel="stylesheet" href="/admin/static/admin.css?v=41">
+  <link rel="stylesheet" href="/admin/static/admin.css?v=43">
 </head>
 <body data-view="{html.escape(view, quote=True)}">
   <div class="ambient ambient-a"></div><div class="ambient ambient-b"></div>
@@ -48,7 +48,7 @@ def admin_shell(view: str, title: str, bootstrap: dict[str, Any], csrf: str) -> 
   <link rel="stylesheet" href="/admin/static/password.css?v=1">
   <script src="/admin/static/password.js?v=1" defer></script>
   <script src="/admin/static/settings.js?v=1" defer></script>
-  <script src="/admin/static/admin.js?v=41" defer></script>
-  <script src="/admin/static/codex-accounts.js?v=40" defer></script>
+  <script src="/admin/static/admin.js?v=44" defer></script>
+  <script src="/admin/static/codex-accounts.js?v=42" defer></script>
 </body>
 </html>"""

@@ -4,20 +4,24 @@
 
 **正式版 [v0.2.0](https://github.com/jijuwen/kindle-glance/releases/tag/v0.2.0) 已发布。** 支持地区与时区配置、首次设置和独立日常管理；设备基线为 KPW11 / KOReader v2026.07.1。安装前请阅读 [兼容范围](docs/COMPATIBILITY.md)。
 
-![KindleGlance 当前版本八种看板拼图](previews/showcase.png)
+![KindleGlance v0.2.0 八种看板拼图](previews/showcase.png)
 
-当前版本直接渲染的八种看板：天气、日历、世界昼夜、山水与时间进度。示例日期为 2026-09-30，天气为演示数据；[查看单张原图与生成说明](previews/README.md)。
+上图为 v0.2.0 的八种看板，示例日期为 2026-09-30，天气为演示数据。当前 main 分支另包含年度花园、自动订阅信息及预览改进，详见 [更新记录](CHANGELOG.md)；这些源码更新尚未打新的发行标签。
+
+![年度花园横屏原生渲染](previews/annual-garden.png)
+
+年度花园随日期逐日生长，365 幅图案与闰日素材采用手绘线条和字体。重绘素材、稳定排列、灰度及启用方法见 [年度花园说明](docs/ANNUAL_GARDEN.md)；[查看其他原图与生成说明](previews/README.md)。
 
 ## 包含什么
 
-- 九类内容：每日概览、天气一览、逐时天气、简约月历、世界昼夜、山水长卷、年度进度、时间刻度、可选 Codex 用量。
-- 手机和桌面管理端：首次设置与日常设置分离，共享 Dock、播放列表、后台预览和设备连接。
+- 十类内容：每日概览、天气一览、逐时天气、简约月历、世界昼夜、山水长卷、年度进度、年度花园、时间刻度、可选 Codex 用量。
+- 手机和桌面管理端：首次设置与日常设置分离，共享 Dock、播放列表、后台预览和设备连接；横屏预览自动直立显示。
 - 城市搜索支持中文、繁体、拼音和英文；城市优先、其他地点折叠。
 - 管理密码至少 6 字符，支持显示／隐藏；设备连接码自动生成 6 位大写字母与数字。
 - 设置持久化、旧配置迁移、缓存版本隔离、摄氏 / 华氏、周起始日、12 / 24 小时制。
 - Kindle 插件：RTC 定时唤醒取图后关闭 Wi-Fi 休眠，也支持保持联网的常驻模式。
 - KUAL A / B 启动入口：普通阅读模式与看板 no framework 模式，保留官方启动参数。
-- 可选账号采集器：四个 Codex 账号、官方设备码授权、用量同步与人工订阅到期日期。
+- 可选账号采集器：四个 Codex 账号、官方设备码授权、用量与套餐及订阅周期自动同步。
 
 ## 快速开始
 
@@ -41,7 +45,7 @@ KUAL → KindleGlance → **B - Dashboard (no framework)** → KOReader 工具 �
 `浏览器 → 服务端配置 / 渲染 ← 天气源与可选采集器`，`Kindle 插件 → 鉴权 API → 灰阶图片`。单管理员、一个全局地区和播放列表、单 Uvicorn worker。运行数据与授权不进入源码仓库。
 
 ```text
-kindle-display/          服务端、管理页面、设置与九类渲染
+kindle-display/          服务端、管理页面、设置与十类渲染
 kindle-plugin/           KOReader 插件和 Lua 回归测试
 kindle-launcher-ab/      A/B KUAL 菜单与构建器
 tools/codex-collector/   可选账号授权及用量采集
@@ -56,6 +60,7 @@ compose.codex.yaml      可选采集器覆盖配置
 ![当前版本的日常设置](previews/setup-desktop.png)
 
 - [安装](docs/INSTALL.md) · [配置与数据流](docs/CONFIGURATION.md)
+- [年度花园与素材](docs/ANNUAL_GARDEN.md) · [开发、测试与构建](docs/DEVELOPMENT.md)
 - [升级 / 备份 / 回退 / 卸载](docs/UPGRADING.md) · [故障处理](docs/TROUBLESHOOTING.md)
 - [开源规划](docs/OPEN_SOURCE_PLAN.md) · [实施进度](docs/IMPLEMENTATION_STATUS.md)
 - [兼容与验收](docs/COMPATIBILITY.md) · [贡献指南](CONTRIBUTING.md) · [安全说明](SECURITY.md)

@@ -7,7 +7,7 @@ import unittest
 from zoneinfo import ZoneInfo
 
 from app.ai_account_data import validate_snapshot
-from app.ai_accounts import account_status, load_snapshot, reset_label, account_time, snapshot_revision
+from app.ai_accounts import account_status, load_snapshot, reset_label, account_time, snapshot_revision, subscription_summary
 
 
 class AiAccountsTest(unittest.TestCase):
@@ -69,3 +69,43 @@ class AiAccountsTest(unittest.TestCase):
             self.assertEqual(load_snapshot(path), self.snapshot)
             path.write_text('{broken', encoding='utf-8')
             self.assertIsNone(load_snapshot(path))
+
+    def automatic(self):
+        self.snapshot['schema_version'] = 2
+        self.account.pop('expires_at')
+        self.account['subscription'] = {'plan_code':'plus', 'cycle_ends_at':self.at+86400,
+            'entitlement_ends_at':self.at+108000, 'active':True, 'will_renew':True,
+            'is_delinquent':False, 'updated_at':self.at, 'source':'subscriptions', 'status':'ok'}
+        return self.account['subscription']
+
+    def test_v2_is_strict_and_v1_remains_readable(self):
+        self.assertEqual(validate_snapshot(self.snapshot), self.snapshot)
+        sub = self.automatic()
+        self.assertEqual(validate_snapshot(self.snapshot), self.snapshot)
+        for field,value in [('tokens', {'access_token':'private'}), ('active','yes'), ('cycle_ends_at',self.at*1000)]:
+            invalid = copy.deepcopy(self.snapshot)
+            invalid['accounts'][0]['subscription'][field] = value
+            with self.assertRaises(ValueError): validate_snapshot(invalid)
+        sub['source'] = 'id_token'
+        with self.assertRaises(ValueError): validate_snapshot(self.snapshot)
+        sub['status'] = 'cached'
+        self.assertEqual(validate_snapshot(self.snapshot), self.snapshot)
+
+    def test_auto_renewal_is_a_cycle_not_an_expired_account(self):
+        sub = self.automatic()
+        title,value,date,suffix,warning = subscription_summary(self.account,self.now)
+        self.assertEqual((title,value,date,suffix,warning),('距离续费','1',self.at+86400,'续费',''))
+        sub['cycle_ends_at'] = self.at-1
+        self.assertEqual(subscription_summary(self.account,self.now)[1],'待更新')
+        self.assertEqual(self.account['plan'],'PLUS')
+        sub['active'] = False
+        self.assertEqual(subscription_summary(self.account,self.now)[1],'已结束')
+
+    def test_subscription_staleness_is_separate_from_quota_staleness(self):
+        sub = self.automatic()
+        sub['updated_at'] -= 7201
+        self.assertEqual(subscription_summary(self.account,self.now)[4],'订阅待更新')
+        self.assertEqual(account_status(self.account,self.at,self.now),'')
+        sub['updated_at'] = self.at
+        sub['status'] = 'cached'
+        self.assertEqual(subscription_summary(self.account,self.now)[4],'订阅待更新')

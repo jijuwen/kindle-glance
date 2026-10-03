@@ -1,0 +1,29 @@
+{
+  "yozai_release": "v0.868",
+  "fonts": [
+    {
+      "file": "Yozai-Medium.ttf",
+      "source": "https://github.com/lxgw/yozai-font/releases/download/v0.868/Yozai-Medium.ttf",
+      "bytes": 15238394,
+      "sha256": "05f50f252b45197d0d6148a4abc3e37c7cd4cfdf03c955b57c25d53d924f835f"
+    },
+    {
+      "file": "ShantellSans.ttf",
+      "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/shantellsans/ShantellSans%5BBNCE%2CINFM%2CSPAC%2Cwght%5D.ttf",
+      "bytes": 1284736,
+      "sha256": "d98a7913853f78d71aa0b86daf66b5eddb5a3266c07bfd51ef70632b88c41084"
+    },
+    {
+      "file": "Yozai-OFL.txt",
+      "source": "https://raw.githubusercontent.com/lxgw/yozai-font/master/OFL.txt",
+      "bytes": 4497,
+      "sha256": "86b3a0b5162848503241d80ea9a309a6459690ba7dc547940758a6a689a53b02"
+    },
+    {
+      "file": "ShantellSans-OFL.txt",
+      "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/shantellsans/OFL.txt",
+      "bytes": 4397,
+      "sha256": "ebfce7d104d597c385b71e9fbf8f0e2034e73320f857086105dc265b82c05caa"
+    }
+  ]
+}

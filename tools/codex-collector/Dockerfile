@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends python3 ca-cert
     && mkdir -p /state /public /bridge /app \
     && chown -R collector:collector /state /public /bridge /app
 WORKDIR /app
-COPY service.py rpc.py entrypoint.py smoke_rpc.py ./
+COPY service.py rpc.py subscriptions.py entrypoint.py smoke_rpc.py ./
 USER collector
 EXPOSE 8091
 CMD ["python3", "entrypoint.py"]

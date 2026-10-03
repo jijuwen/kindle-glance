@@ -11,8 +11,9 @@ from PIL import Image, ImageDraw
 from app.display_context import preferences, clock
 from app.ai_account_data import MAX_BYTES, validate_snapshot
 
-REVISION = 'usage-notice-contrast-v3'
+REVISION = 'automatic-subscriptions-v4'
 STALE_SECONDS = 1800
+SUBSCRIPTION_STALE_SECONDS = 7200
 # E-ink text hierarchy: core, important, secondary, supporting.
 # Antialiased glyph edges naturally contain intermediate gray values.
 INK = 0
@@ -59,6 +60,28 @@ def account_status(account, collected_at, now):
     if any(w['reset_at'] and w['reset_at'] <= now.timestamp() for w in account['windows']):
         return '已到重置时间 · 待刷新'
     return ''
+
+
+def subscription_summary(account, now):
+    sub = account.get('subscription')
+    if sub is None:  # Version 1 compatibility during the receiver-first rollout.
+        end = account.get('expires_at')
+        return ('订阅剩余', str(math.ceil((end - now.timestamp()) / 86400)) if end and end > now.timestamp()
+                else '已到期' if end else '未知', end, '到期', '')
+    end = sub['cycle_ends_at']
+    renewable = sub['will_renew'] is True
+    warning = '订阅待更新' if sub['status'] != 'ok' or not sub['updated_at'] or sub['updated_at'] < now.timestamp() - SUBSCRIPTION_STALE_SECONDS else ''
+    if sub['updated_at'] and sub['updated_at'] > now.timestamp() + 300:
+        warning = '订阅时间异常'
+    if sub['is_delinquent']:
+        warning = '订阅付款待处理'
+    if sub['active'] is False:
+        value = '已结束'
+    elif end and end > now.timestamp():
+        value = str(math.ceil((end - now.timestamp()) / 86400))
+    else:
+        value = '待更新' if end else '未知'
+    return ('距离续费' if renewable else '订阅剩余', value, end, '续费' if renewable else '周期结束', warning)
 
 
 def draw_ai_accounts(snapshot, now, font):
@@ -181,24 +204,26 @@ def draw_ai_accounts(snapshot, now, font):
             write(x, top + 151 + shift, label, fit(label, 26, 480), fill=IMPORTANT_INK)
         if not windows:
             write(72, top + 90, '暂无额度数据', 32)
-        expiry = account['expires_at']
-        write(1226, top + 61, '订阅剩余', 25, fill=SUPPORTING_INK)
-        if expiry and expiry > now.timestamp():
-            days = math.ceil((expiry - now.timestamp()) / 86400)
-            value = str(days)
+        title, value, expiry, date_label, subscription_warning = subscription_summary(account, now)
+        write(1226, top + 61, title, 25, fill=SUPPORTING_INK)
+        if value.isdecimal():
             write(1226, top + 102, value, 44, True)
             write(1226 + width(value, 44, True) + 9, top + 117, '天', 25, fill=SECONDARY_INK)
         else:
-            write(1226, top + 107, '已到期' if expiry else '未知', 34, fill=IMPORTANT_INK)
+            write(1226, top + 107, value, 34, fill=IMPORTANT_INK)
         if expiry:
-            write(1226, top + 160, local_time(expiry) + ' 到期', 24, fill=SECONDARY_INK)
+            date_line = local_time(expiry) + ' ' + date_label
+            write(1226, top + 160, date_line, fit(date_line, 24, 350), fill=SECONDARY_INK)
         status = account_status(account, snapshot['collected_at'], now)
         footer = '额度更新 ' + local_time(account['updated_at'])
         if status:
             footer += ' · ' + status
         write(72, top + 204, footer, fit(footer, 23, 1070), fill=SUPPORTING_INK)
+        subscription_footer = subscription_warning
         if account['reset_credits']:
-            write(1226, top + 204, f"可用重置券 {account['reset_credits']}", 23, fill=SECONDARY_INK)
+            subscription_footer += (' · ' if subscription_footer else '') + f"重置券 {account['reset_credits']}"
+        if subscription_footer:
+            write(1226, top + 204, subscription_footer, fit(subscription_footer, 23, 350), fill=SECONDARY_INK)
         if any(next_account is not None for next_account, _ in rows[row + 1:]):
             line(top + 237, 205)
     if pages > 1:

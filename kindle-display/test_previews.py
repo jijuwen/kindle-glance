@@ -25,6 +25,11 @@ class PreviewTest(unittest.TestCase):
         main.Image.new('L', (12, 16), 255).save(self.directory / (page_id + '.png'))
         state = main.read_pages_state()
         state.setdefault('pages', {})[page_id] = {'filename': page_id + '.png', 'config_revision': main.board_settings()['revision'], 'rendered_at': main.time.time()}
+        revisions = {'day-night': main.DAY_NIGHT_REVISION,
+                     'year-progress': main.YEAR_PROGRESS_REVISION,
+                     'annual-garden': main.ANNUAL_GARDEN_REVISION}
+        if page_id in revisions:
+            state['pages'][page_id]['render_revision'] = revisions[page_id]
         main.write_pages_state(state)
         return state['pages'][page_id]
 

@@ -1,0 +1,5566 @@
+{
+  "version": 3,
+  "count": 365,
+  "format": "individually authored SVG paths and matching transparent black masks",
+  "provenance": "Reconstructed vector illustrations informed by the user-provided One Year garden screenshots; not the original application asset files.",
+  "reference": "user-full-garden-2026.jpg",
+  "subjects": [
+    "acorn",
+    "apple",
+    "bamboo",
+    "banana",
+    "bee",
+    "bell",
+    "berries",
+    "bird",
+    "bush",
+    "butterfly",
+    "cactus",
+    "camp",
+    "carrot",
+    "caterpillar",
+    "cherry",
+    "clover",
+    "cow",
+    "daisy",
+    "droop",
+    "fern",
+    "fig",
+    "fish",
+    "frog",
+    "grapes",
+    "grass",
+    "hedgehog",
+    "heron",
+    "honeycomb",
+    "house",
+    "ladybug",
+    "lily",
+    "log",
+    "moon",
+    "mouse",
+    "mushroom",
+    "onion",
+    "owl",
+    "palm",
+    "pepper",
+    "pine",
+    "pumpkin",
+    "rainbow",
+    "rake",
+    "raspberry",
+    "rose",
+    "rosemary",
+    "sailboat",
+    "seaweed",
+    "sheep",
+    "shrub",
+    "signpost",
+    "slug",
+    "snail",
+    "snake",
+    "snowman",
+    "spade",
+    "spiderweb",
+    "spiralflower",
+    "sprout",
+    "star",
+    "stones",
+    "strawberry",
+    "stump",
+    "succulent",
+    "sun",
+    "sunflower",
+    "tortoise",
+    "tree",
+    "tulip",
+    "twig",
+    "vine",
+    "wateringcan",
+    "waterlily",
+    "well",
+    "witch",
+    "worm"
+  ],
+  "assets": [
+    {
+      "id": "001-berries",
+      "subject": "berries",
+      "reference_slot": 1,
+      "svg": "svg/001-berries.svg",
+      "png": "png/001-berries.png",
+      "sha256": "d1eb0566f3c6c65673e831defa6501cccf31e09f89b6f535ab45590af8431c68",
+      "png_sha256": "7435c5ca4d3a55cca236d2933cf1aaa5979ee4192f057a2b73a1f444282b65c5",
+      "ink_bbox": [
+        21,
+        34,
+        177,
+        220
+      ]
+    },
+    {
+      "id": "002-bell",
+      "subject": "bell",
+      "reference_slot": 2,
+      "svg": "svg/002-bell.svg",
+      "png": "png/002-bell.png",
+      "sha256": "ab2b41f38928c3f3b25422b75c541379565d765eb2f79823415710d3b1d66711",
+      "png_sha256": "43c885f9da96a96937e08ea1ca2b22c872dba3ed15e07dac20a2c8a041a52e57",
+      "ink_bbox": [
+        42,
+        62,
+        161,
+        222
+      ]
+    },
+    {
+      "id": "003-sunflower",
+      "subject": "sunflower",
+      "reference_slot": 3,
+      "svg": "svg/003-sunflower.svg",
+      "png": "png/003-sunflower.png",
+      "sha256": "cac77a54cd8325ac71c2ddd41e8592ce4eb2a30991faefa7a5e315f726e214a3",
+      "png_sha256": "0d3fb8a7c4a1191ee04275ed4f4e6d88b125b1cee5c40cddcbff92e3fa60516a",
+      "ink_bbox": [
+        35,
+        34,
+        159,
+        223
+      ]
+    },
+    {
+      "id": "004-daisy",
+      "subject": "daisy",
+      "reference_slot": 4,
+      "svg": "svg/004-daisy.svg",
+      "png": "png/004-daisy.png",
+      "sha256": "00176a315ad3b4ee38ae1b8ce1c26846ffb57e953d664b2aa59e04f5ae170044",
+      "png_sha256": "530a52f12687d6ce476ec868881ce2c3468dd8a2d13a0ae8d8d5b5b83752cbbb",
+      "ink_bbox": [
+        21,
+        28,
+        176,
+        223
+      ]
+    },
+    {
+      "id": "005-tulip",
+      "subject": "tulip",
+      "reference_slot": 5,
+      "svg": "svg/005-tulip.svg",
+      "png": "png/005-tulip.png",
+      "sha256": "d315682caaaaa24c93d5b909e760bfee4375cd9813d87a78630453c50dfa136e",
+      "png_sha256": "d81be59e21037cc5fd8ab433931ccb61ad86ef4d92a886af0ce7d599cde6fafd",
+      "ink_bbox": [
+        45,
+        21,
+        156,
+        223
+      ]
+    },
+    {
+      "id": "006-clover",
+      "subject": "clover",
+      "reference_slot": 6,
+      "svg": "svg/006-clover.svg",
+      "png": "png/006-clover.png",
+      "sha256": "d0936665005ba85f64da12d71ab735570be6a940debbda72a3b245faa2c3a29b",
+      "png_sha256": "59c2821fc56f29e307b807f80075a706d2112b8ed87398aa213fff4e5437c89a",
+      "ink_bbox": [
+        18,
+        15,
+        187,
+        222
+      ]
+    },
+    {
+      "id": "007-bell",
+      "subject": "bell",
+      "reference_slot": 7,
+      "svg": "svg/007-bell.svg",
+      "png": "png/007-bell.png",
+      "sha256": "0e1edcd7c289e71918cb859653d55e3c95b8d6135d25acbb42f3b56b975756b5",
+      "png_sha256": "4cf09131d0e154e555564de8da4b1a9b5fef52fd4ea3d81935dc9adc0843ad0a",
+      "ink_bbox": [
+        32,
+        70,
+        156,
+        223
+      ]
+    },
+    {
+      "id": "008-acorn",
+      "subject": "acorn",
+      "reference_slot": 8,
+      "svg": "svg/008-acorn.svg",
+      "png": "png/008-acorn.png",
+      "sha256": "ec1e3a4c88eccee2fad3565065e5b11cbfdb396b5c0d11bd99655d85b6cb7ed3",
+      "png_sha256": "cda33c547e9a1b4db7c0ae5caf2ef2a0d02760d194ea4cfb2805090fe1706f3e",
+      "ink_bbox": [
+        29,
+        34,
+        177,
+        202
+      ]
+    },
+    {
+      "id": "009-sheep",
+      "subject": "sheep",
+      "reference_slot": 9,
+      "svg": "svg/009-sheep.svg",
+      "png": "png/009-sheep.png",
+      "sha256": "1484e26fda658472cf8ddef7d63f292477a1818ab9567494f99ad4e50c00eb82",
+      "png_sha256": "b2ce865c4d46e26de0bb51ccd48abbecd0ad8f54d2f89656ac557a38160c022b",
+      "ink_bbox": [
+        21,
+        67,
+        175,
+        213
+      ]
+    },
+    {
+      "id": "010-caterpillar",
+      "subject": "caterpillar",
+      "reference_slot": 10,
+      "svg": "svg/010-caterpillar.svg",
+      "png": "png/010-caterpillar.png",
+      "sha256": "4989db845f7646baf9d5c13ca53721d78e3e63bc82ba62853956461a875178ba",
+      "png_sha256": "bde3efdad06243ce57c5ee5896b225634f5debc4ab41f1cd03e4caece65c701c",
+      "ink_bbox": [
+        24,
+        83,
+        185,
+        197
+      ]
+    },
+    {
+      "id": "011-star",
+      "subject": "star",
+      "reference_slot": 11,
+      "svg": "svg/011-star.svg",
+      "png": "png/011-star.png",
+      "sha256": "00aa6aeb351fae5df8db19382944109339d7a41477ce385d6abc45fe22aaecdf",
+      "png_sha256": "a9cb537cb009417be613857386ce8c5e2fa31858d56261e19dc2b0fb1c581859",
+      "ink_bbox": [
+        13,
+        29,
+        187,
+        220
+      ]
+    },
+    {
+      "id": "012-strawberry",
+      "subject": "strawberry",
+      "reference_slot": 12,
+      "svg": "svg/012-strawberry.svg",
+      "png": "png/012-strawberry.png",
+      "sha256": "dc2b10a4413ec7388d6fb7b89c75288273a5e69cb71770b0391f5974bc42ef99",
+      "png_sha256": "2573d40aeab3e1217c08ad70a4b61b52a661e465091a187403433bb6e566d672",
+      "ink_bbox": [
+        36,
+        40,
+        167,
+        217
+      ]
+    },
+    {
+      "id": "013-clover",
+      "subject": "clover",
+      "reference_slot": 13,
+      "svg": "svg/013-clover.svg",
+      "png": "png/013-clover.png",
+      "sha256": "8cc02ff26f890c484c397fc9764f7d5a9286119785ef6a95f9deb1c2dd9df6cf",
+      "png_sha256": "b7a76e20c237c4734663d2e420aed4cdf8210d4a6c2ff9d63d3ec1a5fb90a306",
+      "ink_bbox": [
+        32,
+        21,
+        167,
+        222
+      ]
+    },
+    {
+      "id": "014-droop",
+      "subject": "droop",
+      "reference_slot": 14,
+      "svg": "svg/014-droop.svg",
+      "png": "png/014-droop.png",
+      "sha256": "55746ba228efd7016f3b1b839ee6be50ec03c60bd5e3291e103d55df6c4132b1",
+      "png_sha256": "b672f1226b1bd6b878c4fc80b71d77b253e7f12d8e1addb2db32ebc80d484129",
+      "ink_bbox": [
+        46,
+        70,
+        167,
+        222
+      ]
+    },
+    {
+      "id": "015-fern",
+      "subject": "fern",
+      "reference_slot": 15,
+      "svg": "svg/015-fern.svg",
+      "png": "png/015-fern.png",
+      "sha256": "a1f097fd6d4c77adf16d390f342a709cf451c170220ab7c5f0b90bfa517ead08",
+      "png_sha256": "f9c73ed477151a19a03962c5db46c1cf9ebba692accef4e05a62ef61cd267c25",
+      "ink_bbox": [
+        46,
+        31,
+        167,
+        222
+      ]
+    },
+    {
+      "id": "016-daisy",
+      "subject": "daisy",
+      "reference_slot": 16,
+      "svg": "svg/016-daisy.svg",
+      "png": "png/016-daisy.png",
+      "sha256": "833be04139f48fa2395244e41191626fbc66db7c74a0a8b70524b9e0f7d36439",
+      "png_sha256": "e64100f0f104b3de74d1da6aad0da70b41b3b9b9359d4cc9c39f7056e9b0b2d4",
+      "ink_bbox": [
+        30,
+        18,
+        174,
+        222
+      ]
+    },
+    {
+      "id": "017-tulip",
+      "subject": "tulip",
+      "reference_slot": 17,
+      "svg": "svg/017-tulip.svg",
+      "png": "png/017-tulip.png",
+      "sha256": "8afd5e0875b9e1ae15e3f39a15820b52a01d95bd023784299743cdad33d6ed04",
+      "png_sha256": "95018b969a26f6bb0e725ca722b245298c288b94ea9149bf68b260042b1b0f10",
+      "ink_bbox": [
+        37,
+        26,
+        156,
+        222
+      ]
+    },
+    {
+      "id": "018-grapes",
+      "subject": "grapes",
+      "reference_slot": 18,
+      "svg": "svg/018-grapes.svg",
+      "png": "png/018-grapes.png",
+      "sha256": "f2a217ce518274d6267cbbd4ab9d7881e952a4ca6491f53d38bd16634743c013",
+      "png_sha256": "c9f92cabe618c3b37084cba2941fb8df96b5779ce908a4461dd9087a5ca28e28",
+      "ink_bbox": [
+        37,
+        24,
+        164,
+        199
+      ]
+    },
+    {
+      "id": "019-twig",
+      "subject": "twig",
+      "reference_slot": 19,
+      "svg": "svg/019-twig.svg",
+      "png": "png/019-twig.png",
+      "sha256": "6f9f57928b631bea1f0ec48137bb37135edc5e499aa5411eefb8f6fa68bb80ad",
+      "png_sha256": "abc6aa794a5b11b62d7b6d733c0e2f9c0f790af25551170bc85a6f259d6265b1",
+      "ink_bbox": [
+        16,
+        17,
+        172,
+        223
+      ]
+    },
+    {
+      "id": "020-berries",
+      "subject": "berries",
+      "reference_slot": 20,
+      "svg": "svg/020-berries.svg",
+      "png": "png/020-berries.png",
+      "sha256": "3128af3749832c0a0ff0ce8a2ecb1fbb314c90784f5ee9724ed854fb0df553c5",
+      "png_sha256": "c55cbdd8f73f1f261dd867d80d3168659459f8c3df4592153e863e32a2d9b806",
+      "ink_bbox": [
+        21,
+        34,
+        177,
+        220
+      ]
+    },
+    {
+      "id": "021-bird",
+      "subject": "bird",
+      "reference_slot": 21,
+      "svg": "svg/021-bird.svg",
+      "png": "png/021-bird.png",
+      "sha256": "aa96125475e78dcbf2638e4c4a1013ed680db01a93db6b04360b892211cb818f",
+      "png_sha256": "ca4d001ea1be84b156c9e330e4e86dfbc90561689eb1f1595f28b45e0c1fac0d",
+      "ink_bbox": [
+        25,
+        45,
+        158,
+        221
+      ]
+    },
+    {
+      "id": "022-grass",
+      "subject": "grass",
+      "reference_slot": 22,
+      "svg": "svg/022-grass.svg",
+      "png": "png/022-grass.png",
+      "sha256": "c6d29b4f4c341cbdb1eb56affa2b563438471453187a50bd234d9fd771255474",
+      "png_sha256": "6bfeb9876c7d0df39366f21f0eec4f8f78b12434eedbd26fb088dc46514b24ec",
+      "ink_bbox": [
+        14,
+        49,
+        186,
+        219
+      ]
+    },
+    {
+      "id": "023-lily",
+      "subject": "lily",
+      "reference_slot": 23,
+      "svg": "svg/023-lily.svg",
+      "png": "png/023-lily.png",
+      "sha256": "092e8f6e271e6cd9f2023a36a6951f6843027a852bf38368578eba587e1705ff",
+      "png_sha256": "7d382872d08d97a2c5533f8076b653c3bda0ba41c41697b978e3705512ecd849",
+      "ink_bbox": [
+        46,
+        21,
+        157,
+        222
+      ]
+    },
+    {
+      "id": "024-vine",
+      "subject": "vine",
+      "reference_slot": 24,
+      "svg": "svg/024-vine.svg",
+      "png": "png/024-vine.png",
+      "sha256": "0887bd303da57cb406dbfc22b2395a7b39b5f27c479c2e5e65284fde91f1278b",
+      "png_sha256": "58955dfb0a5525f2483e8b7717f738c3f7085f734b2b299dc779fb8d3be14ac9",
+      "ink_bbox": [
+        42,
+        16,
+        154,
+        222
+      ]
+    },
+    {
+      "id": "025-daisy",
+      "subject": "daisy",
+      "reference_slot": 25,
+      "svg": "svg/025-daisy.svg",
+      "png": "png/025-daisy.png",
+      "sha256": "4e29d67a738cfd47ccf656f83d558e0bb4d6f1ad6fd3ae77306e7b4af11dad1a",
+      "png_sha256": "58c261943b389026eb37464d5d99966bdb5c94ee1b229420a9751bbbde17d50a",
+      "ink_bbox": [
+        35,
+        35,
+        154,
+        223
+      ]
+    },
+    {
+      "id": "026-mushroom",
+      "subject": "mushroom",
+      "reference_slot": 26,
+      "svg": "svg/026-mushroom.svg",
+      "png": "png/026-mushroom.png",
+      "sha256": "c0d312c3d73ed9310a46fae8842fca8d5521eb6358d40cade9475697337c8564",
+      "png_sha256": "c34a4fab6482ef3383e88c8fa98d7f6fe8843373da8bdd1cd5c7e205ded4721d",
+      "ink_bbox": [
+        36,
+        42,
+        165,
+        222
+      ]
+    },
+    {
+      "id": "027-sprout",
+      "subject": "sprout",
+      "reference_slot": 27,
+      "svg": "svg/027-sprout.svg",
+      "png": "png/027-sprout.png",
+      "sha256": "c0795ac73c16d8eb6e58f703a18364fa68a78475866123996a00fd51a76c2532",
+      "png_sha256": "a82344d03a2714b2171215bfa3163cc06c2bdc8477bc39f05c44fcb07340439e",
+      "ink_bbox": [
+        44,
+        28,
+        157,
+        222
+      ]
+    },
+    {
+      "id": "028-rose",
+      "subject": "rose",
+      "reference_slot": 28,
+      "svg": "svg/028-rose.svg",
+      "png": "png/028-rose.png",
+      "sha256": "cc9ef220cf2c2e7fa3372e32d27398782ff8fbc7bd8427d2872b8f1a0795f028",
+      "png_sha256": "309a3a627e25ac11d3be80e15c763d4fbce979ef91742ef242b4d03be4467be6",
+      "ink_bbox": [
+        27,
+        42,
+        160,
+        223
+      ]
+    },
+    {
+      "id": "029-pine",
+      "subject": "pine",
+      "reference_slot": 29,
+      "svg": "svg/029-pine.svg",
+      "png": "png/029-pine.png",
+      "sha256": "b459d401f4885b631b9b2a8c2884118556f49823018367343767aa72d553c95d",
+      "png_sha256": "9212c4bf2ae15e38d06cfc8e3ca228efbd5866d4bcdf460a9b0eabf444043b70",
+      "ink_bbox": [
+        27,
+        28,
+        173,
+        224
+      ]
+    },
+    {
+      "id": "030-slug",
+      "subject": "slug",
+      "reference_slot": 30,
+      "svg": "svg/030-slug.svg",
+      "png": "png/030-slug.png",
+      "sha256": "798837c5ed84c2ddbbbd4400581e1629acfc69533bb6840f4860e56a6d74435c",
+      "png_sha256": "f2cf65fa279460a659bbf7198bbae308ff25ca69fbb98ebbf766eb5cf8ad6bf6",
+      "ink_bbox": [
+        25,
+        136,
+        182,
+        224
+      ]
+    },
+    {
+      "id": "031-heron",
+      "subject": "heron",
+      "reference_slot": 31,
+      "svg": "svg/031-heron.svg",
+      "png": "png/031-heron.png",
+      "sha256": "db388493c4b33713562aaa778f059cacc5879e8be475881fc1a85ed71881cdac",
+      "png_sha256": "52c8fd73709b3861a30bf48ad83a67d395acd705407cb6e79db1248c4ca0493f",
+      "ink_bbox": [
+        25,
+        46,
+        159,
+        221
+      ]
+    },
+    {
+      "id": "032-vine",
+      "subject": "vine",
+      "reference_slot": 32,
+      "svg": "svg/032-vine.svg",
+      "png": "png/032-vine.png",
+      "sha256": "a4989c549da259c8954478999998bd119274035ab8f33907bfe136f34c8aba52",
+      "png_sha256": "515a611632b1f71ef488a0eb2c608a83f3d7da0f8691d65bd9c9c76a49b0f3d9",
+      "ink_bbox": [
+        58,
+        27,
+        155,
+        223
+      ]
+    },
+    {
+      "id": "033-daisy",
+      "subject": "daisy",
+      "reference_slot": 33,
+      "svg": "svg/033-daisy.svg",
+      "png": "png/033-daisy.png",
+      "sha256": "483e616b5f531f5341e4a9d06f576809a28ec1e5d23bb5cfed63e36337bb01b0",
+      "png_sha256": "43023c2a1c77957687a06e25f501f2034afd363f9c20886ea2a9715a1c3638c9",
+      "ink_bbox": [
+        15,
+        20,
+        184,
+        222
+      ]
+    },
+    {
+      "id": "034-tulip",
+      "subject": "tulip",
+      "reference_slot": 34,
+      "svg": "svg/034-tulip.svg",
+      "png": "png/034-tulip.png",
+      "sha256": "1bebbf6d6c9aab9df1a6a3ca1c13d78402c27e53cdda58730a4df1da8207a61f",
+      "png_sha256": "3358932b3ad4e945ad668acfb8f0edbe844a6b3568d62729a7b253f4f7c575ec",
+      "ink_bbox": [
+        53,
+        23,
+        167,
+        223
+      ]
+    },
+    {
+      "id": "035-succulent",
+      "subject": "succulent",
+      "reference_slot": 35,
+      "svg": "svg/035-succulent.svg",
+      "png": "png/035-succulent.png",
+      "sha256": "2cf96949e92bf89a3a07e6cd45d9cb1c1bda4d707e8567c27c0407069b8be5f6",
+      "png_sha256": "74dd6f4faaf76374073768d170425f738894d59d108deb4345a5dc7cef8da805",
+      "ink_bbox": [
+        33,
+        70,
+        174,
+        231
+      ]
+    },
+    {
+      "id": "036-spiralflower",
+      "subject": "spiralflower",
+      "reference_slot": 36,
+      "svg": "svg/036-spiralflower.svg",
+      "png": "png/036-spiralflower.png",
+      "sha256": "e9de7f14abb99ff75f32100a12c73fc4fa2cdb8f624de22baae2360f429aed38",
+      "png_sha256": "7b35289f40924f5bbd37d4c4f96ad4980a124f2e15bba39b0f6e2e0322d8f90c",
+      "ink_bbox": [
+        42,
+        31,
+        162,
+        222
+      ]
+    },
+    {
+      "id": "037-daisy",
+      "subject": "daisy",
+      "reference_slot": 37,
+      "svg": "svg/037-daisy.svg",
+      "png": "png/037-daisy.png",
+      "sha256": "6345f2784726991eebe255497870d7ce5debc0ac7875b21a128448f690e3d60d",
+      "png_sha256": "4c228c4b461c30426a9d747181edd0577c497478f49a28ed202390772a2eae4d",
+      "ink_bbox": [
+        39,
+        19,
+        159,
+        223
+      ]
+    },
+    {
+      "id": "038-grass",
+      "subject": "grass",
+      "reference_slot": 38,
+      "svg": "svg/038-grass.svg",
+      "png": "png/038-grass.png",
+      "sha256": "2bd667dc708f24f31a8772c25056bf6b2b161cf9c3785632889f60df88f97f0f",
+      "png_sha256": "6df425c64373d9191c72b9416f4328849cccef959e853a6b28ddd3f4f5ef3189",
+      "ink_bbox": [
+        14,
+        53,
+        186,
+        219
+      ]
+    },
+    {
+      "id": "039-clover",
+      "subject": "clover",
+      "reference_slot": 39,
+      "svg": "svg/039-clover.svg",
+      "png": "png/039-clover.png",
+      "sha256": "df3a54f537c1a97d4326106ea5ba5849e98b20f477d64517411785de7353c299",
+      "png_sha256": "f01c7f731f1133710097fee08f60c6915cf2429a02491527418334f961431673",
+      "ink_bbox": [
+        30,
+        22,
+        170,
+        222
+      ]
+    },
+    {
+      "id": "040-fern",
+      "subject": "fern",
+      "reference_slot": 40,
+      "svg": "svg/040-fern.svg",
+      "png": "png/040-fern.png",
+      "sha256": "5252872fac900243bcb163c6d65b3efea15a98023760b6a727f87347a9cad5fb",
+      "png_sha256": "22244a49b66d30e52fdec827589409b71b24eb6f0e4dd1b39518ea3ec64c1f30",
+      "ink_bbox": [
+        39,
+        31,
+        151,
+        223
+      ]
+    },
+    {
+      "id": "041-fern",
+      "subject": "fern",
+      "reference_slot": 41,
+      "svg": "svg/041-fern.svg",
+      "png": "png/041-fern.png",
+      "sha256": "c589cc1264226fde14010007aac7a648ccf0e7f3de54dfb8cdef57eb258c87ef",
+      "png_sha256": "4a30ba47cef7c2b255b99d3d1866ba590376f556bfcc6f942c02fa624db8ca6c",
+      "ink_bbox": [
+        38,
+        31,
+        154,
+        222
+      ]
+    },
+    {
+      "id": "042-seaweed",
+      "subject": "seaweed",
+      "reference_slot": 42,
+      "svg": "svg/042-seaweed.svg",
+      "png": "png/042-seaweed.png",
+      "sha256": "13a1b17e084a9c7a9dd69e1167f993718d5d800678c5b3770401592d1a33582e",
+      "png_sha256": "2e2d03087ef41d41cdf4434458776cf5e631f2a7472af3e8e647015938ef25c2",
+      "ink_bbox": [
+        23,
+        51,
+        177,
+        219
+      ]
+    },
+    {
+      "id": "043-daisy",
+      "subject": "daisy",
+      "reference_slot": 43,
+      "svg": "svg/043-daisy.svg",
+      "png": "png/043-daisy.png",
+      "sha256": "5c8fc274de3c1ba1a6ab39ca1ad9f25edaa391a5931d47cbbc59ad24ad96004c",
+      "png_sha256": "3305346a269385ebb394df57501eb7217e5b3e1560ce4f69eae51098c5d50a94",
+      "ink_bbox": [
+        27,
+        19,
+        175,
+        222
+      ]
+    },
+    {
+      "id": "044-seaweed",
+      "subject": "seaweed",
+      "reference_slot": 44,
+      "svg": "svg/044-seaweed.svg",
+      "png": "png/044-seaweed.png",
+      "sha256": "0afdd7ad6078b97b6689e1b1b2b06949e20929918e5c0b935f6f2ec0e3893b7e",
+      "png_sha256": "9e9a2ade1427112ad23d62ec087c3f021cd34a1e6233641cce281b15a342afe3",
+      "ink_bbox": [
+        23,
+        53,
+        176,
+        219
+      ]
+    },
+    {
+      "id": "045-shrub",
+      "subject": "shrub",
+      "reference_slot": 45,
+      "svg": "svg/045-shrub.svg",
+      "png": "png/045-shrub.png",
+      "sha256": "0f4b4ab1d5a2e38f60344c111aabe83abb817b32643b644625d13567f306983b",
+      "png_sha256": "9ab87b61cd0e31b3802dcabec7f5e24feb6696eded75d549a58beb229135e60b",
+      "ink_bbox": [
+        34,
+        42,
+        180,
+        223
+      ]
+    },
+    {
+      "id": "046-vine",
+      "subject": "vine",
+      "reference_slot": 46,
+      "svg": "svg/046-vine.svg",
+      "png": "png/046-vine.png",
+      "sha256": "4cff59a6529f8c025751226ab2fa23b8a86b986e1ef604ffa7d0f79a47322d17",
+      "png_sha256": "3de10ea365483da5ba9d446479e4d579142e52486b3fc5e1c2c34fee5a008213",
+      "ink_bbox": [
+        35,
+        28,
+        161,
+        222
+      ]
+    },
+    {
+      "id": "047-clover",
+      "subject": "clover",
+      "reference_slot": 47,
+      "svg": "svg/047-clover.svg",
+      "png": "png/047-clover.png",
+      "sha256": "4f3b2375022f6268b7d9fc3352aeb6ef7f1828dd83e7df4c68f588da623eb4c0",
+      "png_sha256": "54e4affbdf2bd1191afbb6ca678be382abe5dcf861b2989cf8c96236b301ceb6",
+      "ink_bbox": [
+        29,
+        21,
+        166,
+        223
+      ]
+    },
+    {
+      "id": "048-daisy",
+      "subject": "daisy",
+      "reference_slot": 48,
+      "svg": "svg/048-daisy.svg",
+      "png": "png/048-daisy.png",
+      "sha256": "ca9769012524081c3e98b88e1f8ab65e6d588463a29dd2ec1614b3dbdd2ad5d0",
+      "png_sha256": "a5373b5514cfd39ecd1a40aa56092798ee270b3e17641bd30f594c371606e6ff",
+      "ink_bbox": [
+        49,
+        33,
+        162,
+        222
+      ]
+    },
+    {
+      "id": "049-bush",
+      "subject": "bush",
+      "reference_slot": 49,
+      "svg": "svg/049-bush.svg",
+      "png": "png/049-bush.png",
+      "sha256": "cbcc5fd4ac822109e77026a82bb5a4077752747f97bf0e95cb076db9b1903835",
+      "png_sha256": "439ab36da480222acf739bdc0460505db981466db25c9f02151cfa2e8cc3b3ba",
+      "ink_bbox": [
+        42,
+        48,
+        161,
+        222
+      ]
+    },
+    {
+      "id": "050-bamboo",
+      "subject": "bamboo",
+      "reference_slot": 50,
+      "svg": "svg/050-bamboo.svg",
+      "png": "png/050-bamboo.png",
+      "sha256": "6986edfa51a0c9e03f763ca337a4b40aa21e86ae58e184a1fdc2f5e8aeb258be",
+      "png_sha256": "b1aaf28d9022224eeace596e19f5932eefc2e0cd679e2c30527513a5e259831f",
+      "ink_bbox": [
+        40,
+        39,
+        176,
+        225
+      ]
+    },
+    {
+      "id": "051-grass",
+      "subject": "grass",
+      "reference_slot": 51,
+      "svg": "svg/051-grass.svg",
+      "png": "png/051-grass.png",
+      "sha256": "4c1ab5a09c66c708d9f24e247eca6c99405b2188b24d2ed78558e73895a9d33c",
+      "png_sha256": "2f36f282a952ba3fdcee63af6c9d737b70d8af1d8189e808cdfe52b62c49affc",
+      "ink_bbox": [
+        14,
+        47,
+        185,
+        219
+      ]
+    },
+    {
+      "id": "052-twig",
+      "subject": "twig",
+      "reference_slot": 52,
+      "svg": "svg/052-twig.svg",
+      "png": "png/052-twig.png",
+      "sha256": "bca22ad3f53a287be3c88b0ec81f683dc78dad90d4b4e018e6f24c200834049a",
+      "png_sha256": "8f62a7d624755bbfd055283a00071fe8144880de71136c51a45b6800d63bf9c9",
+      "ink_bbox": [
+        47,
+        17,
+        168,
+        222
+      ]
+    },
+    {
+      "id": "053-daisy",
+      "subject": "daisy",
+      "reference_slot": 53,
+      "svg": "svg/053-daisy.svg",
+      "png": "png/053-daisy.png",
+      "sha256": "81f0eed9f1880c568d9559e401eb4263e87c260a8e70978740c7b996d02698d2",
+      "png_sha256": "01d8f208f3af6df93e1b2bc4b287d167e653a21bcbd02f1d1d6f8fa37c5ba905",
+      "ink_bbox": [
+        20,
+        26,
+        175,
+        222
+      ]
+    },
+    {
+      "id": "054-pine",
+      "subject": "pine",
+      "reference_slot": 54,
+      "svg": "svg/054-pine.svg",
+      "png": "png/054-pine.png",
+      "sha256": "4a01d673def7756310654d2e22fabc0222afd2fb8682142d3a423660728568bf",
+      "png_sha256": "b5abead52901607752daf6a0a77d0f4a267c65f98416f380341298fd8cd5bf61",
+      "ink_bbox": [
+        28,
+        29,
+        173,
+        224
+      ]
+    },
+    {
+      "id": "055-twig",
+      "subject": "twig",
+      "reference_slot": 55,
+      "svg": "svg/055-twig.svg",
+      "png": "png/055-twig.png",
+      "sha256": "92a3d0881e630c56630d1de0782daaccdefc66b1044b37c97ace63aaf37ae435",
+      "png_sha256": "4cab1948aeab880e5ef4820804f6bff86adf03d733beb3405e41647966a5abc5",
+      "ink_bbox": [
+        37,
+        17,
+        184,
+        223
+      ]
+    },
+    {
+      "id": "056-apple",
+      "subject": "apple",
+      "reference_slot": 56,
+      "svg": "svg/056-apple.svg",
+      "png": "png/056-apple.png",
+      "sha256": "5cf41d62b9230797736cbb037fb73581c866aaefa6a7c5f4f58dc0c2e102bfd2",
+      "png_sha256": "50f8f4c8356a07c7986b87187c501037d856d15f7a264e59d3aed5d5337d49c4",
+      "ink_bbox": [
+        31,
+        40,
+        171,
+        219
+      ]
+    },
+    {
+      "id": "057-snake",
+      "subject": "snake",
+      "reference_slot": 57,
+      "svg": "svg/057-snake.svg",
+      "png": "png/057-snake.png",
+      "sha256": "4d7541f339febc160bbfbc69f0841ab0eb0be5447b16541dfa6fdefe3d23a9e9",
+      "png_sha256": "8ed2ae1c02dff2a266994e7f7d2595e42752c086469b0a10d3df18effc2ed903",
+      "ink_bbox": [
+        23,
+        38,
+        142,
+        218
+      ]
+    },
+    {
+      "id": "058-clover",
+      "subject": "clover",
+      "reference_slot": 58,
+      "svg": "svg/058-clover.svg",
+      "png": "png/058-clover.png",
+      "sha256": "151c098347ddc9bdf1e28dbb37253e399ec4e2b33b5b32b8b342d3dc96df8b11",
+      "png_sha256": "56432a95d08434075b0a4e1b41f67e36e72b970eaac229f7d18084f7154a9ab9",
+      "ink_bbox": [
+        15,
+        18,
+        187,
+        222
+      ]
+    },
+    {
+      "id": "059-spiralflower",
+      "subject": "spiralflower",
+      "reference_slot": 59,
+      "svg": "svg/059-spiralflower.svg",
+      "png": "png/059-spiralflower.png",
+      "sha256": "3f447632d066b41aee1ab51095d4110b4b68a25677f97154a3ba37f2fee0a395",
+      "png_sha256": "e6100d3f6a1c10bc34f0a3150fd43f92c76350fc825638c40e72daf0b131a600",
+      "ink_bbox": [
+        37,
+        37,
+        155,
+        222
+      ]
+    },
+    {
+      "id": "060-twig",
+      "subject": "twig",
+      "reference_slot": 60,
+      "svg": "svg/060-twig.svg",
+      "png": "png/060-twig.png",
+      "sha256": "0186862eeb8d0f7ed63735ab2c00e2e4fb6f1cfadb2db12f0477cfcabf94cbb2",
+      "png_sha256": "d3cafb31f15dee0631af1a971b775e9e457ef75ae986fb0f17274da2c5ff90e6",
+      "ink_bbox": [
+        25,
+        18,
+        163,
+        222
+      ]
+    },
+    {
+      "id": "061-bell",
+      "subject": "bell",
+      "reference_slot": 61,
+      "svg": "svg/061-bell.svg",
+      "png": "png/061-bell.png",
+      "sha256": "2ae7ff72c03769ea2cd8804013c05bb79e1d0a5cf27f24113b811e15a3c921c0",
+      "png_sha256": "db489ec499d0ad95ae5e72c38da64e29cd01504f634ca9199cd9ee305c8402b9",
+      "ink_bbox": [
+        36,
+        71,
+        156,
+        222
+      ]
+    },
+    {
+      "id": "062-grass",
+      "subject": "grass",
+      "reference_slot": 62,
+      "svg": "svg/062-grass.svg",
+      "png": "png/062-grass.png",
+      "sha256": "caeccfe5fcd46dcf3608772c9d5d11e03a32b3c0bf1215c3111e5aac30c019e1",
+      "png_sha256": "2406a5057efc48d53ee330f31e57c93bfd0d3ba09f19c743ae523e3b44e3dd8c",
+      "ink_bbox": [
+        15,
+        71,
+        185,
+        219
+      ]
+    },
+    {
+      "id": "063-snail",
+      "subject": "snail",
+      "reference_slot": 63,
+      "svg": "svg/063-snail.svg",
+      "png": "png/063-snail.png",
+      "sha256": "118f6a3af3fd08f0ebf85d5da7ebc621b8b361a7a3fc055b70db901d4f41e62b",
+      "png_sha256": "6812ee68f92b17f32e05329265ec31eab8a2ccae0f4a3e970d4baefd4d518663",
+      "ink_bbox": [
+        24,
+        114,
+        182,
+        224
+      ]
+    },
+    {
+      "id": "064-berries",
+      "subject": "berries",
+      "reference_slot": 64,
+      "svg": "svg/064-berries.svg",
+      "png": "png/064-berries.png",
+      "sha256": "141d5083e9c6bad76eb1ef10dc8d39c0a628bb99fd8f81477973b89542a37f75",
+      "png_sha256": "99bf340d04b66a36ef417db1829787326dcdaef47568540d393e2fa8fbd2793b",
+      "ink_bbox": [
+        21,
+        34,
+        177,
+        221
+      ]
+    },
+    {
+      "id": "065-snowman",
+      "subject": "snowman",
+      "reference_slot": 65,
+      "svg": "svg/065-snowman.svg",
+      "png": "png/065-snowman.png",
+      "sha256": "f13a7754215719bf4816dd22534f7180f56e155b37634cdf37075d8257dffd9e",
+      "png_sha256": "d8e4ac5812843bcd873553c805b7cb3790007c23e9912a024d8185f53c794b78",
+      "ink_bbox": [
+        24,
+        49,
+        182,
+        226
+      ]
+    },
+    {
+      "id": "066-sunflower",
+      "subject": "sunflower",
+      "reference_slot": 66,
+      "svg": "svg/066-sunflower.svg",
+      "png": "png/066-sunflower.png",
+      "sha256": "25676a61d238e94380e7ab8ca5666c6d6fd20e3d66cf884d99823e18501c798d",
+      "png_sha256": "be6522e02be08b81e1ac81a1c513c23d99d7d12c44e55323503d2bd9faa64991",
+      "ink_bbox": [
+        25,
+        16,
+        174,
+        223
+      ]
+    },
+    {
+      "id": "067-fern",
+      "subject": "fern",
+      "reference_slot": 67,
+      "svg": "svg/067-fern.svg",
+      "png": "png/067-fern.png",
+      "sha256": "d042517ebdcadbeb4c3db6c26f700be79d1f401fc6011afdd69c86c949943dd3",
+      "png_sha256": "5ea9270acae8b2aa6e89bc228aa0e667b3671400a645a96f34e4f1cdf9f00d39",
+      "ink_bbox": [
+        40,
+        31,
+        165,
+        223
+      ]
+    },
+    {
+      "id": "068-clover",
+      "subject": "clover",
+      "reference_slot": 68,
+      "svg": "svg/068-clover.svg",
+      "png": "png/068-clover.png",
+      "sha256": "ff23e0eb552e21a6bca55e9abe0e2d4e0a4fbfa41739295208b9fcb5ab3611fe",
+      "png_sha256": "e908833293774c2a075f32219793903b6d1bf5077b1134ff0243667ae0167122",
+      "ink_bbox": [
+        33,
+        19,
+        168,
+        222
+      ]
+    },
+    {
+      "id": "069-clover",
+      "subject": "clover",
+      "reference_slot": 69,
+      "svg": "svg/069-clover.svg",
+      "png": "png/069-clover.png",
+      "sha256": "2e5dcc80d221036262242fd1a9a661b4f1d39a96c5b6d72d42348eb5011483e8",
+      "png_sha256": "68dbe8cb531510dccd15b2a955fc37759e6851d87cc6d572ec3648d537bab40c",
+      "ink_bbox": [
+        29,
+        19,
+        172,
+        223
+      ]
+    },
+    {
+      "id": "070-twig",
+      "subject": "twig",
+      "reference_slot": 70,
+      "svg": "svg/070-twig.svg",
+      "png": "png/070-twig.png",
+      "sha256": "f4f287a357b84a3774b87dc364c730f14ee390243b99e0e03dde526a6dc430c0",
+      "png_sha256": "92f564c471a57fe512354a00ff9f426a1d25c3bbc543d75f41b5b472ba0d61e0",
+      "ink_bbox": [
+        37,
+        18,
+        175,
+        222
+      ]
+    },
+    {
+      "id": "071-clover",
+      "subject": "clover",
+      "reference_slot": 71,
+      "svg": "svg/071-clover.svg",
+      "png": "png/071-clover.png",
+      "sha256": "0858385c8dec7fb6da153a6b5dfcd80497169fe324154639769cc006c2434c02",
+      "png_sha256": "2a6e60ffd7de730399d9efc6cddcab575ec3c103a7a1be772ae019d64264a25f",
+      "ink_bbox": [
+        33,
+        25,
+        167,
+        222
+      ]
+    },
+    {
+      "id": "072-seaweed",
+      "subject": "seaweed",
+      "reference_slot": 72,
+      "svg": "svg/072-seaweed.svg",
+      "png": "png/072-seaweed.png",
+      "sha256": "edfefd53fe0730cbc68a6e2a77efb2a0b6348eab78fce375c626dbaa644d048a",
+      "png_sha256": "585054fcaef6e493ba9f365946d07cada2d5c83eaa2d5989dcd443172df4fb5f",
+      "ink_bbox": [
+        23,
+        56,
+        177,
+        219
+      ]
+    },
+    {
+      "id": "073-fern",
+      "subject": "fern",
+      "reference_slot": 73,
+      "svg": "svg/073-fern.svg",
+      "png": "png/073-fern.png",
+      "sha256": "3927a071076c06adb87b12e229bfd9514b4d0c93dc2cc352548e769537529493",
+      "png_sha256": "d196fc0703be8cda9b36ad4163939b7428ab308e7de20bce8a38d4277f4823f2",
+      "ink_bbox": [
+        55,
+        31,
+        163,
+        222
+      ]
+    },
+    {
+      "id": "074-seaweed",
+      "subject": "seaweed",
+      "reference_slot": 74,
+      "svg": "svg/074-seaweed.svg",
+      "png": "png/074-seaweed.png",
+      "sha256": "c8f2ec9aa9a7fd1036cd6ab7376758278eb1f98093d421ac319e970d4ada8347",
+      "png_sha256": "220e8632834f93e7439cf0812f62f968d979662d36369fbffffb9b494fc9ae08",
+      "ink_bbox": [
+        23,
+        58,
+        177,
+        219
+      ]
+    },
+    {
+      "id": "075-bush",
+      "subject": "bush",
+      "reference_slot": 75,
+      "svg": "svg/075-bush.svg",
+      "png": "png/075-bush.png",
+      "sha256": "a8deff99c1542057c0371f7e685ae6adff165c4e36d7865b180fc28fe82f3943",
+      "png_sha256": "025d3b7761e2dea276adb2843a81656c93f692576eb416885619ae590883d313",
+      "ink_bbox": [
+        38,
+        45,
+        165,
+        223
+      ]
+    },
+    {
+      "id": "076-palm",
+      "subject": "palm",
+      "reference_slot": 76,
+      "svg": "svg/076-palm.svg",
+      "png": "png/076-palm.png",
+      "sha256": "57e33540660b3e149dbb66d5981994d5d68edc54a5e2112cffc1c8d701210a25",
+      "png_sha256": "83c97539adff77a425517f044b7884aeacec29a0c12c3de86f199dc143e38573",
+      "ink_bbox": [
+        34,
+        22,
+        184,
+        226
+      ]
+    },
+    {
+      "id": "077-signpost",
+      "subject": "signpost",
+      "reference_slot": 77,
+      "svg": "svg/077-signpost.svg",
+      "png": "png/077-signpost.png",
+      "sha256": "a329a0d88229a71c62bc318ed942e527e0ad4ca29e009abaa0c20237df0d346e",
+      "png_sha256": "dcabc35f7be53dc7afb0b090024146b4d82a01de224a8e558d2f1f3d4262de00",
+      "ink_bbox": [
+        31,
+        67,
+        160,
+        224
+      ]
+    },
+    {
+      "id": "078-berries",
+      "subject": "berries",
+      "reference_slot": 78,
+      "svg": "svg/078-berries.svg",
+      "png": "png/078-berries.png",
+      "sha256": "8864715361402155e9f52c24e83c663b5bc0cbc73f2533c014f52bde63b28c29",
+      "png_sha256": "06e76bb20e050bb497331d27be41d933dec943f7b313782a640bdc9c60b983ab",
+      "ink_bbox": [
+        21,
+        34,
+        177,
+        221
+      ]
+    },
+    {
+      "id": "079-sprout",
+      "subject": "sprout",
+      "reference_slot": 79,
+      "svg": "svg/079-sprout.svg",
+      "png": "png/079-sprout.png",
+      "sha256": "f8c103ae4a2d379f7653e2b9d759761c3ea2d4e9a777903da8de392f11ae8938",
+      "png_sha256": "7e3bf3c8c4f38fa217fb4fa0058c16e012c1072a7b269ad696e89598945fd252",
+      "ink_bbox": [
+        38,
+        31,
+        155,
+        222
+      ]
+    },
+    {
+      "id": "080-seaweed",
+      "subject": "seaweed",
+      "reference_slot": 80,
+      "svg": "svg/080-seaweed.svg",
+      "png": "png/080-seaweed.png",
+      "sha256": "76570fa4944b855744160ab2ae1d30bac1e63436b098fc6b2956b1c4da6804e2",
+      "png_sha256": "c067d7b6789fb29c3d1f084bd4a593dbc0232a13da51ad94482c67e7622eb9d5",
+      "ink_bbox": [
+        23,
+        58,
+        177,
+        219
+      ]
+    },
+    {
+      "id": "081-twig",
+      "subject": "twig",
+      "reference_slot": 81,
+      "svg": "svg/081-twig.svg",
+      "png": "png/081-twig.png",
+      "sha256": "b65862506bc08784febc4f7cd503580190b3aee852101acf0989537e60d51dfa",
+      "png_sha256": "3c86c028eade35ed827ac049cd255afdfbcdece632d13b994789713240e9cac3",
+      "ink_bbox": [
+        27,
+        18,
+        168,
+        222
+      ]
+    },
+    {
+      "id": "082-daisy",
+      "subject": "daisy",
+      "reference_slot": 82,
+      "svg": "svg/082-daisy.svg",
+      "png": "png/082-daisy.png",
+      "sha256": "d1a6f2879b52c2fc223e3b371d9d765a3ae443dc9ebb93d0fdedbb502ce821e3",
+      "png_sha256": "7d7363bdc1c62e9fcf35967bc0f166e6497fcabdd000bf01baf387dc485979c6",
+      "ink_bbox": [
+        19,
+        18,
+        182,
+        223
+      ]
+    },
+    {
+      "id": "083-tree",
+      "subject": "tree",
+      "reference_slot": 83,
+      "svg": "svg/083-tree.svg",
+      "png": "png/083-tree.png",
+      "sha256": "c6cf972c1e60cb85f1596b1e54ec26a8a1098548aabd354dfb18e7ae121fad7d",
+      "png_sha256": "37ac6f02695150b9a5dda7f01f8dd64e3453dffbf399741b3184f98fb2839367",
+      "ink_bbox": [
+        44,
+        35,
+        160,
+        223
+      ]
+    },
+    {
+      "id": "084-stump",
+      "subject": "stump",
+      "reference_slot": 84,
+      "svg": "svg/084-stump.svg",
+      "png": "png/084-stump.png",
+      "sha256": "07de0cb59d7cfd2ac3e1f4a0ef122f6985a7be8e8a4fcbb9fb45512b882674be",
+      "png_sha256": "d8c0f438e954a7926d0a9483b0b80de8a6031504001c9fee12f40c9a55a4a3fe",
+      "ink_bbox": [
+        23,
+        90,
+        177,
+        222
+      ]
+    },
+    {
+      "id": "085-spiralflower",
+      "subject": "spiralflower",
+      "reference_slot": 85,
+      "svg": "svg/085-spiralflower.svg",
+      "png": "png/085-spiralflower.png",
+      "sha256": "50d125cc73d7f669fdd3b0aec49455beb10e7f692aa9446243bba71bc09da5ee",
+      "png_sha256": "583b163fc761e7336393e396d8fd6f33c1af9e0ddd54a0c9b1a976b0b949c0df",
+      "ink_bbox": [
+        44,
+        36,
+        147,
+        222
+      ]
+    },
+    {
+      "id": "086-vine",
+      "subject": "vine",
+      "reference_slot": 86,
+      "svg": "svg/086-vine.svg",
+      "png": "png/086-vine.png",
+      "sha256": "2df93a3c92f0b8a565cd6f0483f79e45810d431ff266608ec87a34c34da9c306",
+      "png_sha256": "1b8861a72061e95a5d82aa0eab2d9aacf721046cf2bf4e0bb746e1050c336bf3",
+      "ink_bbox": [
+        44,
+        16,
+        163,
+        222
+      ]
+    },
+    {
+      "id": "087-apple",
+      "subject": "apple",
+      "reference_slot": 87,
+      "svg": "svg/087-apple.svg",
+      "png": "png/087-apple.png",
+      "sha256": "421e1812dcc6c3f35699c9889521dd774ce0b068fbcf420ea03ca7d4e01eb31a",
+      "png_sha256": "584ec3011e36c7a2c9191ed883815094fd69f2e6e57ddd07767f986895ee4395",
+      "ink_bbox": [
+        31,
+        40,
+        170,
+        219
+      ]
+    },
+    {
+      "id": "088-well",
+      "subject": "well",
+      "reference_slot": 88,
+      "svg": "svg/088-well.svg",
+      "png": "png/088-well.png",
+      "sha256": "2353c73699450b764e3dc98e77e3bb5da9f85929c2ecfc742a53d358ab6265f7",
+      "png_sha256": "d945a5759145ea92d7de23af293b5353e670a643111bc1aced365451a506b1b4",
+      "ink_bbox": [
+        40,
+        45,
+        161,
+        226
+      ]
+    },
+    {
+      "id": "089-cactus",
+      "subject": "cactus",
+      "reference_slot": 89,
+      "svg": "svg/089-cactus.svg",
+      "png": "png/089-cactus.png",
+      "sha256": "ebdf2bb4dc22fc46b5824c810cbd139c654c205bbe568f3ccfe4b90ae2bcdcf2",
+      "png_sha256": "de0029613e57bea0f718c23263ca733f1d997e6447f18fda823ca346dc546f03",
+      "ink_bbox": [
+        38,
+        39,
+        175,
+        226
+      ]
+    },
+    {
+      "id": "090-grass",
+      "subject": "grass",
+      "reference_slot": 90,
+      "svg": "svg/090-grass.svg",
+      "png": "png/090-grass.png",
+      "sha256": "620048f1db6b7e685817eb754cd8475aca5d3871173bd709813fc631ed8689d8",
+      "png_sha256": "11ffabad0551381edd7c504cc51ca7ce0d3d2f7fb2fcffeceef9a53c91a1d10a",
+      "ink_bbox": [
+        14,
+        76,
+        186,
+        219
+      ]
+    },
+    {
+      "id": "091-seaweed",
+      "subject": "seaweed",
+      "reference_slot": 91,
+      "svg": "svg/091-seaweed.svg",
+      "png": "png/091-seaweed.png",
+      "sha256": "51fe2301b3287efea475ed940027cb36022671f2bf1fb99f221192e51c839f11",
+      "png_sha256": "25eabe0109e80b16743663b0102af151bfa50972b7e0924fb17307e4ef155c4f",
+      "ink_bbox": [
+        23,
+        50,
+        177,
+        219
+      ]
+    },
+    {
+      "id": "092-bush",
+      "subject": "bush",
+      "reference_slot": 92,
+      "svg": "svg/092-bush.svg",
+      "png": "png/092-bush.png",
+      "sha256": "2ef7e9f355b36a461f457aa0a153714ebc1d08bfa69d5e527654ab6ba4429870",
+      "png_sha256": "967d876189989ff946e6ce6a15be1fc95e0bd36b792447ec27fabfc94df53513",
+      "ink_bbox": [
+        37,
+        42,
+        173,
+        223
+      ]
+    },
+    {
+      "id": "093-mushroom",
+      "subject": "mushroom",
+      "reference_slot": 93,
+      "svg": "svg/093-mushroom.svg",
+      "png": "png/093-mushroom.png",
+      "sha256": "a240d0fb15eaa80d6607c25c6232476741231dc46371f9cef62b9db940710aec",
+      "png_sha256": "8cf6e53e52ba4e62b60d7e8fb1823480e23c0fb9d42df5717ffa268b8ee24e7a",
+      "ink_bbox": [
+        44,
+        44,
+        156,
+        223
+      ]
+    },
+    {
+      "id": "094-bush",
+      "subject": "bush",
+      "reference_slot": 94,
+      "svg": "svg/094-bush.svg",
+      "png": "png/094-bush.png",
+      "sha256": "452d30301be236f21a5f64224c0a675653ecc555494d266a678e18e75d122061",
+      "png_sha256": "6442719ddd6608a62bd494c24356b3b744fa0d25ac17d1e2ecffe91772a0b288",
+      "ink_bbox": [
+        32,
+        43,
+        172,
+        222
+      ]
+    },
+    {
+      "id": "095-house",
+      "subject": "house",
+      "reference_slot": 95,
+      "svg": "svg/095-house.svg",
+      "png": "png/095-house.png",
+      "sha256": "e11f075e9c69ee846ecc3d7504e32a21cd5ec9d3939b56135a88648e77876dfb",
+      "png_sha256": "2237a976f4342b30f725baaa64b39ca69b0ed803a521d0fb9261c5f6f1dd1044",
+      "ink_bbox": [
+        23,
+        35,
+        177,
+        226
+      ]
+    },
+    {
+      "id": "096-clover",
+      "subject": "clover",
+      "reference_slot": 96,
+      "svg": "svg/096-clover.svg",
+      "png": "png/096-clover.png",
+      "sha256": "2957e639963fc23150136013a892e947dbd3adb40370fd49dc2943a844bddfe7",
+      "png_sha256": "0a478a557c3786226f8e3cbd4278b6246ab6a8c24a41347f63c6c720fc3eeaa7",
+      "ink_bbox": [
+        37,
+        22,
+        166,
+        222
+      ]
+    },
+    {
+      "id": "097-fern",
+      "subject": "fern",
+      "reference_slot": 97,
+      "svg": "svg/097-fern.svg",
+      "png": "png/097-fern.png",
+      "sha256": "500efc287bc75734cee50a3fe81b9ecbf40abdbcad0a893cd5b0b1b130afbe31",
+      "png_sha256": "d06cfb13718fac9bb1dcd80a535307c9591fb4265ea07d60a11c90390ac12d76",
+      "ink_bbox": [
+        37,
+        31,
+        154,
+        222
+      ]
+    },
+    {
+      "id": "098-daisy",
+      "subject": "daisy",
+      "reference_slot": 98,
+      "svg": "svg/098-daisy.svg",
+      "png": "png/098-daisy.png",
+      "sha256": "a6b2fa0f40fe53405e3e0019cc9f827399b746c44b100b40d01f3cc7dc48486b",
+      "png_sha256": "d8e23f4bdbfd2f95d8120120de039076763700fb70c5db215380c5c458238855",
+      "ink_bbox": [
+        47,
+        34,
+        168,
+        222
+      ]
+    },
+    {
+      "id": "099-pepper",
+      "subject": "pepper",
+      "reference_slot": 99,
+      "svg": "svg/099-pepper.svg",
+      "png": "png/099-pepper.png",
+      "sha256": "9a01b36e91e77c88d7ea984a44786893a8c7fad15b1b3122684454c6a52391fb",
+      "png_sha256": "5c6753d2b63e78cb62bf38f42b7dd15459c16166d15ddefd8bd62044adc89505",
+      "ink_bbox": [
+        31,
+        40,
+        170,
+        219
+      ]
+    },
+    {
+      "id": "100-sprout",
+      "subject": "sprout",
+      "reference_slot": 100,
+      "svg": "svg/100-sprout.svg",
+      "png": "png/100-sprout.png",
+      "sha256": "7d70a7f624c8b3387591e32a269d458680b05f9973efc652af724a8e6458ce94",
+      "png_sha256": "6e05f51e3e218c1d6c487e947e3a215bb7d5c645b51377ffd451363e2997e1ab",
+      "ink_bbox": [
+        49,
+        30,
+        145,
+        222
+      ]
+    },
+    {
+      "id": "101-witch",
+      "subject": "witch",
+      "reference_slot": 101,
+      "svg": "svg/101-witch.svg",
+      "png": "png/101-witch.png",
+      "sha256": "2d7cf7f9fbffb6b4f758a6b7ba88d9e8269f6aa465e61a764f0d11e682ca0f77",
+      "png_sha256": "b04dfe34327650e81ac3ea5cb1577c575f9182ffb627b48a7c5eda39efbda5a6",
+      "ink_bbox": [
+        26,
+        31,
+        165,
+        229
+      ]
+    },
+    {
+      "id": "102-mushroom",
+      "subject": "mushroom",
+      "reference_slot": 102,
+      "svg": "svg/102-mushroom.svg",
+      "png": "png/102-mushroom.png",
+      "sha256": "198869de2fc5c8e61983ac26ef5a01a1e506e6b03980c4514bfbbba5566e5765",
+      "png_sha256": "92eb3ec02f884f5c6764bc02597c4b144c93c7fbc9fd048b8c22c1087c935993",
+      "ink_bbox": [
+        35,
+        52,
+        165,
+        223
+      ]
+    },
+    {
+      "id": "103-bush",
+      "subject": "bush",
+      "reference_slot": 103,
+      "svg": "svg/103-bush.svg",
+      "png": "png/103-bush.png",
+      "sha256": "49d15568c41c880ecf267e7b5a8ecc32b81d7271c2499bfd8fe67d9e22a4ae36",
+      "png_sha256": "cda290c11fe2de8b9a2eacec5e2daaae1c9183ac44882945e0e5c5b888d7dec3",
+      "ink_bbox": [
+        30,
+        39,
+        173,
+        222
+      ]
+    },
+    {
+      "id": "104-clover",
+      "subject": "clover",
+      "reference_slot": 104,
+      "svg": "svg/104-clover.svg",
+      "png": "png/104-clover.png",
+      "sha256": "516834e0fa4934018380def87128ce440276973d06bd24a5a9676ecee9c82254",
+      "png_sha256": "21bd8a051efc42fecc52c43a6ed3feb17e67a44b3a5cea657c2804e8bc21a986",
+      "ink_bbox": [
+        14,
+        20,
+        188,
+        222
+      ]
+    },
+    {
+      "id": "105-vine",
+      "subject": "vine",
+      "reference_slot": 105,
+      "svg": "svg/105-vine.svg",
+      "png": "png/105-vine.png",
+      "sha256": "0aee52f185fd9d149a40470f42cf3e98cfb1f7516072bcf2d83c55e5bcd407a3",
+      "png_sha256": "0ee84c022def23f50a7c1daba3964ea52705aee9ea95f9eec3b2d7847f4dbaf1",
+      "ink_bbox": [
+        47,
+        27,
+        160,
+        222
+      ]
+    },
+    {
+      "id": "106-berries",
+      "subject": "berries",
+      "reference_slot": 106,
+      "svg": "svg/106-berries.svg",
+      "png": "png/106-berries.png",
+      "sha256": "9b952d9c186202992db7ab357fe90954fe01fa8e1e407f4ee264fbaa85d4ad83",
+      "png_sha256": "000ebbdcdf60e39637f8877b0310318ef8488f4c482413ce221544bf0785a4cc",
+      "ink_bbox": [
+        21,
+        34,
+        177,
+        221
+      ]
+    },
+    {
+      "id": "107-mushroom",
+      "subject": "mushroom",
+      "reference_slot": 107,
+      "svg": "svg/107-mushroom.svg",
+      "png": "png/107-mushroom.png",
+      "sha256": "8c3129e895fea3851ff4a0c820e3a579d71bd81b0bfd740755e3b6c24239b0ec",
+      "png_sha256": "5affc73a31b117b6e8612e4eb4fb8889c161c8a07c623a0365b6c1047f091021",
+      "ink_bbox": [
+        32,
+        42,
+        169,
+        223
+      ]
+    },
+    {
+      "id": "108-seaweed",
+      "subject": "seaweed",
+      "reference_slot": 108,
+      "svg": "svg/108-seaweed.svg",
+      "png": "png/108-seaweed.png",
+      "sha256": "97fee5bfc8fbb5d51521d52c3f5680540067e41c214c94abdd8982e4809116ca",
+      "png_sha256": "95c056f056e5a09e400ab3b2f5389cf3300923d4d7861d1eb00e2a64f1edf064",
+      "ink_bbox": [
+        23,
+        62,
+        177,
+        219
+      ]
+    },
+    {
+      "id": "109-twig",
+      "subject": "twig",
+      "reference_slot": 109,
+      "svg": "svg/109-twig.svg",
+      "png": "png/109-twig.png",
+      "sha256": "213fcabc9a8084e3a29b02276ad4da419bca428b0a4c22e69085adacda11d65d",
+      "png_sha256": "0e309b8a001344d2d9a2761ca419234abc81a485bdb702e5e3cc900e7e20cf12",
+      "ink_bbox": [
+        42,
+        17,
+        173,
+        222
+      ]
+    },
+    {
+      "id": "110-raspberry",
+      "subject": "raspberry",
+      "reference_slot": 110,
+      "svg": "svg/110-raspberry.svg",
+      "png": "png/110-raspberry.png",
+      "sha256": "70a8fb99435fa4878857e0b409c5088b720aaec3d400988a81b65834744adaef",
+      "png_sha256": "107f9ab770f7ae8522a8ee88b5947e94b8a315f59e022405306ebbe0c06f4c49",
+      "ink_bbox": [
+        36,
+        25,
+        164,
+        198
+      ]
+    },
+    {
+      "id": "111-moon",
+      "subject": "moon",
+      "reference_slot": 111,
+      "svg": "svg/111-moon.svg",
+      "png": "png/111-moon.png",
+      "sha256": "3abe5b488efaed9c4d162849f23b4544f9dad8ceb560dc65371ab404b85f6cac",
+      "png_sha256": "c643fa85ca74013a0d13fac478e4f41c0257a12332fbb6ce241cfe9ef78f358b",
+      "ink_bbox": [
+        45,
+        41,
+        176,
+        217
+      ]
+    },
+    {
+      "id": "112-clover",
+      "subject": "clover",
+      "reference_slot": 112,
+      "svg": "svg/112-clover.svg",
+      "png": "png/112-clover.png",
+      "sha256": "345cee2aab1c21a8d8773b6043dfa0af178bec3b8f01c564a724196697c4b89f",
+      "png_sha256": "88949bd8cdb124adc22761226752d4b31e46f002f6853ee2f1e986f230bbf18e",
+      "ink_bbox": [
+        21,
+        22,
+        179,
+        223
+      ]
+    },
+    {
+      "id": "113-tree",
+      "subject": "tree",
+      "reference_slot": 113,
+      "svg": "svg/113-tree.svg",
+      "png": "png/113-tree.png",
+      "sha256": "baf144a8680ca3b79d739f5c8ad5bed58f6887d80f96a5b4b72cf82cfba90fb2",
+      "png_sha256": "577639ffebf4a71d13267d754921a03b91f9b3d7379508e6dd623ec5a0c74dd0",
+      "ink_bbox": [
+        49,
+        39,
+        155,
+        223
+      ]
+    },
+    {
+      "id": "114-grass",
+      "subject": "grass",
+      "reference_slot": 114,
+      "svg": "svg/114-grass.svg",
+      "png": "png/114-grass.png",
+      "sha256": "bf690ecf212462c150ac6405c69fede2e4e7c589f20b9344fc036c2b4eac396c",
+      "png_sha256": "bd9ec63bc3a64de403b4e0f9d6a29166d9d523e55391bba281462baeb510e7dc",
+      "ink_bbox": [
+        13,
+        62,
+        186,
+        219
+      ]
+    },
+    {
+      "id": "115-apple",
+      "subject": "apple",
+      "reference_slot": 115,
+      "svg": "svg/115-apple.svg",
+      "png": "png/115-apple.png",
+      "sha256": "7089e42f99577897dac9736bf71af93d367a98513d5ba742a844e7763dba2115",
+      "png_sha256": "210dd69c53659ba4ab1d58dacd58a58ff77d07a9c7747d669d6ef403b184f5d4",
+      "ink_bbox": [
+        32,
+        40,
+        170,
+        218
+      ]
+    },
+    {
+      "id": "116-bush",
+      "subject": "bush",
+      "reference_slot": 116,
+      "svg": "svg/116-bush.svg",
+      "png": "png/116-bush.png",
+      "sha256": "bcdb387bd858bd5d195cef44097e714e6e671b2d4c8a763f291e48692d51917f",
+      "png_sha256": "ef447dd1d25377fd7cb8054ad8bb2bf968faa349c6d796e7b289d9e58c5f9417",
+      "ink_bbox": [
+        37,
+        43,
+        171,
+        223
+      ]
+    },
+    {
+      "id": "117-apple",
+      "subject": "apple",
+      "reference_slot": 117,
+      "svg": "svg/117-apple.svg",
+      "png": "png/117-apple.png",
+      "sha256": "7700d42fb61da974f71952a0c95ea87cdf32b518d691ffd953f4ce23d2e41146",
+      "png_sha256": "cecdfea134d19c668d0a0cb50f6cbf266b6a13d526b28f4ab1fb2ba0132097b9",
+      "ink_bbox": [
+        32,
+        40,
+        170,
+        218
+      ]
+    },
+    {
+      "id": "118-succulent",
+      "subject": "succulent",
+      "reference_slot": 118,
+      "svg": "svg/118-succulent.svg",
+      "png": "png/118-succulent.png",
+      "sha256": "bc2917cf253c2d05e50d566b4fbae0907d77d6f542d59ba10b3debab828bb0b9",
+      "png_sha256": "04dbfc681dcad802f58ba231b118f3e144a26eb4b3c580f079b19945275ad8f8",
+      "ink_bbox": [
+        32,
+        70,
+        174,
+        231
+      ]
+    },
+    {
+      "id": "119-vine",
+      "subject": "vine",
+      "reference_slot": 119,
+      "svg": "svg/119-vine.svg",
+      "png": "png/119-vine.png",
+      "sha256": "7f87d4ca5282198fdf1e28897ba7bfcfc66402f8bb0e07c3dad79a981e1eaec4",
+      "png_sha256": "97da428c1c13df30e04ba7ceeab3a7cc9737ee3a1123a241bdd45a018d867ea1",
+      "ink_bbox": [
+        33,
+        27,
+        163,
+        222
+      ]
+    },
+    {
+      "id": "120-daisy",
+      "subject": "daisy",
+      "reference_slot": 120,
+      "svg": "svg/120-daisy.svg",
+      "png": "png/120-daisy.png",
+      "sha256": "88eb4342ee17bedd79937538032d899efc625a640a2ef6c054b10548cb3d9257",
+      "png_sha256": "6c3636da65edcdcc7d64d616f30c2908403010e0cda59b7383323ee8857bda32",
+      "ink_bbox": [
+        47,
+        33,
+        157,
+        223
+      ]
+    },
+    {
+      "id": "121-spiralflower",
+      "subject": "spiralflower",
+      "reference_slot": 121,
+      "svg": "svg/121-spiralflower.svg",
+      "png": "png/121-spiralflower.png",
+      "sha256": "0ef87d2bed28bfbf0eab9e5c1a1b8efabee429cbb449727c20615c9f394a6cf5",
+      "png_sha256": "79b138be62cd72988ae6009acb087d7600f40f0f0563912dd06110abdccba700",
+      "ink_bbox": [
+        39,
+        38,
+        159,
+        223
+      ]
+    },
+    {
+      "id": "122-daisy",
+      "subject": "daisy",
+      "reference_slot": 122,
+      "svg": "svg/122-daisy.svg",
+      "png": "png/122-daisy.png",
+      "sha256": "eeb33b2d388829a7c1e1e3b993db5e149ff70768259b1d7dd651f397e7e2c229",
+      "png_sha256": "bcc94cb9aed1747fd1eebe4876df43a52b827a76e39dbcbd9e2485b1369b4bd0",
+      "ink_bbox": [
+        49,
+        31,
+        167,
+        222
+      ]
+    },
+    {
+      "id": "123-rose",
+      "subject": "rose",
+      "reference_slot": 123,
+      "svg": "svg/123-rose.svg",
+      "png": "png/123-rose.png",
+      "sha256": "88c11d2db26d1257bcdab8f47b5b8af908191212d234e72fcab36cc83d810631",
+      "png_sha256": "f505b486555addf2ac67783f67b719a515f8c373476c0f28e342f1a684122871",
+      "ink_bbox": [
+        43,
+        51,
+        156,
+        223
+      ]
+    },
+    {
+      "id": "124-vine",
+      "subject": "vine",
+      "reference_slot": 124,
+      "svg": "svg/124-vine.svg",
+      "png": "png/124-vine.png",
+      "sha256": "c70e78f04f194b6e89907a10f45bf1830f55ee3556593c183c85ed597c1f1ada",
+      "png_sha256": "455bcfd6c16a6af6d543eab0aa3e346429f2ca8fc23b303b8cab9e579d8840c4",
+      "ink_bbox": [
+        46,
+        16,
+        153,
+        222
+      ]
+    },
+    {
+      "id": "125-rose",
+      "subject": "rose",
+      "reference_slot": 125,
+      "svg": "svg/125-rose.svg",
+      "png": "png/125-rose.png",
+      "sha256": "8a3bc937e79a993e20fcf880f27032ee96567dd95141dcb44935281d5da276ee",
+      "png_sha256": "9209b1b2c4963a0c50b4efe8692d679552be4afc3989ca7ae44ec3d6e4aab3b3",
+      "ink_bbox": [
+        27,
+        56,
+        155,
+        223
+      ]
+    },
+    {
+      "id": "126-bee",
+      "subject": "bee",
+      "reference_slot": 126,
+      "svg": "svg/126-bee.svg",
+      "png": "png/126-bee.png",
+      "sha256": "b38c09452fb8030f6901c79de827d3e2cc03e74decf015dd836ce049854a07e4",
+      "png_sha256": "d04be8d3341226688b5f03d577e29cbef9b0ce610526d4e6242a8276075e98d7",
+      "ink_bbox": [
+        32,
+        60,
+        166,
+        201
+      ]
+    },
+    {
+      "id": "127-clover",
+      "subject": "clover",
+      "reference_slot": 127,
+      "svg": "svg/127-clover.svg",
+      "png": "png/127-clover.png",
+      "sha256": "b13946a261b247471eaf9eff49117a3beb85f475073f97c092a6605234c49307",
+      "png_sha256": "75dfad3e8842c65be4c0e6049d4a9fd94ab75db38c2abe89a740db15cad4a53f",
+      "ink_bbox": [
+        17,
+        19,
+        181,
+        223
+      ]
+    },
+    {
+      "id": "128-berries",
+      "subject": "berries",
+      "reference_slot": 128,
+      "svg": "svg/128-berries.svg",
+      "png": "png/128-berries.png",
+      "sha256": "1a163a993214671514beb49b3b2bf0fc0a3a8022e95826f4d26bdbdd586e0510",
+      "png_sha256": "41bef7f7faf3e79f96d20133e46158924ceabb98e890a3d9cb8116b013094efd",
+      "ink_bbox": [
+        21,
+        34,
+        177,
+        221
+      ]
+    },
+    {
+      "id": "129-bamboo",
+      "subject": "bamboo",
+      "reference_slot": 129,
+      "svg": "svg/129-bamboo.svg",
+      "png": "png/129-bamboo.png",
+      "sha256": "a070cd39f5c6c4a9e0ac95c8a64cd6e9f9162124f866d2b829c7b767e430fe00",
+      "png_sha256": "34c02d7c1b515bc2072dd6a51d0f500d1e921808bdc894b90652e6fdbb278644",
+      "ink_bbox": [
+        39,
+        38,
+        108,
+        224
+      ]
+    },
+    {
+      "id": "130-fern",
+      "subject": "fern",
+      "reference_slot": 130,
+      "svg": "svg/130-fern.svg",
+      "png": "png/130-fern.png",
+      "sha256": "73e626482cdb69617e1fbba65f98fe7955699c71bccca2d92fd98aff88f73224",
+      "png_sha256": "a81e79517867f871b6f61982ea7650661e01c3fd0b7cfe2ff24bf84a6b305810",
+      "ink_bbox": [
+        51,
+        30,
+        165,
+        222
+      ]
+    },
+    {
+      "id": "131-sunflower",
+      "subject": "sunflower",
+      "reference_slot": 131,
+      "svg": "svg/131-sunflower.svg",
+      "png": "png/131-sunflower.png",
+      "sha256": "7ae899a6bb6413edc9695d4207b3267aadbb22db16e18730f07f8a8c760b2d62",
+      "png_sha256": "fd4d1cabe2f9f706663d4b0f6de6dfe91223db5b1a7d3f1a3d42739f0420b39b",
+      "ink_bbox": [
+        16,
+        18,
+        182,
+        222
+      ]
+    },
+    {
+      "id": "132-worm",
+      "subject": "worm",
+      "reference_slot": 132,
+      "svg": "svg/132-worm.svg",
+      "png": "png/132-worm.png",
+      "sha256": "31ef0cb2fea796fc62dbc513273cac51530fd747bfc3a3fc3a22f46e6d7cf420",
+      "png_sha256": "6fa637ca87f890452174df097b25b4d3e61f5fdd0d86cf35b9c0e2d35586897a",
+      "ink_bbox": [
+        24,
+        84,
+        185,
+        197
+      ]
+    },
+    {
+      "id": "133-heron",
+      "subject": "heron",
+      "reference_slot": 133,
+      "svg": "svg/133-heron.svg",
+      "png": "png/133-heron.png",
+      "sha256": "16b5c1c4123d88f4c618f03a2a175e489c862dc98a27d4caa6ce3a483566f95a",
+      "png_sha256": "83f6636c75a552b1c347d7c3a50c10010dd7afa109ed63e6f79bb9f03090665f",
+      "ink_bbox": [
+        26,
+        45,
+        158,
+        221
+      ]
+    },
+    {
+      "id": "134-spiderweb",
+      "subject": "spiderweb",
+      "reference_slot": 134,
+      "svg": "svg/134-spiderweb.svg",
+      "png": "png/134-spiderweb.png",
+      "sha256": "d384f079ada67f0fc3783cdbd14daf4271db5600cbf7a52bb7db086bae528da2",
+      "png_sha256": "e34d7c7950b783a3364b69ee91d33ebbcfe3baf922d145e6caa59166082943fc",
+      "ink_bbox": [
+        16,
+        32,
+        184,
+        218
+      ]
+    },
+    {
+      "id": "135-seaweed",
+      "subject": "seaweed",
+      "reference_slot": 135,
+      "svg": "svg/135-seaweed.svg",
+      "png": "png/135-seaweed.png",
+      "sha256": "3dad56d077257e466284595a4c325c3595c99bb7af6d358f0dcefc093410c612",
+      "png_sha256": "ab64d340357838ecc0be8249810c0dbdbba1f98b08aaf865dc8137a9678af9c1",
+      "ink_bbox": [
+        23,
+        58,
+        176,
+        219
+      ]
+    },
+    {
+      "id": "136-clover",
+      "subject": "clover",
+      "reference_slot": 136,
+      "svg": "svg/136-clover.svg",
+      "png": "png/136-clover.png",
+      "sha256": "5c8249ada905dd6fb5e660d66973fbd1912902169c9d3c795c16ccdb1fb91de8",
+      "png_sha256": "ab283e23d367b3fc896a7d9d95767366a72ed76790640a59e343ee7aa61d31f1",
+      "ink_bbox": [
+        18,
+        18,
+        179,
+        222
+      ]
+    },
+    {
+      "id": "137-spade",
+      "subject": "spade",
+      "reference_slot": 137,
+      "svg": "svg/137-spade.svg",
+      "png": "png/137-spade.png",
+      "sha256": "275bf25554e6eb8a76f1f6bf12d773173176c3873dc4b2d6d870df51bf3caaf5",
+      "png_sha256": "8ce99b7cd2309088ceef01e207df0c480a2a83ddb3346dd14f2c0f3e643e69b5",
+      "ink_bbox": [
+        61,
+        31,
+        148,
+        231
+      ]
+    },
+    {
+      "id": "138-bush",
+      "subject": "bush",
+      "reference_slot": 138,
+      "svg": "svg/138-bush.svg",
+      "png": "png/138-bush.png",
+      "sha256": "e2a7613e6bcda441be72304bac4b2f0e12d60b281865567262e2ae170cd7e7ae",
+      "png_sha256": "fa909b4fc39a915c8e2ce496e715e83c3d8638d4b19e0e28255180b4d1ba5b03",
+      "ink_bbox": [
+        40,
+        49,
+        163,
+        223
+      ]
+    },
+    {
+      "id": "139-spade",
+      "subject": "spade",
+      "reference_slot": 139,
+      "svg": "svg/139-spade.svg",
+      "png": "png/139-spade.png",
+      "sha256": "44adfef5196894cb7bc835af9eb5225c8186adf37427918614435351a587915b",
+      "png_sha256": "cea91bcf53b3bac248e53656d41e46f36c17026e4c5cd6e9b9f6234a33c1db1e",
+      "ink_bbox": [
+        60,
+        31,
+        149,
+        231
+      ]
+    },
+    {
+      "id": "140-log",
+      "subject": "log",
+      "reference_slot": 140,
+      "svg": "svg/140-log.svg",
+      "png": "png/140-log.png",
+      "sha256": "3e30d55947b7a0f8eb4bf2468a398536406e6c01515b3e286b344425c9c68ee5",
+      "png_sha256": "ce3c7bab84a8cee38ba82009f24acba793c93d49ec3dddb1718db7e1c578e36a",
+      "ink_bbox": [
+        31,
+        87,
+        173,
+        223
+      ]
+    },
+    {
+      "id": "141-mushroom",
+      "subject": "mushroom",
+      "reference_slot": 141,
+      "svg": "svg/141-mushroom.svg",
+      "png": "png/141-mushroom.png",
+      "sha256": "c9f29a437bd0cb04c1a0f06dac9a7250139fc24e484d016d9e433c2c79a26c8c",
+      "png_sha256": "b1e10eee2d0bc4cc5a5599aed841e6ef1d650ef8435b0fe726116c7fd65aa200",
+      "ink_bbox": [
+        44,
+        75,
+        157,
+        222
+      ]
+    },
+    {
+      "id": "142-strawberry",
+      "subject": "strawberry",
+      "reference_slot": 142,
+      "svg": "svg/142-strawberry.svg",
+      "png": "png/142-strawberry.png",
+      "sha256": "6d09daf1f7b1e552a0b55bb72df433edd207d2ae949e38df43c7c1de4b89d9d4",
+      "png_sha256": "1f51f2e7f5f4664a6b6abcfa4e9ada0aaca0353dd60afaf02dfdea36a0a5a071",
+      "ink_bbox": [
+        36,
+        41,
+        166,
+        216
+      ]
+    },
+    {
+      "id": "143-twig",
+      "subject": "twig",
+      "reference_slot": 143,
+      "svg": "svg/143-twig.svg",
+      "png": "png/143-twig.png",
+      "sha256": "4f6f84943e66da7c5aa2438e2a0e2cb056249c0812f70f2929ff722b384027c3",
+      "png_sha256": "ce542b5379ee62abf57bb47edc254a984c31ab8025020fefc8f4c2bd146f8f9d",
+      "ink_bbox": [
+        29,
+        18,
+        177,
+        223
+      ]
+    },
+    {
+      "id": "144-grapes",
+      "subject": "grapes",
+      "reference_slot": 144,
+      "svg": "svg/144-grapes.svg",
+      "png": "png/144-grapes.png",
+      "sha256": "3f0716b3c4297cf73d3c62d130ff29a43f3ebf002cd861d0442103be9e298926",
+      "png_sha256": "f9c47ce132ae985434c84a10f9e6ed67a1be000251a9bb98eac73e0fc1ebb4f8",
+      "ink_bbox": [
+        35,
+        24,
+        164,
+        198
+      ]
+    },
+    {
+      "id": "145-tulip",
+      "subject": "tulip",
+      "reference_slot": 145,
+      "svg": "svg/145-tulip.svg",
+      "png": "png/145-tulip.png",
+      "sha256": "dcf6d8590d21b9fe258c6d05cc72f362e81963ddcd80313c53159d4100335f03",
+      "png_sha256": "16c94845cbb08eb53c509d0adafd3560bdf6985642cea663c27051c3d4007968",
+      "ink_bbox": [
+        44,
+        13,
+        158,
+        223
+      ]
+    },
+    {
+      "id": "146-succulent",
+      "subject": "succulent",
+      "reference_slot": 146,
+      "svg": "svg/146-succulent.svg",
+      "png": "png/146-succulent.png",
+      "sha256": "afedc40eb4862309f1771514ce09a13cd80e711ab8f3fd37963306e3e61f01bc",
+      "png_sha256": "9ef6775f3b0500ffd1ddcd5f282fd9996e752723e52e2f79790c18384ede5f8b",
+      "ink_bbox": [
+        33,
+        69,
+        174,
+        231
+      ]
+    },
+    {
+      "id": "147-sun",
+      "subject": "sun",
+      "reference_slot": 147,
+      "svg": "svg/147-sun.svg",
+      "png": "png/147-sun.png",
+      "sha256": "1497aef26929f6a5d34aa63f687a5cf4670c84748bad07e770f6c20dc3699143",
+      "png_sha256": "e4d24aa787111adef0288aba9c401e126eb23aa129facb5c18e7120f83ead8dc",
+      "ink_bbox": [
+        17,
+        27,
+        184,
+        220
+      ]
+    },
+    {
+      "id": "148-berries",
+      "subject": "berries",
+      "reference_slot": 148,
+      "svg": "svg/148-berries.svg",
+      "png": "png/148-berries.png",
+      "sha256": "c472327bbab2904e86733afea0eaa4d7c496b5d68e596e8a9f6fa08ca9010015",
+      "png_sha256": "d879f5ec66d7c210b5e4160aeb4508d8da2938fd2019c6e92523f3468f26bba9",
+      "ink_bbox": [
+        21,
+        35,
+        177,
+        221
+      ]
+    },
+    {
+      "id": "149-daisy",
+      "subject": "daisy",
+      "reference_slot": 149,
+      "svg": "svg/149-daisy.svg",
+      "png": "png/149-daisy.png",
+      "sha256": "48b184c98d8129116169ae5e2a199a64008b897427dd6db125f5a03b0e63b2c8",
+      "png_sha256": "aeeab0233b7a49814346ccb2076d4b9582d7aacad23b0dca116ddd8e9cbd3ad1",
+      "ink_bbox": [
+        17,
+        28,
+        182,
+        222
+      ]
+    },
+    {
+      "id": "150-owl",
+      "subject": "owl",
+      "reference_slot": 150,
+      "svg": "svg/150-owl.svg",
+      "png": "png/150-owl.png",
+      "sha256": "de53d9e54840dc5ec24ea671273aecacc360df7bffa17e8fca9d0f68b3ea2b0f",
+      "png_sha256": "274bf8edb5360f7c26513d11b9657d54d409549239ab7264a18a97a1cb20bbaa",
+      "ink_bbox": [
+        42,
+        35,
+        163,
+        232
+      ]
+    },
+    {
+      "id": "151-clover",
+      "subject": "clover",
+      "reference_slot": 151,
+      "svg": "svg/151-clover.svg",
+      "png": "png/151-clover.png",
+      "sha256": "25e1f1c13b7d7a4df680a4b5528d6eb320a6dc905a240ffa1722af34e8eb70cb",
+      "png_sha256": "a9fc67af5869e7690cb74e64ef4a77c83de5ed2b9682bcf657261cbbf832e033",
+      "ink_bbox": [
+        13,
+        18,
+        186,
+        222
+      ]
+    },
+    {
+      "id": "152-seaweed",
+      "subject": "seaweed",
+      "reference_slot": 152,
+      "svg": "svg/152-seaweed.svg",
+      "png": "png/152-seaweed.png",
+      "sha256": "b622da409ab000e6c0ccf3cca0844e1ca98c0e27957c04b6ff64a5f51ae5b0bd",
+      "png_sha256": "af5308af4ac97fe9729963c9d0d121ca0b6fcd6385536658d72a59232dc50e0f",
+      "ink_bbox": [
+        23,
+        51,
+        176,
+        219
+      ]
+    },
+    {
+      "id": "153-mushroom",
+      "subject": "mushroom",
+      "reference_slot": 153,
+      "svg": "svg/153-mushroom.svg",
+      "png": "png/153-mushroom.png",
+      "sha256": "fb14c9f755ca5a0e3df3752aec50c9a8fa65eb81c4f058880dbcc490e772a27b",
+      "png_sha256": "aba04a88e126750dff90b927c21787ded231b09e01a501dd82ffec52bb66ae51",
+      "ink_bbox": [
+        44,
+        51,
+        157,
+        222
+      ]
+    },
+    {
+      "id": "154-rainbow",
+      "subject": "rainbow",
+      "reference_slot": 154,
+      "svg": "svg/154-rainbow.svg",
+      "png": "png/154-rainbow.png",
+      "sha256": "ba4212944c2b10398863d726cef43e16bb35a8d881e29c0be09ea58bd6367baa",
+      "png_sha256": "64c9fd467e8290b957431c1e1a77614b0f42d2ba9ecb077814197e2c4562e1e2",
+      "ink_bbox": [
+        30,
+        78,
+        173,
+        204
+      ]
+    },
+    {
+      "id": "155-fish",
+      "subject": "fish",
+      "reference_slot": 155,
+      "svg": "svg/155-fish.svg",
+      "png": "png/155-fish.png",
+      "sha256": "fedfde9bc0f4055be5a370f1c63dbcb0f82ed0f2b4889c1708fa5c93600a298d",
+      "png_sha256": "f1e285a3a5edb0b2e8aa0078b6592e0d1ac8e7a074fc715857376aa533a780ae",
+      "ink_bbox": [
+        40,
+        59,
+        190,
+        212
+      ]
+    },
+    {
+      "id": "156-berries",
+      "subject": "berries",
+      "reference_slot": 156,
+      "svg": "svg/156-berries.svg",
+      "png": "png/156-berries.png",
+      "sha256": "8048436cac7ce623238a7f407a9b7e4a99f7859152da873b7925aa73e193b5f2",
+      "png_sha256": "68a072a432953aea4aae33048a82ef5609e4812639a1552622e772737b36c3bf",
+      "ink_bbox": [
+        21,
+        34,
+        177,
+        220
+      ]
+    },
+    {
+      "id": "157-clover",
+      "subject": "clover",
+      "reference_slot": 157,
+      "svg": "svg/157-clover.svg",
+      "png": "png/157-clover.png",
+      "sha256": "0e087f55a0f85bc32886f085835dfda089393f47d84309ba67f763f69121f9a0",
+      "png_sha256": "509f6d8774335a65c977c74bf39907ceb810552ad61d59c254f7f89dca58d935",
+      "ink_bbox": [
+        38,
+        20,
+        171,
+        222
+      ]
+    },
+    {
+      "id": "158-fig",
+      "subject": "fig",
+      "reference_slot": 158,
+      "svg": "svg/158-fig.svg",
+      "png": "png/158-fig.png",
+      "sha256": "3724d4b6e40ca99ab63e37929052e345c263a9bad51e3703cbc26df7d38f042c",
+      "png_sha256": "523958c5df3266ee833e5fe596c0a26c34e2cb933085dea1b097c0f362ce573c",
+      "ink_bbox": [
+        36,
+        60,
+        164,
+        216
+      ]
+    },
+    {
+      "id": "159-mushroom",
+      "subject": "mushroom",
+      "reference_slot": 159,
+      "svg": "svg/159-mushroom.svg",
+      "png": "png/159-mushroom.png",
+      "sha256": "99485f4a709e366220d6a2a9bc86d2205cc5eb651305835175b9d70f3df2a15a",
+      "png_sha256": "bb93a2a954bca7f1b14013e5c47bfc6cafcba633cfd5b38c10dd97fe92edeb33",
+      "ink_bbox": [
+        31,
+        42,
+        170,
+        223
+      ]
+    },
+    {
+      "id": "160-pumpkin",
+      "subject": "pumpkin",
+      "reference_slot": 160,
+      "svg": "svg/160-pumpkin.svg",
+      "png": "png/160-pumpkin.png",
+      "sha256": "62cdeedb0572b92a6f22f7999b3aa64e075e23fbcf57d6906cc0cd1ec6f0d5b0",
+      "png_sha256": "238e9292121195f12c13c2775718f3115caa9ce9ebc1e3f9d4343b9af28e53cb",
+      "ink_bbox": [
+        32,
+        40,
+        171,
+        218
+      ]
+    },
+    {
+      "id": "161-clover",
+      "subject": "clover",
+      "reference_slot": 161,
+      "svg": "svg/161-clover.svg",
+      "png": "png/161-clover.png",
+      "sha256": "5e6d4f7a5a8bf8b31cb7c143ed30d716f8bfbf28c96ab9bddaf71480b52155b9",
+      "png_sha256": "3cb9f529eb4e68a66ef891aa6cbb44ae504c9bac6356bfa5ff41b55ccd4ba557",
+      "ink_bbox": [
+        23,
+        28,
+        179,
+        222
+      ]
+    },
+    {
+      "id": "162-fern",
+      "subject": "fern",
+      "reference_slot": 162,
+      "svg": "svg/162-fern.svg",
+      "png": "png/162-fern.png",
+      "sha256": "ec589a15b13f0fb87f8eefcf3f33297f41a86abde6ff211ef1354b83935651e5",
+      "png_sha256": "d10941ff9466e45b0e711399b344e3caae71217860b67c1585f1b6fa449cd4b7",
+      "ink_bbox": [
+        44,
+        31,
+        161,
+        222
+      ]
+    },
+    {
+      "id": "163-clover",
+      "subject": "clover",
+      "reference_slot": 163,
+      "svg": "svg/163-clover.svg",
+      "png": "png/163-clover.png",
+      "sha256": "8dad295564c10149a830e600bd0eb865a8cec3e18ac56d29298c57bf355784e5",
+      "png_sha256": "ace509b86ea28e4eafae7c1045e32b381449a0c64e5bdd9d17c94f1b2df32b62",
+      "ink_bbox": [
+        20,
+        18,
+        182,
+        222
+      ]
+    },
+    {
+      "id": "164-clover",
+      "subject": "clover",
+      "reference_slot": 164,
+      "svg": "svg/164-clover.svg",
+      "png": "png/164-clover.png",
+      "sha256": "023d2377bf11b6ca17ce54fae51a7e0d3c0db0630fe91fa754ffa821ff146d6e",
+      "png_sha256": "b2214b3071abecc9adcfdb12c1a06efe53866347aeb5630601903bf3c22ce24a",
+      "ink_bbox": [
+        34,
+        20,
+        170,
+        223
+      ]
+    },
+    {
+      "id": "165-fish",
+      "subject": "fish",
+      "reference_slot": 165,
+      "svg": "svg/165-fish.svg",
+      "png": "png/165-fish.png",
+      "sha256": "0d43907a5143093c0962826f82ddfbfb13cc6ad687581a090937a2525cd19438",
+      "png_sha256": "8322510fa88f548778e27b69f59a6dc903f9f3cd5f8f98ad62236f7acb9a29fa",
+      "ink_bbox": [
+        40,
+        59,
+        189,
+        213
+      ]
+    },
+    {
+      "id": "166-spiralflower",
+      "subject": "spiralflower",
+      "reference_slot": 166,
+      "svg": "svg/166-spiralflower.svg",
+      "png": "png/166-spiralflower.png",
+      "sha256": "c45b7f4107845d1496c91bcd342c18eb167993d83e0f92ba89e3df0f79e5d20e",
+      "png_sha256": "b7432f178794a8b4d10bef7f0419978ffd2d61712a1d417c8cdb51bd1b6251be",
+      "ink_bbox": [
+        49,
+        35,
+        164,
+        223
+      ]
+    },
+    {
+      "id": "167-mushroom",
+      "subject": "mushroom",
+      "reference_slot": 167,
+      "svg": "svg/167-mushroom.svg",
+      "png": "png/167-mushroom.png",
+      "sha256": "dbb2351e9928f9ecb0c6f0e855ee6e6ffbe5b0b26b207a03bc47ed52f1ba5d5e",
+      "png_sha256": "acd4b83c72923378933ac9e3d1e39df0ed717e2098633970fdcd267ff4211a7a",
+      "ink_bbox": [
+        32,
+        49,
+        170,
+        223
+      ]
+    },
+    {
+      "id": "168-daisy",
+      "subject": "daisy",
+      "reference_slot": 168,
+      "svg": "svg/168-daisy.svg",
+      "png": "png/168-daisy.png",
+      "sha256": "ff553205149f00fd74a030030da7b2adc7f55aaa95d0728eb92dfc7b6fa02f84",
+      "png_sha256": "6a882faff4ace77576820bf33833454a34287605dcd30be76567084e1ba523f4",
+      "ink_bbox": [
+        43,
+        40,
+        167,
+        222
+      ]
+    },
+    {
+      "id": "169-succulent",
+      "subject": "succulent",
+      "reference_slot": 169,
+      "svg": "svg/169-succulent.svg",
+      "png": "png/169-succulent.png",
+      "sha256": "42d35ce1d44f04f45f450664750e36c638da55bdc3728dde7c3361c33d9eb2c3",
+      "png_sha256": "8b24f460c4d9b8fcf752ba01ab2fc931fd3c2d710b488dcf23269d9decd4d3fb",
+      "ink_bbox": [
+        33,
+        71,
+        175,
+        231
+      ]
+    },
+    {
+      "id": "170-banana",
+      "subject": "banana",
+      "reference_slot": 170,
+      "svg": "svg/170-banana.svg",
+      "png": "png/170-banana.png",
+      "sha256": "8bdf779deeed0ce6e2c2dc05a3156c8bfc7f79280faac7023017384f185b701a",
+      "png_sha256": "9a27d1bc5a63cd8439d5f865c63f469ae1ab0102ce6348978dbe947dc966c8fe",
+      "ink_bbox": [
+        39,
+        33,
+        165,
+        201
+      ]
+    },
+    {
+      "id": "171-sprout",
+      "subject": "sprout",
+      "reference_slot": 171,
+      "svg": "svg/171-sprout.svg",
+      "png": "png/171-sprout.png",
+      "sha256": "de57443bf0fb11ab28f1bcdf3d9812d82ce8a40f13bdba1d259c36aa99604f78",
+      "png_sha256": "96dcde233ff1e3f8e900b463f845ae961af931edbf4962d270e22b5323ab2b92",
+      "ink_bbox": [
+        34,
+        29,
+        153,
+        222
+      ]
+    },
+    {
+      "id": "172-cow",
+      "subject": "cow",
+      "reference_slot": 172,
+      "svg": "svg/172-cow.svg",
+      "png": "png/172-cow.png",
+      "sha256": "a1446e863e0c826db8d597f959ac7cb6a3c31d922c6b3256e13c1b07f471a453",
+      "png_sha256": "3bfd089d51050c8a192cfedc06766b16acd2c9df5e05c0e97d29310aa887b038",
+      "ink_bbox": [
+        19,
+        56,
+        175,
+        213
+      ]
+    },
+    {
+      "id": "173-succulent",
+      "subject": "succulent",
+      "reference_slot": 173,
+      "svg": "svg/173-succulent.svg",
+      "png": "png/173-succulent.png",
+      "sha256": "02930abd62abf39e1be2f342965ca4efc7de503c40c8121fdf9c2909f9ea7ddb",
+      "png_sha256": "621314bae7e21a293920770e47ae6102f32d587c29dd1abadccc85fd4bce0d8d",
+      "ink_bbox": [
+        33,
+        69,
+        175,
+        231
+      ]
+    },
+    {
+      "id": "174-hedgehog",
+      "subject": "hedgehog",
+      "reference_slot": 174,
+      "svg": "svg/174-hedgehog.svg",
+      "png": "png/174-hedgehog.png",
+      "sha256": "6228f244baaf06d45291060873de7decbadf5cc9320af865597652483fc76831",
+      "png_sha256": "7888b8b6c5e2f14945bb45c721e8ed798551239d7a4b9b7ba859751d4897aee9",
+      "ink_bbox": [
+        10,
+        70,
+        194,
+        219
+      ]
+    },
+    {
+      "id": "175-clover",
+      "subject": "clover",
+      "reference_slot": 175,
+      "svg": "svg/175-clover.svg",
+      "png": "png/175-clover.png",
+      "sha256": "c520a5579176ea79cd6de057c9e3622688b1c168a0850dc49d30a44df961a9b5",
+      "png_sha256": "ce66bf39baa2a89b1bce3f7998c69c76d8e364852abaf99ada63efcf47ac7de1",
+      "ink_bbox": [
+        18,
+        22,
+        185,
+        223
+      ]
+    },
+    {
+      "id": "176-bush",
+      "subject": "bush",
+      "reference_slot": 176,
+      "svg": "svg/176-bush.svg",
+      "png": "png/176-bush.png",
+      "sha256": "af0be99783e71d40b28661e39715efd62c3ef451cf740494d89e41188899c723",
+      "png_sha256": "ff7d7887e0d0ee51999f5d96981d8ebe93d6d7a2a94498ca2f366b339b5e5703",
+      "ink_bbox": [
+        38,
+        50,
+        171,
+        223
+      ]
+    },
+    {
+      "id": "177-grass",
+      "subject": "grass",
+      "reference_slot": 177,
+      "svg": "svg/177-grass.svg",
+      "png": "png/177-grass.png",
+      "sha256": "077d15443f605962d00d58eece2cd6a177cf9c861461137e3fa24cfa8c318b13",
+      "png_sha256": "9d2238279248c9d7f054694c66d4ab5daff15b9acad48aab30016fc722c58dda",
+      "ink_bbox": [
+        14,
+        64,
+        186,
+        219
+      ]
+    },
+    {
+      "id": "178-vine",
+      "subject": "vine",
+      "reference_slot": 178,
+      "svg": "svg/178-vine.svg",
+      "png": "png/178-vine.png",
+      "sha256": "9087bb1f374abae253a7878fb0e36c478ee7a8667579ad8f4cd3bfbc00eea48a",
+      "png_sha256": "e08111e3817e577442498cb205e36b6bdfba130095da9f6ed4fe69e71cb1625f",
+      "ink_bbox": [
+        34,
+        26,
+        160,
+        223
+      ]
+    },
+    {
+      "id": "179-grass",
+      "subject": "grass",
+      "reference_slot": 179,
+      "svg": "svg/179-grass.svg",
+      "png": "png/179-grass.png",
+      "sha256": "e98c62ea85dc1c4ae2dc1afe34bd5459af2f7b453369a236f6894e5d0362323a",
+      "png_sha256": "74df9610817fc791cf588812fab5648f321aa1757f608c8bc8909aee59150e63",
+      "ink_bbox": [
+        15,
+        47,
+        186,
+        219
+      ]
+    },
+    {
+      "id": "180-rose",
+      "subject": "rose",
+      "reference_slot": 180,
+      "svg": "svg/180-rose.svg",
+      "png": "png/180-rose.png",
+      "sha256": "9ee5fe9e2ec0054c29a554403d52a23ea911fcc3ee3653d28c23b4bd176f9afb",
+      "png_sha256": "b5bc9dd45c4d8584b0b09bc2779fb5cb8e44156111966f09f2d595a27ad2caa4",
+      "ink_bbox": [
+        50,
+        40,
+        157,
+        222
+      ]
+    },
+    {
+      "id": "181-tulip",
+      "subject": "tulip",
+      "reference_slot": 181,
+      "svg": "svg/181-tulip.svg",
+      "png": "png/181-tulip.png",
+      "sha256": "94d3c89400e9e57793eb3931aa407452b443111daaaa25160f624b8c3bc3a574",
+      "png_sha256": "978244b63a5aca4da3d2a3b7f7c0b4f20c4ea2b8e529f200dccdbe6a2979cdce",
+      "ink_bbox": [
+        46,
+        12,
+        156,
+        222
+      ]
+    },
+    {
+      "id": "182-clover",
+      "subject": "clover",
+      "reference_slot": 182,
+      "svg": "svg/182-clover.svg",
+      "png": "png/182-clover.png",
+      "sha256": "0f532ca513bf167832d4e266598632afa7d3801c559137102572df214b120dec",
+      "png_sha256": "771bb5ee5fedace4f3c5f01d9ef6416c74713acb91012772401b17ae68c9e262",
+      "ink_bbox": [
+        40,
+        23,
+        169,
+        223
+      ]
+    },
+    {
+      "id": "183-succulent",
+      "subject": "succulent",
+      "reference_slot": 183,
+      "svg": "svg/183-succulent.svg",
+      "png": "png/183-succulent.png",
+      "sha256": "77cb988c8bf9eeeda77bdac1f566f577833d5f81e84174bb66205006eac5a60a",
+      "png_sha256": "02281dabdeda757c59a7be04d10094c51c1669515f64d4f78ef3f63cb587030d",
+      "ink_bbox": [
+        33,
+        70,
+        174,
+        231
+      ]
+    },
+    {
+      "id": "184-spiralflower",
+      "subject": "spiralflower",
+      "reference_slot": 184,
+      "svg": "svg/184-spiralflower.svg",
+      "png": "png/184-spiralflower.png",
+      "sha256": "04ae73387395bea428754397512ebb863eb6aaca5a007bf6e5ac26efa3d5a44d",
+      "png_sha256": "42a39b19ccfa05b839ab7a202d42d02844911a6eda50bd8e63721881965d03f5",
+      "ink_bbox": [
+        46,
+        41,
+        165,
+        222
+      ]
+    },
+    {
+      "id": "185-apple",
+      "subject": "apple",
+      "reference_slot": 185,
+      "svg": "svg/185-apple.svg",
+      "png": "png/185-apple.png",
+      "sha256": "403bfbedbbea7164addc964209e1df652ea1e843ca8ea41843979e0239c30156",
+      "png_sha256": "de7c09522c7ca2cdec7c129cab677019a4e765247a7b2515bd8fc131960f33f5",
+      "ink_bbox": [
+        31,
+        41,
+        171,
+        219
+      ]
+    },
+    {
+      "id": "186-cactus",
+      "subject": "cactus",
+      "reference_slot": 186,
+      "svg": "svg/186-cactus.svg",
+      "png": "png/186-cactus.png",
+      "sha256": "a730c90c11e1fef9c12ae291239fa95a015e1672d749620b700bdfb451402351",
+      "png_sha256": "b78c262988ff5acfcf6595f8f6fce28c5a99b42e77604677affc12e61a7b6f84",
+      "ink_bbox": [
+        38,
+        40,
+        174,
+        226
+      ]
+    },
+    {
+      "id": "187-spiralflower",
+      "subject": "spiralflower",
+      "reference_slot": 187,
+      "svg": "svg/187-spiralflower.svg",
+      "png": "png/187-spiralflower.png",
+      "sha256": "d073ac22fa52b749372a303cf4fbc572c3e5718aee2be3122b869252646bc053",
+      "png_sha256": "c3f55158065f736c1a7b8ff5322354ed97b563242b3e6569f216408b4ddfae4f",
+      "ink_bbox": [
+        37,
+        46,
+        157,
+        222
+      ]
+    },
+    {
+      "id": "188-clover",
+      "subject": "clover",
+      "reference_slot": 188,
+      "svg": "svg/188-clover.svg",
+      "png": "png/188-clover.png",
+      "sha256": "786839eb797cdbbb48dce5c971abdf52842280db95880db26af2c9b9e480cbb3",
+      "png_sha256": "b436a6734187eaff564022b8d114a6d9f38171ad6f8762a13a2084c8899d8786",
+      "ink_bbox": [
+        32,
+        18,
+        169,
+        223
+      ]
+    },
+    {
+      "id": "189-spiralflower",
+      "subject": "spiralflower",
+      "reference_slot": 189,
+      "svg": "svg/189-spiralflower.svg",
+      "png": "png/189-spiralflower.png",
+      "sha256": "c834c7c80aa2fb57372839ca2afb361481370a74861e8d017c4db6c4f83d58bf",
+      "png_sha256": "60a141a9f86cf76a3141f69e5ed7295532f19a74842fde6bbc8f4e4eacc735e9",
+      "ink_bbox": [
+        46,
+        33,
+        157,
+        222
+      ]
+    },
+    {
+      "id": "190-sprout",
+      "subject": "sprout",
+      "reference_slot": 190,
+      "svg": "svg/190-sprout.svg",
+      "png": "png/190-sprout.png",
+      "sha256": "3ee4bfa2c722c6d05ddb197da825ec109ec56405ca315a4c40bc203e42ae0e49",
+      "png_sha256": "ac8dd4135ff8a359245b3760cf182c711095ca1cb1bcbceedbb8d2aa0cb449d3",
+      "ink_bbox": [
+        36,
+        31,
+        149,
+        223
+      ]
+    },
+    {
+      "id": "191-daisy",
+      "subject": "daisy",
+      "reference_slot": 191,
+      "svg": "svg/191-daisy.svg",
+      "png": "png/191-daisy.png",
+      "sha256": "e6bd975cc2be94e504c4bdb1321bdaaf181bf9efb4a7d6e78ef8daac632dd913",
+      "png_sha256": "eca695f974d22cdd7266ed19e3a0a5f7d2ae075fe680df67d2ec2611f9ee32c8",
+      "ink_bbox": [
+        44,
+        15,
+        159,
+        222
+      ]
+    },
+    {
+      "id": "192-tree",
+      "subject": "tree",
+      "reference_slot": 192,
+      "svg": "svg/192-tree.svg",
+      "png": "png/192-tree.png",
+      "sha256": "d5f8590ff1b49be8c60744f8b9e4b48bd3001a360d7c07fc7fcfa109e5a9a8aa",
+      "png_sha256": "25673428833983f4d3af0f48cfbf47736b687f79f061f563af8274ba3003d704",
+      "ink_bbox": [
+        51,
+        41,
+        153,
+        222
+      ]
+    },
+    {
+      "id": "193-onion",
+      "subject": "onion",
+      "reference_slot": 193,
+      "svg": "svg/193-onion.svg",
+      "png": "png/193-onion.png",
+      "sha256": "93372e9ef927b60c946aae62bd83dd8bfd996798dcc25d2f0c3801f353ddbf0d",
+      "png_sha256": "21cba8e3d41a9e76559dad5530a6f18024c503af27b8317c52f96c25bf350934",
+      "ink_bbox": [
+        40,
+        40,
+        166,
+        232
+      ]
+    },
+    {
+      "id": "194-mushroom",
+      "subject": "mushroom",
+      "reference_slot": 194,
+      "svg": "svg/194-mushroom.svg",
+      "png": "png/194-mushroom.png",
+      "sha256": "80889ee2e04703391c3b56e31da31a7fe4cb58886cce9ddf723b50c1737974cf",
+      "png_sha256": "57171efbc9383d9741bd0a6c301c3335e616d6c988f4568f33ca691bf46e499e",
+      "ink_bbox": [
+        36,
+        53,
+        165,
+        223
+      ]
+    },
+    {
+      "id": "195-daisy",
+      "subject": "daisy",
+      "reference_slot": 195,
+      "svg": "svg/195-daisy.svg",
+      "png": "png/195-daisy.png",
+      "sha256": "ead5d522ee4a66bd7b8c900fed8f4db7b2aed11b11e55d6231cf113edcf5e0a5",
+      "png_sha256": "72aad3014c0dd9d9645ebbf1e3818701fd398fff5c8c897443481ce175748e5b",
+      "ink_bbox": [
+        45,
+        40,
+        151,
+        222
+      ]
+    },
+    {
+      "id": "196-ladybug",
+      "subject": "ladybug",
+      "reference_slot": 196,
+      "svg": "svg/196-ladybug.svg",
+      "png": "png/196-ladybug.png",
+      "sha256": "ec4389adb4f2008d68039436ce2ca1191b2ee4ec37f3fb2893cbc5f1efa43413",
+      "png_sha256": "24193710c57ab955e22dbbbce7043e5e44024bf7db7e7cbb04d3a3189dc628d4",
+      "ink_bbox": [
+        38,
+        61,
+        164,
+        204
+      ]
+    },
+    {
+      "id": "197-clover",
+      "subject": "clover",
+      "reference_slot": 197,
+      "svg": "svg/197-clover.svg",
+      "png": "png/197-clover.png",
+      "sha256": "5f824b6be6337c64d74579623f9be60388a50fe9c2ced11d7424ca1c9de0530d",
+      "png_sha256": "c77898859388e27d415c946b586901e0b7edc617f438b8a53c7bdb5d158059a2",
+      "ink_bbox": [
+        17,
+        22,
+        187,
+        222
+      ]
+    },
+    {
+      "id": "198-honeycomb",
+      "subject": "honeycomb",
+      "reference_slot": 198,
+      "svg": "svg/198-honeycomb.svg",
+      "png": "png/198-honeycomb.png",
+      "sha256": "d1fc4df4cc10dcb695e3d975a1b453ab293a8d024bbce8a88ec4ba7e680c1230",
+      "png_sha256": "f05eea63a48b9bab36ef1ef4191a173e94bd894f5de588a54df71a268f309dee",
+      "ink_bbox": [
+        32,
+        35,
+        164,
+        231
+      ]
+    },
+    {
+      "id": "199-clover",
+      "subject": "clover",
+      "reference_slot": 199,
+      "svg": "svg/199-clover.svg",
+      "png": "png/199-clover.png",
+      "sha256": "4d713e8d202c4471b54e4cb1d69830f2615a73ac4f94d4a29daef7f983160c10",
+      "png_sha256": "fa5ee608f144524da85d50c175ec97612cd53f484a0131064b976845609d11eb",
+      "ink_bbox": [
+        18,
+        21,
+        186,
+        223
+      ]
+    },
+    {
+      "id": "200-mushroom",
+      "subject": "mushroom",
+      "reference_slot": 200,
+      "svg": "svg/200-mushroom.svg",
+      "png": "png/200-mushroom.png",
+      "sha256": "1856b4d5ae0c50bba1852c347f2724e4d371282a01937b3a022c9c9c059182fb",
+      "png_sha256": "bb3f821f4fbd1decb7a1ce51fd7e27a09ea2e4a1d4a78b3cc180046866a97d20",
+      "ink_bbox": [
+        58,
+        82,
+        142,
+        223
+      ]
+    },
+    {
+      "id": "201-clover",
+      "subject": "clover",
+      "reference_slot": 201,
+      "svg": "svg/201-clover.svg",
+      "png": "png/201-clover.png",
+      "sha256": "addfec51c52f8a03e31ff757414244de5f142de23729788a2777b83a02cbf6b8",
+      "png_sha256": "27ff27bd346af57a51af0ae702d883abf1b14f0b48496baa63a9d0f9f960c38b",
+      "ink_bbox": [
+        13,
+        19,
+        187,
+        222
+      ]
+    },
+    {
+      "id": "202-grass",
+      "subject": "grass",
+      "reference_slot": 202,
+      "svg": "svg/202-grass.svg",
+      "png": "png/202-grass.png",
+      "sha256": "6d74a9b5c9547f1e5576bb62957d06b0ad5b966f8d29f32df5f75e7ea4a8cad8",
+      "png_sha256": "bfc2d79b17895b25341d8249b963b9582e8dd9b0183e55d438ba5348c17183de",
+      "ink_bbox": [
+        14,
+        59,
+        186,
+        219
+      ]
+    },
+    {
+      "id": "203-sprout",
+      "subject": "sprout",
+      "reference_slot": 203,
+      "svg": "svg/203-sprout.svg",
+      "png": "png/203-sprout.png",
+      "sha256": "af4926a98a0913803d20f0da6cfd519cc5de374cce161986e7445c6147084945",
+      "png_sha256": "0e2ea270d2bda461c1e085f98871466af92f0f92f2f24f8d7b27dc836faa3788",
+      "ink_bbox": [
+        51,
+        31,
+        159,
+        223
+      ]
+    },
+    {
+      "id": "204-bird",
+      "subject": "bird",
+      "reference_slot": 204,
+      "svg": "svg/204-bird.svg",
+      "png": "png/204-bird.png",
+      "sha256": "469cce2cbf9931196603118638fcfd8b01a19e57df846498ba6dcf003052219a",
+      "png_sha256": "7848ae134df18ba3752bb992cc37e9895115924406b16ef18dad09a75a7e2bd5",
+      "ink_bbox": [
+        25,
+        46,
+        158,
+        221
+      ]
+    },
+    {
+      "id": "205-berries",
+      "subject": "berries",
+      "reference_slot": 205,
+      "svg": "svg/205-berries.svg",
+      "png": "png/205-berries.png",
+      "sha256": "87e7fc3d1e49bc8869db2a3ba46c3984bda201fafbc3011a3aa246958c712a60",
+      "png_sha256": "a110be5ba6832d83fc726a483a41cbf391431ab5792bf890bc21513c1cc50324",
+      "ink_bbox": [
+        21,
+        34,
+        177,
+        221
+      ]
+    },
+    {
+      "id": "206-bush",
+      "subject": "bush",
+      "reference_slot": 206,
+      "svg": "svg/206-bush.svg",
+      "png": "png/206-bush.png",
+      "sha256": "4558ed51a587becd44ede8141cdb8709e04b2f8d7adc806f2d6cc9f14d143335",
+      "png_sha256": "eeba53b1e43f13461bc704a7af4857c5433155901822dd46e49d1b63fc961444",
+      "ink_bbox": [
+        32,
+        42,
+        172,
+        222
+      ]
+    },
+    {
+      "id": "207-fig",
+      "subject": "fig",
+      "reference_slot": 207,
+      "svg": "svg/207-fig.svg",
+      "png": "png/207-fig.png",
+      "sha256": "6ffbbbb586780f116a9d870be6b66843403723ea4a641a8b9cb9ae233fe4227e",
+      "png_sha256": "fc8b8fa87a208c5fd487aec412998b79f94fa7aa430b5d18209176a2b1ddab4d",
+      "ink_bbox": [
+        36,
+        60,
+        164,
+        216
+      ]
+    },
+    {
+      "id": "208-fish",
+      "subject": "fish",
+      "reference_slot": 208,
+      "svg": "svg/208-fish.svg",
+      "png": "png/208-fish.png",
+      "sha256": "eea17bcdec37b0e7188c5b6c176654ae7ff2914c539e04f81fd6b0d145d728f3",
+      "png_sha256": "aa0b9e1d2134ae3cb2257f36c67f97dbb63c88115b42e2f28577434aaf1d031e",
+      "ink_bbox": [
+        40,
+        58,
+        189,
+        212
+      ]
+    },
+    {
+      "id": "209-sunflower",
+      "subject": "sunflower",
+      "reference_slot": 209,
+      "svg": "svg/209-sunflower.svg",
+      "png": "png/209-sunflower.png",
+      "sha256": "16cb01821c5c405b0682d4a5ee3ba486252558e66c30b90f43fd68c371e381b3",
+      "png_sha256": "425d0488122bbe19689581e14b2d2200183c72505876b0b791524c86542fc4bd",
+      "ink_bbox": [
+        27,
+        17,
+        174,
+        223
+      ]
+    },
+    {
+      "id": "210-seaweed",
+      "subject": "seaweed",
+      "reference_slot": 210,
+      "svg": "svg/210-seaweed.svg",
+      "png": "png/210-seaweed.png",
+      "sha256": "05145f925cdb5770440b95286d80272feae902e6d534e2313c80444f8105af08",
+      "png_sha256": "a2c609cff4b5226af9cee4041452f773019694ea33e540da95ef8ed7f1f5ef73",
+      "ink_bbox": [
+        22,
+        59,
+        176,
+        219
+      ]
+    },
+    {
+      "id": "211-log",
+      "subject": "log",
+      "reference_slot": 211,
+      "svg": "svg/211-log.svg",
+      "png": "png/211-log.png",
+      "sha256": "f7ac845d57ee5381986ea5382b62096870e0a4dcfa77fdc2a6189059d9d9e4b6",
+      "png_sha256": "81f62b8072a921a75b66ac52aa0d0cb12eab91c73c0707aaca1379dd9cbc23b7",
+      "ink_bbox": [
+        30,
+        86,
+        173,
+        224
+      ]
+    },
+    {
+      "id": "212-bush",
+      "subject": "bush",
+      "reference_slot": 212,
+      "svg": "svg/212-bush.svg",
+      "png": "png/212-bush.png",
+      "sha256": "d0868d21307c17ae42392108ace4ad2bbd43dbf04c47d8d004dda32387d8c167",
+      "png_sha256": "daf748fd6ba0f821b7c94758f91f778ce1cd211cb1e36227cad1b3d35bc38c5c",
+      "ink_bbox": [
+        37,
+        43,
+        172,
+        223
+      ]
+    },
+    {
+      "id": "213-tortoise",
+      "subject": "tortoise",
+      "reference_slot": 213,
+      "svg": "svg/213-tortoise.svg",
+      "png": "png/213-tortoise.png",
+      "sha256": "c6d71afa870dfe6ca1b5c63cb5f8ec5bf151f4905994de878d0861ef725625cd",
+      "png_sha256": "3717082f925257e0634305952a09ad4a8afbcb1c3a165b4c10e60974b6797681",
+      "ink_bbox": [
+        31,
+        80,
+        184,
+        194
+      ]
+    },
+    {
+      "id": "214-fern",
+      "subject": "fern",
+      "reference_slot": 214,
+      "svg": "svg/214-fern.svg",
+      "png": "png/214-fern.png",
+      "sha256": "b1bef8037dd1da413e2968187f74488200a01f847301320041aaa36d20a29504",
+      "png_sha256": "f1df542cfd1a5f6f716111fdbb55405b1ad2599680863a0b49ff52c15c87d134",
+      "ink_bbox": [
+        37,
+        30,
+        158,
+        222
+      ]
+    },
+    {
+      "id": "215-tulip",
+      "subject": "tulip",
+      "reference_slot": 215,
+      "svg": "svg/215-tulip.svg",
+      "png": "png/215-tulip.png",
+      "sha256": "e9aa27c3a5c8415f816331a4714c348938610a1905b50a20c56b496c891f59d0",
+      "png_sha256": "fa66be5449ac4ee9aece9c58bc0430451f040916b2f896eb0afef5c0baf16b56",
+      "ink_bbox": [
+        34,
+        25,
+        153,
+        222
+      ]
+    },
+    {
+      "id": "216-cactus",
+      "subject": "cactus",
+      "reference_slot": 216,
+      "svg": "svg/216-cactus.svg",
+      "png": "png/216-cactus.png",
+      "sha256": "a1ae629bb75fa0eb4b34b8892c09c37aab602d2a73264c33716937d390b37894",
+      "png_sha256": "097c2eb11fba4ce9d7248260a33406baea843c1eb79e7974e4ae14900fadb35b",
+      "ink_bbox": [
+        38,
+        39,
+        175,
+        227
+      ]
+    },
+    {
+      "id": "217-fern",
+      "subject": "fern",
+      "reference_slot": 217,
+      "svg": "svg/217-fern.svg",
+      "png": "png/217-fern.png",
+      "sha256": "849e8025cb33471b2af4fe549d529fc04747c21bc8cf0140768b6b2008b4f334",
+      "png_sha256": "f9012f42afcf2a40c6b506a8b254c547c05d17172b3fd965af6fc559bb04f9ae",
+      "ink_bbox": [
+        44,
+        31,
+        157,
+        223
+      ]
+    },
+    {
+      "id": "218-camp",
+      "subject": "camp",
+      "reference_slot": 218,
+      "svg": "svg/218-camp.svg",
+      "png": "png/218-camp.png",
+      "sha256": "21c3e9713ada91ee1e1886555aecdfaacd4a8009cd0cf74cdaf2038010971ac2",
+      "png_sha256": "1f4e173c447ef9bd67d44e364ebe01b87cec1ee125d95e8b078908099adcfa1a",
+      "ink_bbox": [
+        18,
+        56,
+        193,
+        224
+      ]
+    },
+    {
+      "id": "219-clover",
+      "subject": "clover",
+      "reference_slot": 219,
+      "svg": "svg/219-clover.svg",
+      "png": "png/219-clover.png",
+      "sha256": "e1b17fc6f58265d629f4564cc6f6369c5308ffa3780503b43a02701f9fb3fc88",
+      "png_sha256": "55d9dccdaca1e230c8850b38dabcbfa290cc5442bbaacd382a328a245522d118",
+      "ink_bbox": [
+        35,
+        23,
+        165,
+        223
+      ]
+    },
+    {
+      "id": "220-bush",
+      "subject": "bush",
+      "reference_slot": 220,
+      "svg": "svg/220-bush.svg",
+      "png": "png/220-bush.png",
+      "sha256": "ccac14d8fe10956a1caa86d15760ec269fe43912fbe8d268e726817dd69f299d",
+      "png_sha256": "565e8d40dc525d39b99c6c430fdbe6bc91bda9284b03592ce0d577f584d95455",
+      "ink_bbox": [
+        37,
+        43,
+        167,
+        222
+      ]
+    },
+    {
+      "id": "221-spiralflower",
+      "subject": "spiralflower",
+      "reference_slot": 221,
+      "svg": "svg/221-spiralflower.svg",
+      "png": "png/221-spiralflower.png",
+      "sha256": "8ad74c8b28fe72518e9a091e43e7ab3c35d6a3b3c4c06b1461516d4ee60df2c6",
+      "png_sha256": "75f51c57aa593258bb68bc092b9ce19853cc834aca6472979fe92af8e0dafafe",
+      "ink_bbox": [
+        41,
+        37,
+        151,
+        223
+      ]
+    },
+    {
+      "id": "222-sprout",
+      "subject": "sprout",
+      "reference_slot": 222,
+      "svg": "svg/222-sprout.svg",
+      "png": "png/222-sprout.png",
+      "sha256": "a21c56311a567dbd5a68913d1f06046342f52fc798b0b818c8610b9d683fb9cc",
+      "png_sha256": "9f4dee73376e5b68f0e06808329217b887c52de5120400e5d3c3187929b3a04c",
+      "ink_bbox": [
+        55,
+        31,
+        155,
+        222
+      ]
+    },
+    {
+      "id": "223-mushroom",
+      "subject": "mushroom",
+      "reference_slot": 223,
+      "svg": "svg/223-mushroom.svg",
+      "png": "png/223-mushroom.png",
+      "sha256": "4dc822f82c140a2878fd85bec4598014efa7a3d7e45031b91c11dc49509f649c",
+      "png_sha256": "c06622e67da1e612f7085b64f3e16ed3cf8a85f8ae1a316f312fe045f69a1272",
+      "ink_bbox": [
+        31,
+        44,
+        170,
+        223
+      ]
+    },
+    {
+      "id": "224-grass",
+      "subject": "grass",
+      "reference_slot": 224,
+      "svg": "svg/224-grass.svg",
+      "png": "png/224-grass.png",
+      "sha256": "3677c492068f8a97f96ba36312affc56843ff40a76bb7f0f81fe2fbd6155bec9",
+      "png_sha256": "ed25b9887d65070d7dd1aa78950e061c9cec3a7f3f4ccd75987f30f0042ded50",
+      "ink_bbox": [
+        14,
+        75,
+        186,
+        218
+      ]
+    },
+    {
+      "id": "225-snail",
+      "subject": "snail",
+      "reference_slot": 225,
+      "svg": "svg/225-snail.svg",
+      "png": "png/225-snail.png",
+      "sha256": "6c948b40b0a1239bd9f6420d1ff43b150579d656c15292bfb7e976d640d7fa2d",
+      "png_sha256": "416983db1f44306f99b4429c0880b9f6002139c7389f2dbabf5d0b6cda40374c",
+      "ink_bbox": [
+        25,
+        113,
+        182,
+        224
+      ]
+    },
+    {
+      "id": "226-tulip",
+      "subject": "tulip",
+      "reference_slot": 226,
+      "svg": "svg/226-tulip.svg",
+      "png": "png/226-tulip.png",
+      "sha256": "aff21cd6f91c60c8f39dccdb4a0b258951de33bb13dba2818b3100e51d915929",
+      "png_sha256": "57ac4d374680e0bee9317da0e2f9bc7a05c2c2c3ac3eedd613e4e0c46320fce1",
+      "ink_bbox": [
+        53,
+        13,
+        152,
+        223
+      ]
+    },
+    {
+      "id": "227-clover",
+      "subject": "clover",
+      "reference_slot": 227,
+      "svg": "svg/227-clover.svg",
+      "png": "png/227-clover.png",
+      "sha256": "370eb8cbb721613c34d0bf649836641cd2274d6c7c91e1d3b09f9889f0b73924",
+      "png_sha256": "5c93f4bb9b009c2ef61989a7c29b8965cd1522a09946249e65316fa2a43354a6",
+      "ink_bbox": [
+        13,
+        19,
+        188,
+        222
+      ]
+    },
+    {
+      "id": "228-tulip",
+      "subject": "tulip",
+      "reference_slot": 228,
+      "svg": "svg/228-tulip.svg",
+      "png": "png/228-tulip.png",
+      "sha256": "f704b828dd116f9d0d93ea80ff5b2df5bc29564a91c86a0f4cc2fcb29fd17076",
+      "png_sha256": "2aced34a7aa171ce36e18e93974ae305cc868eb03d48e9239d2f9f0789a2c54f",
+      "ink_bbox": [
+        53,
+        16,
+        161,
+        222
+      ]
+    },
+    {
+      "id": "229-clover",
+      "subject": "clover",
+      "reference_slot": 229,
+      "svg": "svg/229-clover.svg",
+      "png": "png/229-clover.png",
+      "sha256": "8f147d727c34f83d5eacc1d8507fc737916325530c8e1ef0fd645964b581a5aa",
+      "png_sha256": "432c1331f92aada79ca84ef59a42b925118c7798afa59ba1fad8478ea7c9b828",
+      "ink_bbox": [
+        34,
+        20,
+        167,
+        223
+      ]
+    },
+    {
+      "id": "230-bush",
+      "subject": "bush",
+      "reference_slot": 230,
+      "svg": "svg/230-bush.svg",
+      "png": "png/230-bush.png",
+      "sha256": "7c849eb72e29e2b1e815f21cc001a74884d7b29ac7814bc9551ec7d2d5e98f90",
+      "png_sha256": "19c48c45ca42aa830a5eacb2005bbbef85c60cf2e8695bf6f61c43143fbc60bd",
+      "ink_bbox": [
+        33,
+        43,
+        172,
+        222
+      ]
+    },
+    {
+      "id": "231-bush",
+      "subject": "bush",
+      "reference_slot": 231,
+      "svg": "svg/231-bush.svg",
+      "png": "png/231-bush.png",
+      "sha256": "9bc5d2cafe42fb2cb6845e067a32e290c6bc6b4983629eaeeca8e569b6e0184e",
+      "png_sha256": "ba52bb03ecba49978292f0a0fbd63cfcf4398831cd4ec59af609981932104fa3",
+      "ink_bbox": [
+        30,
+        40,
+        173,
+        222
+      ]
+    },
+    {
+      "id": "232-carrot",
+      "subject": "carrot",
+      "reference_slot": 232,
+      "svg": "svg/232-carrot.svg",
+      "png": "png/232-carrot.png",
+      "sha256": "466426fe67190f07925c9cc702514ffc879986b8583d75324c7760319f55dbcd",
+      "png_sha256": "621f62732aaa6a0ad678923fa566349a3e411a1c42879dcc55fd503cfc868d85",
+      "ink_bbox": [
+        57,
+        20,
+        150,
+        230
+      ]
+    },
+    {
+      "id": "233-tulip",
+      "subject": "tulip",
+      "reference_slot": 233,
+      "svg": "svg/233-tulip.svg",
+      "png": "png/233-tulip.png",
+      "sha256": "5666d10099a81e80691189214bbe3a23a45b579fae1fcf05fef72af6b3c8658e",
+      "png_sha256": "d5fbb23663b347d9986e34e5c6dc20306b4d0bd7ceadccaa489cc3027fe6246d",
+      "ink_bbox": [
+        41,
+        26,
+        154,
+        222
+      ]
+    },
+    {
+      "id": "234-clover",
+      "subject": "clover",
+      "reference_slot": 234,
+      "svg": "svg/234-clover.svg",
+      "png": "png/234-clover.png",
+      "sha256": "628f19d6bcb56ff59df9570502f91b002cddfcbcaa0fcd69784060e73d6a97cb",
+      "png_sha256": "e41ebd7c51964bd4d4d2d0f58ce0a0e2b9b7adb685331c0fcf96ef4480e35e91",
+      "ink_bbox": [
+        21,
+        17,
+        182,
+        223
+      ]
+    },
+    {
+      "id": "235-tulip",
+      "subject": "tulip",
+      "reference_slot": 235,
+      "svg": "svg/235-tulip.svg",
+      "png": "png/235-tulip.png",
+      "sha256": "3457effc6b96b2fba4deed7cc14612ff22550eac6a4e9534c301f69dd112fcf6",
+      "png_sha256": "a331fabea377e2e23e6e10c87f4a706b962ce788edfe9b84107233112d63f88c",
+      "ink_bbox": [
+        35,
+        13,
+        148,
+        222
+      ]
+    },
+    {
+      "id": "236-camp",
+      "subject": "camp",
+      "reference_slot": 236,
+      "svg": "svg/236-camp.svg",
+      "png": "png/236-camp.png",
+      "sha256": "bd904fa8537a4adfa70eafd5758d6252dee1e858122d6e7628465796f4249560",
+      "png_sha256": "833fac33f3613b2d0637192fc6cba0b36de07781e4996e86df16036f44d07fb9",
+      "ink_bbox": [
+        18,
+        55,
+        193,
+        224
+      ]
+    },
+    {
+      "id": "237-rake",
+      "subject": "rake",
+      "reference_slot": 237,
+      "svg": "svg/237-rake.svg",
+      "png": "png/237-rake.png",
+      "sha256": "87f4bbfdb4d1459127562c67638b7d2684502eee6c48ec5b5a73273a108d01be",
+      "png_sha256": "eea77c13405602ec363e2fa972ab0e4d940f099fd7bf3d5a84463a075f9215c6",
+      "ink_bbox": [
+        42,
+        24,
+        164,
+        231
+      ]
+    },
+    {
+      "id": "238-grass",
+      "subject": "grass",
+      "reference_slot": 238,
+      "svg": "svg/238-grass.svg",
+      "png": "png/238-grass.png",
+      "sha256": "5d194fa215049c7c733e2cb705de8953fcced6cbdc60ac7a1b1b001f51237ba5",
+      "png_sha256": "eeeb5bf292f5a269247de37916c688424a076f6baf38c1fe04a150943eb2b87c",
+      "ink_bbox": [
+        15,
+        64,
+        187,
+        220
+      ]
+    },
+    {
+      "id": "239-clover",
+      "subject": "clover",
+      "reference_slot": 239,
+      "svg": "svg/239-clover.svg",
+      "png": "png/239-clover.png",
+      "sha256": "3d68679379a061729ac39ae054185439f9d66691caca600ad286168354f13c8a",
+      "png_sha256": "f894f73d5ac1c8d905b95f7b464616e80d772c4f187ec6e542b03d2514c25826",
+      "ink_bbox": [
+        31,
+        27,
+        171,
+        222
+      ]
+    },
+    {
+      "id": "240-mushroom",
+      "subject": "mushroom",
+      "reference_slot": 240,
+      "svg": "svg/240-mushroom.svg",
+      "png": "png/240-mushroom.png",
+      "sha256": "54dd3cf9be66dcb13a4a3e561437a2e0fa46787097e591f1c5fe47bd4ced0ff7",
+      "png_sha256": "6a96bc3b606febc903e67606b874958954abb7dd0e00ebccd8ea5212cf95e495",
+      "ink_bbox": [
+        58,
+        71,
+        142,
+        223
+      ]
+    },
+    {
+      "id": "241-clover",
+      "subject": "clover",
+      "reference_slot": 241,
+      "svg": "svg/241-clover.svg",
+      "png": "png/241-clover.png",
+      "sha256": "1e4122e04c8df12f6dd5432656df6987a6ec45652c3d4b85df97ff05e53b2325",
+      "png_sha256": "f42b0563d9a66d906b28d92385fff7b6c324559a9205c87729eacabdc79c4223",
+      "ink_bbox": [
+        36,
+        26,
+        166,
+        223
+      ]
+    },
+    {
+      "id": "242-sunflower",
+      "subject": "sunflower",
+      "reference_slot": 242,
+      "svg": "svg/242-sunflower.svg",
+      "png": "png/242-sunflower.png",
+      "sha256": "bdddef94200314591b5a678d3d948aa7e3bea8d1d7dae4b3003d783e1f67bf2b",
+      "png_sha256": "3e3a91ee0f167c2c6a307dcdbeced957073cb8ca50e09f00cc9d88711c9b57ab",
+      "ink_bbox": [
+        54,
+        31,
+        169,
+        223
+      ]
+    },
+    {
+      "id": "243-sailboat",
+      "subject": "sailboat",
+      "reference_slot": 243,
+      "svg": "svg/243-sailboat.svg",
+      "png": "png/243-sailboat.png",
+      "sha256": "db986aafbd625e948a76c2e77952a36fc9b8ef376ea300627919da6b746054b9",
+      "png_sha256": "faedf016771b5f0d3727d18994f96781da89c39c6ace7964149b77259d255d43",
+      "ink_bbox": [
+        28,
+        32,
+        178,
+        230
+      ]
+    },
+    {
+      "id": "244-daisy",
+      "subject": "daisy",
+      "reference_slot": 244,
+      "svg": "svg/244-daisy.svg",
+      "png": "png/244-daisy.png",
+      "sha256": "7a560b174331bebde4d9d1859d8acd6001572a9e496683a80a398fd1f8d9b928",
+      "png_sha256": "1c030b2d75472f404dc6f2b81e3e61fe0d7bd3ee6c075fc05c6d5ab1d0e3551c",
+      "ink_bbox": [
+        18,
+        29,
+        176,
+        222
+      ]
+    },
+    {
+      "id": "245-butterfly",
+      "subject": "butterfly",
+      "reference_slot": 245,
+      "svg": "svg/245-butterfly.svg",
+      "png": "png/245-butterfly.png",
+      "sha256": "c5ed54143495683e66cf67b85588ae189b18a6644a86c7df3676862f8154eca0",
+      "png_sha256": "a8949849cd1bb8e1b714a02fda8c04e7d7e2b767e8bc365e6369cfd190691394",
+      "ink_bbox": [
+        26,
+        65,
+        176,
+        209
+      ]
+    },
+    {
+      "id": "246-vine",
+      "subject": "vine",
+      "reference_slot": 246,
+      "svg": "svg/246-vine.svg",
+      "png": "png/246-vine.png",
+      "sha256": "07e282389417cdd459ea99eac5d4e023280d738b911e3579a595bef3d1b0a2f4",
+      "png_sha256": "654bca6b332d2ea26c49914bf6450ca0ee90699ce5500f8d88f8971239e279d3",
+      "ink_bbox": [
+        56,
+        16,
+        170,
+        223
+      ]
+    },
+    {
+      "id": "247-clover",
+      "subject": "clover",
+      "reference_slot": 247,
+      "svg": "svg/247-clover.svg",
+      "png": "png/247-clover.png",
+      "sha256": "8fc35038511c0f9374591249ff17e3e0fa3adb0016ca50f572cb6b729664021f",
+      "png_sha256": "fad38742f0f7dc8bebef8ef224ad0f6fde452cbaa1edef65398458d6137f4a2f",
+      "ink_bbox": [
+        18,
+        19,
+        185,
+        222
+      ]
+    },
+    {
+      "id": "248-berries",
+      "subject": "berries",
+      "reference_slot": 248,
+      "svg": "svg/248-berries.svg",
+      "png": "png/248-berries.png",
+      "sha256": "dfdcee0eccd24a1600427928d5510c874d7415b36aa73c8d5099615fd307db21",
+      "png_sha256": "81911e11ea8c3c99fce894f362528c4aadea176d08d1cebbf5ce27504d9fbdce",
+      "ink_bbox": [
+        21,
+        35,
+        177,
+        221
+      ]
+    },
+    {
+      "id": "249-clover",
+      "subject": "clover",
+      "reference_slot": 249,
+      "svg": "svg/249-clover.svg",
+      "png": "png/249-clover.png",
+      "sha256": "0b6e59a6db5397d1b238fc0de95c5a24f69a05f57aa6649582dab22b4d8803e8",
+      "png_sha256": "c9fb2c28eccae9832c25b5b09519a97ed44dae1b77fc0d879cb3428ade7d5a44",
+      "ink_bbox": [
+        13,
+        21,
+        187,
+        223
+      ]
+    },
+    {
+      "id": "250-waterlily",
+      "subject": "waterlily",
+      "reference_slot": 250,
+      "svg": "svg/250-waterlily.svg",
+      "png": "png/250-waterlily.png",
+      "sha256": "890cb6dbbce3381b86465eb462e8cbf8aab0a564479ff8bc5ab494709be58354",
+      "png_sha256": "42f2c03bf627d2b7a346a2918df9323efcfb16b53407d3ab95fd3a669f0b37b3",
+      "ink_bbox": [
+        28,
+        40,
+        178,
+        227
+      ]
+    },
+    {
+      "id": "251-clover",
+      "subject": "clover",
+      "reference_slot": 251,
+      "svg": "svg/251-clover.svg",
+      "png": "png/251-clover.png",
+      "sha256": "6b9313ae39fc687527c6de75c5ff6ce8b4c7634b6d26461e28f2bdca750069b8",
+      "png_sha256": "fae6c0cbcbceb276ee6f03834de33b700dc88971aac1bf2cc67f94f5b6abd943",
+      "ink_bbox": [
+        16,
+        14,
+        187,
+        222
+      ]
+    },
+    {
+      "id": "252-apple",
+      "subject": "apple",
+      "reference_slot": 252,
+      "svg": "svg/252-apple.svg",
+      "png": "png/252-apple.png",
+      "sha256": "c08727073c50275955aa83c640def691e0e72314a8c3b6959799ab0fc50da129",
+      "png_sha256": "75a9d356e83fd56edf1f1e3b7bc605b3c782bf2e5273ddd316dc0c66411c964b",
+      "ink_bbox": [
+        31,
+        40,
+        170,
+        218
+      ]
+    },
+    {
+      "id": "253-bell",
+      "subject": "bell",
+      "reference_slot": 253,
+      "svg": "svg/253-bell.svg",
+      "png": "png/253-bell.png",
+      "sha256": "da8d8e0616f5fb727b71b9b4989b22aa764cd660ecdfbcee838f5e14e13cdbff",
+      "png_sha256": "baf12056e4dd3ff0dad080a4c8bb5f649e518683d7247d5ef53d63358a5ee3b0",
+      "ink_bbox": [
+        39,
+        60,
+        156,
+        223
+      ]
+    },
+    {
+      "id": "254-cherry",
+      "subject": "cherry",
+      "reference_slot": 254,
+      "svg": "svg/254-cherry.svg",
+      "png": "png/254-cherry.png",
+      "sha256": "b94b4034bf2dd107e675b67f2bf4a8eb670d168e2ca77b737a174f1b2743a12f",
+      "png_sha256": "d169d127e5c61df5fa2a8672adc8ce44ea6314aca2432f32f1c4db4df2e0474e",
+      "ink_bbox": [
+        21,
+        38,
+        177,
+        217
+      ]
+    },
+    {
+      "id": "255-bamboo",
+      "subject": "bamboo",
+      "reference_slot": 255,
+      "svg": "svg/255-bamboo.svg",
+      "png": "png/255-bamboo.png",
+      "sha256": "64140bdafa13e133919cdb7fef85210e868fd21a130a7f2fb2a6b1561ac4ec6a",
+      "png_sha256": "09d1c504b59ed871c4a718b8e7496096c8950eb0652e70e44db61d392b993389",
+      "ink_bbox": [
+        39,
+        38,
+        110,
+        225
+      ]
+    },
+    {
+      "id": "256-grass",
+      "subject": "grass",
+      "reference_slot": 256,
+      "svg": "svg/256-grass.svg",
+      "png": "png/256-grass.png",
+      "sha256": "5eda2644be2279f33f7be5691811d55e21bb6c00a93944622bd16c37e71aa017",
+      "png_sha256": "63f5d469ee56f5654be0f27e3a5953a61a321dc02fc0dc6248a6d2820a208e0f",
+      "ink_bbox": [
+        15,
+        64,
+        186,
+        219
+      ]
+    },
+    {
+      "id": "257-daisy",
+      "subject": "daisy",
+      "reference_slot": 257,
+      "svg": "svg/257-daisy.svg",
+      "png": "png/257-daisy.png",
+      "sha256": "cb4218d808f8f0928b70044cf4444bed3c95c516b7cb2d2013b85724dfaeb5a1",
+      "png_sha256": "4c708a5b5fe8934178378e22b12ce0fc549a1bc3de45786ac3e24128975b7cc0",
+      "ink_bbox": [
+        25,
+        15,
+        173,
+        222
+      ]
+    },
+    {
+      "id": "258-succulent",
+      "subject": "succulent",
+      "reference_slot": 258,
+      "svg": "svg/258-succulent.svg",
+      "png": "png/258-succulent.png",
+      "sha256": "4a8b57e65a47f6f4c15cf3d06279917efa7d3781447722915ca888098270d358",
+      "png_sha256": "04b5332be1b41bb31fe30cde5b0b44e7d4f16d5586c417e9b7d80f619b0ec313",
+      "ink_bbox": [
+        33,
+        70,
+        175,
+        230
+      ]
+    },
+    {
+      "id": "259-mushroom",
+      "subject": "mushroom",
+      "reference_slot": 259,
+      "svg": "svg/259-mushroom.svg",
+      "png": "png/259-mushroom.png",
+      "sha256": "4a6543be083d891bac1770ca09255a7951da54675f80006f96f010ef01517838",
+      "png_sha256": "5f27911fe5dab30f8451645539731d0a7c2dbc3f10a5748010707da849dbf689",
+      "ink_bbox": [
+        31,
+        51,
+        170,
+        223
+      ]
+    },
+    {
+      "id": "260-bamboo",
+      "subject": "bamboo",
+      "reference_slot": 260,
+      "svg": "svg/260-bamboo.svg",
+      "png": "png/260-bamboo.png",
+      "sha256": "f1d32f26fd14951eebe49ddfa0b2fb25b56a166d08209fb10fee2371b9156ee6",
+      "png_sha256": "1e6036eb8b99286c48a21cb71245a0dc41785bd88c05dfc38e0357dd9ad0e673",
+      "ink_bbox": [
+        40,
+        38,
+        176,
+        225
+      ]
+    },
+    {
+      "id": "261-daisy",
+      "subject": "daisy",
+      "reference_slot": 261,
+      "svg": "svg/261-daisy.svg",
+      "png": "png/261-daisy.png",
+      "sha256": "2f61d8c069b55b630cb9ee7b3b06b21890f2321f36d27e3650512561f467a345",
+      "png_sha256": "ff40bcc4adb7ea705800d68c948f24375eca66dfe15fcbd5dd798c4b6be9b295",
+      "ink_bbox": [
+        40,
+        21,
+        159,
+        223
+      ]
+    },
+    {
+      "id": "262-tree",
+      "subject": "tree",
+      "reference_slot": 262,
+      "svg": "svg/262-tree.svg",
+      "png": "png/262-tree.png",
+      "sha256": "f48e07beddfc0d2cf2e14061a8d563f3cbd664bb8f14c35d5509803e8333a6ca",
+      "png_sha256": "d5adb1b82d68ce415e12606bbcef014d3a8f110e1d0bf1790d5ba6a46d812bf4",
+      "ink_bbox": [
+        39,
+        31,
+        165,
+        223
+      ]
+    },
+    {
+      "id": "263-tree",
+      "subject": "tree",
+      "reference_slot": 263,
+      "svg": "svg/263-tree.svg",
+      "png": "png/263-tree.png",
+      "sha256": "80c22b47e21424eb0bc3478d78f6bacb6de4ce7fdc6e60789cb7152879aef2d3",
+      "png_sha256": "663e83d765956ff64e982092782bac2dbebe6e0951a96aa479f4cd6711e4f350",
+      "ink_bbox": [
+        36,
+        27,
+        168,
+        223
+      ]
+    },
+    {
+      "id": "264-apple",
+      "subject": "apple",
+      "reference_slot": 264,
+      "svg": "svg/264-apple.svg",
+      "png": "png/264-apple.png",
+      "sha256": "3352cac9296def01c1f46c690e0a5a2c72068e3ca6ba0616a11c2e0795f900f7",
+      "png_sha256": "83463e51ecf47387ee591fecaf9eced2465d17ef590afc1884a19be976a1dd39",
+      "ink_bbox": [
+        32,
+        40,
+        170,
+        218
+      ]
+    },
+    {
+      "id": "265-bush",
+      "subject": "bush",
+      "reference_slot": 265,
+      "svg": "svg/265-bush.svg",
+      "png": "png/265-bush.png",
+      "sha256": "8497f91bdb9e13b64ad00632bfbeb09a1c83191bfdd01eac144ad0bbe0ef5693",
+      "png_sha256": "e70c0dd6b25571fb5574a73db486fab08f064fe8d2917e6d38dcb30c7dffd62c",
+      "ink_bbox": [
+        43,
+        48,
+        161,
+        223
+      ]
+    },
+    {
+      "id": "266-daisy",
+      "subject": "daisy",
+      "reference_slot": 266,
+      "svg": "svg/266-daisy.svg",
+      "png": "png/266-daisy.png",
+      "sha256": "f70fc26ebf26104bb418e850ea5fb1885eb063388a4e93684e4f460a142ab630",
+      "png_sha256": "fd81c74f0645b42887546f77b0f94cda0ef6b1df3a67d3b720896ce480a0cf60",
+      "ink_bbox": [
+        47,
+        29,
+        159,
+        222
+      ]
+    },
+    {
+      "id": "267-berries",
+      "subject": "berries",
+      "reference_slot": 267,
+      "svg": "svg/267-berries.svg",
+      "png": "png/267-berries.png",
+      "sha256": "b07a56dc5a63ec2fd88c03d1ba23c23f29a7a33feef622b6cdb8c713c0b081da",
+      "png_sha256": "c01b14f95d598713dfafd824f6f347d893a8d32787cc6547f889a173f60859a3",
+      "ink_bbox": [
+        20,
+        34,
+        177,
+        221
+      ]
+    },
+    {
+      "id": "268-daisy",
+      "subject": "daisy",
+      "reference_slot": 268,
+      "svg": "svg/268-daisy.svg",
+      "png": "png/268-daisy.png",
+      "sha256": "358811c5fdfc95efbfcf1083c160a534863b71c20cfd356297db75d7a449a9ab",
+      "png_sha256": "b05741cf5413bdeb5f5573923836f52b273b4bf973f29880bce60a343bfee766",
+      "ink_bbox": [
+        19,
+        24,
+        177,
+        223
+      ]
+    },
+    {
+      "id": "269-fig",
+      "subject": "fig",
+      "reference_slot": 269,
+      "svg": "svg/269-fig.svg",
+      "png": "png/269-fig.png",
+      "sha256": "90b674343ecd99c11d644a9fbdea7a7c4aeb2f6d6be0f7b909cc20ef29e08070",
+      "png_sha256": "1db488dbb927353eddcc39494a604f53d579ad85b445dde828e1f345bab33f06",
+      "ink_bbox": [
+        36,
+        59,
+        165,
+        216
+      ]
+    },
+    {
+      "id": "270-succulent",
+      "subject": "succulent",
+      "reference_slot": 270,
+      "svg": "svg/270-succulent.svg",
+      "png": "png/270-succulent.png",
+      "sha256": "c8e820126728eae6613b5a28ed831bda1cb18bdff7613946556c7fd9a0fed9a6",
+      "png_sha256": "c3d2a1031e7c1b72756b8132a8098ad32a2abe098d7ea4ccac7f3ecac1dc2c52",
+      "ink_bbox": [
+        33,
+        71,
+        174,
+        231
+      ]
+    },
+    {
+      "id": "271-bush",
+      "subject": "bush",
+      "reference_slot": 271,
+      "svg": "svg/271-bush.svg",
+      "png": "png/271-bush.png",
+      "sha256": "98ee56ddc6bee9c3070bb320b160580a7d1f295edf203883a0eba5d4fb5bbe37",
+      "png_sha256": "0ff6f51418ef1e623c7fbb6bf1d03762d9792bdeb00ef8928af79384fea7939b",
+      "ink_bbox": [
+        30,
+        39,
+        174,
+        223
+      ]
+    },
+    {
+      "id": "272-grass",
+      "subject": "grass",
+      "reference_slot": 272,
+      "svg": "svg/272-grass.svg",
+      "png": "png/272-grass.png",
+      "sha256": "3b345b914136884d0aa175fa33fcb47137d0a2bbaa40f933dacf827eefb92606",
+      "png_sha256": "681e95dbc33211d794b2a6e9d2b51c8b0d27868447158e7a6a7d49aea834e29a",
+      "ink_bbox": [
+        15,
+        49,
+        186,
+        219
+      ]
+    },
+    {
+      "id": "273-vine",
+      "subject": "vine",
+      "reference_slot": 273,
+      "svg": "svg/273-vine.svg",
+      "png": "png/273-vine.png",
+      "sha256": "81a8114ed65b845db3adebe60b0eaed23c8c0053f2ca62ee63a06340360ef7ef",
+      "png_sha256": "eeeb57e85e756d55b368973001b26c88650260847df4a982db1bf6ac71a2b871",
+      "ink_bbox": [
+        43,
+        27,
+        158,
+        223
+      ]
+    },
+    {
+      "id": "274-bamboo",
+      "subject": "bamboo",
+      "reference_slot": 274,
+      "svg": "svg/274-bamboo.svg",
+      "png": "png/274-bamboo.png",
+      "sha256": "1cbe2153b46df8ae0fb91ae55ae58f14ca0ad0cb2f3caad8662acbd35442ff9e",
+      "png_sha256": "a9694fe91db452dcf59daf0721f7a2ac5d14d276132495f0a821c952b44647cf",
+      "ink_bbox": [
+        40,
+        38,
+        142,
+        225
+      ]
+    },
+    {
+      "id": "275-frog",
+      "subject": "frog",
+      "reference_slot": 275,
+      "svg": "svg/275-frog.svg",
+      "png": "png/275-frog.png",
+      "sha256": "05f24ea70865e73be741ec672f295066d1eac024f3793063705c931290a69d9f",
+      "png_sha256": "238fe894db91edadfa949201cf528bd4d348003f607f5d1f712ee0835d86b27a",
+      "ink_bbox": [
+        30,
+        74,
+        172,
+        230
+      ]
+    },
+    {
+      "id": "276-rose",
+      "subject": "rose",
+      "reference_slot": 276,
+      "svg": "svg/276-rose.svg",
+      "png": "png/276-rose.png",
+      "sha256": "69306e70b834127af4432fe7b2d841a928e448552f8f05efce01050250a25065",
+      "png_sha256": "816e040e0ccb131348fb748695f28b3c91420d3ce8e6c311d96c9267d915a39e",
+      "ink_bbox": [
+        45,
+        51,
+        165,
+        223
+      ]
+    },
+    {
+      "id": "277-sprout",
+      "subject": "sprout",
+      "reference_slot": 277,
+      "svg": "svg/277-sprout.svg",
+      "png": "png/277-sprout.png",
+      "sha256": "8d25bfa174b24338796300643a16bb38700bb19e3deaf1613e40e9f3b2f93154",
+      "png_sha256": "7aa55b83aaf3bd1ffbd2cee1d88bb9d6efdb925881ea1ae04e2448fb48e44418",
+      "ink_bbox": [
+        55,
+        31,
+        152,
+        222
+      ]
+    },
+    {
+      "id": "278-rose",
+      "subject": "rose",
+      "reference_slot": 278,
+      "svg": "svg/278-rose.svg",
+      "png": "png/278-rose.png",
+      "sha256": "33907fe7a890dad0fad682f4cd4326014a98a6b137c87cd835f19a44cb972138",
+      "png_sha256": "14a52dea4f90121321af4ffc192a7c61bb462be133896f0aea8368eb95818eaa",
+      "ink_bbox": [
+        28,
+        55,
+        165,
+        223
+      ]
+    },
+    {
+      "id": "279-clover",
+      "subject": "clover",
+      "reference_slot": 279,
+      "svg": "svg/279-clover.svg",
+      "png": "png/279-clover.png",
+      "sha256": "205e1b5ef2b185ede6b16bde88476b578e8f2c1b91d39590d29c82ca39e6d8b0",
+      "png_sha256": "1657d0e45d44d9833d8c4c4553c605537cee8584ba6f0ed7832b14bff07c9923",
+      "ink_bbox": [
+        26,
+        21,
+        167,
+        223
+      ]
+    },
+    {
+      "id": "280-lily",
+      "subject": "lily",
+      "reference_slot": 280,
+      "svg": "svg/280-lily.svg",
+      "png": "png/280-lily.png",
+      "sha256": "047e4ba77ecd425fb2f918967631b388941c4be4f4d7861a8b4298ab6a1648c2",
+      "png_sha256": "b6d58b83afa5d8e78cc81414c5fcc74ab3ddc4c4f1449fd6a0098230a7cbc636",
+      "ink_bbox": [
+        40,
+        13,
+        157,
+        223
+      ]
+    },
+    {
+      "id": "281-wateringcan",
+      "subject": "wateringcan",
+      "reference_slot": 281,
+      "svg": "svg/281-wateringcan.svg",
+      "png": "png/281-wateringcan.png",
+      "sha256": "d398bf9eb213ff9e460f94db32405a544f08798925fbb5330a62a2ea9de85399",
+      "png_sha256": "aee227822dad513d267796a0fe9a78953d9bb0c7d9df5155187f484273b3c0ed",
+      "ink_bbox": [
+        16,
+        84,
+        182,
+        220
+      ]
+    },
+    {
+      "id": "282-bell",
+      "subject": "bell",
+      "reference_slot": 282,
+      "svg": "svg/282-bell.svg",
+      "png": "png/282-bell.png",
+      "sha256": "764295e223bf4ef5534505461cb50b83859ffedf52eead20fcb581f15b2a1639",
+      "png_sha256": "48d7c1dd33f072bc22ef5291056d9d3a38aa135f0719eab5f48f2497bbff97c7",
+      "ink_bbox": [
+        43,
+        64,
+        162,
+        222
+      ]
+    },
+    {
+      "id": "283-clover",
+      "subject": "clover",
+      "reference_slot": 283,
+      "svg": "svg/283-clover.svg",
+      "png": "png/283-clover.png",
+      "sha256": "ae343d7002170f47e52271d9625c77c7f400522cb1de0c707f6aef4fb18a25ae",
+      "png_sha256": "3c73bfcf1cb6b72b0337f1c1c05f649dbc4d5085776a1c3719759c41adbf1db6",
+      "ink_bbox": [
+        21,
+        18,
+        179,
+        222
+      ]
+    },
+    {
+      "id": "284-berries",
+      "subject": "berries",
+      "reference_slot": 284,
+      "svg": "svg/284-berries.svg",
+      "png": "png/284-berries.png",
+      "sha256": "678126cd09bcf458074edcae4c425ca28baaf8d75ebf948b43594b5dcf19beaa",
+      "png_sha256": "889a2f59f80b9a17c7d0f7a4229c0ca65faa845098757e2bd2a22bf669662fc7",
+      "ink_bbox": [
+        22,
+        34,
+        176,
+        221
+      ]
+    },
+    {
+      "id": "285-seaweed",
+      "subject": "seaweed",
+      "reference_slot": 285,
+      "svg": "svg/285-seaweed.svg",
+      "png": "png/285-seaweed.png",
+      "sha256": "70f8e47d4edefe0d95b52a33b02eaa528f82091ae3f889321cc97dd2874b0504",
+      "png_sha256": "de63e7af5749fe8db73cfb0f4472c49602e5874f10e477a7f1f7469a27fd5947",
+      "ink_bbox": [
+        23,
+        62,
+        176,
+        219
+      ]
+    },
+    {
+      "id": "286-grass",
+      "subject": "grass",
+      "reference_slot": 286,
+      "svg": "svg/286-grass.svg",
+      "png": "png/286-grass.png",
+      "sha256": "4f730b8d70858fbfab4e3c62dea0cff5eb6d2324325fb6760d6644774a372c63",
+      "png_sha256": "08465d1ef28caee7b0fb9e67d2b153c2e57e247964d4beda59102d27946873c8",
+      "ink_bbox": [
+        15,
+        51,
+        187,
+        219
+      ]
+    },
+    {
+      "id": "287-stones",
+      "subject": "stones",
+      "reference_slot": 287,
+      "svg": "svg/287-stones.svg",
+      "png": "png/287-stones.png",
+      "sha256": "b62e3d74a9fbb252ab4fcf89b54c5a1e821c7cfa394296d6a3b462fa26a49582",
+      "png_sha256": "86c1bb72b4188793953c0e9e0e7f889e01934c33550050510b5bb768caa51849",
+      "ink_bbox": [
+        22,
+        51,
+        176,
+        220
+      ]
+    },
+    {
+      "id": "288-fish",
+      "subject": "fish",
+      "reference_slot": 288,
+      "svg": "svg/288-fish.svg",
+      "png": "png/288-fish.png",
+      "sha256": "8516312466818749929cdf880df820a3fbb74d6ccb3a64be7e86eb3bd6077c7c",
+      "png_sha256": "a0ddc25e47a26b8c1e8e519a057d0ee59fc2ae51e9dc91f926589362b7a5c39e",
+      "ink_bbox": [
+        40,
+        58,
+        190,
+        213
+      ]
+    },
+    {
+      "id": "289-star",
+      "subject": "star",
+      "reference_slot": 289,
+      "svg": "svg/289-star.svg",
+      "png": "png/289-star.png",
+      "sha256": "83597d284d9e7b6fe754fd368f3cd3f36821cbb7d74f4ea3b1d97b76c6a9fa45",
+      "png_sha256": "ea8a08fbd47979b74504cd43ee71f6edd8f636178cded0760aed0af9693d60c2",
+      "ink_bbox": [
+        13,
+        29,
+        188,
+        220
+      ]
+    },
+    {
+      "id": "290-worm",
+      "subject": "worm",
+      "reference_slot": 290,
+      "svg": "svg/290-worm.svg",
+      "png": "png/290-worm.png",
+      "sha256": "4702a7acdbd35acee4c4774814832d1418e0d35a0e8e7048dfb4512b517ba016",
+      "png_sha256": "104cb537805bc1d06d41fd22e54775daa050241d8f49dd6cbd1085edcf111602",
+      "ink_bbox": [
+        23,
+        84,
+        185,
+        197
+      ]
+    },
+    {
+      "id": "291-twig",
+      "subject": "twig",
+      "reference_slot": 291,
+      "svg": "svg/291-twig.svg",
+      "png": "png/291-twig.png",
+      "sha256": "754ebddb9a7346ee7a4f6cad7f2f6eeca3957328ea97580a89139bd09c020f52",
+      "png_sha256": "59c00428604345c8c63710eec32a49201383dd146e607128479249c259fa4e5b",
+      "ink_bbox": [
+        23,
+        18,
+        175,
+        222
+      ]
+    },
+    {
+      "id": "292-fern",
+      "subject": "fern",
+      "reference_slot": 292,
+      "svg": "svg/292-fern.svg",
+      "png": "png/292-fern.png",
+      "sha256": "8988c756ed89c48630f9472c4b55bef594666ff71bf1c49de83f12299ea5f619",
+      "png_sha256": "8a832940dba905b7833c5642f00b7139873e882b5df9fdf397dc7600ab7ba440",
+      "ink_bbox": [
+        47,
+        31,
+        154,
+        222
+      ]
+    },
+    {
+      "id": "293-clover",
+      "subject": "clover",
+      "reference_slot": 293,
+      "svg": "svg/293-clover.svg",
+      "png": "png/293-clover.png",
+      "sha256": "cce25b8333562de3676d0b7f7135f8b55ea01230246cd03b583afb99f1aade27",
+      "png_sha256": "a4934b6eb31fc487d5878e74d9464f4a9774713d0d94c9d2c7964d6622961293",
+      "ink_bbox": [
+        17,
+        18,
+        183,
+        222
+      ]
+    },
+    {
+      "id": "294-clover",
+      "subject": "clover",
+      "reference_slot": 294,
+      "svg": "svg/294-clover.svg",
+      "png": "png/294-clover.png",
+      "sha256": "6af3356513d07da25bcf784fb2aa15e9e5668fa584299cb8e4810f58ee7d4e40",
+      "png_sha256": "82a849400ea40f357c6ee08ff4dee90b7f659d9a3b6747f9abbc8680c3d82b9f",
+      "ink_bbox": [
+        21,
+        25,
+        186,
+        222
+      ]
+    },
+    {
+      "id": "295-succulent",
+      "subject": "succulent",
+      "reference_slot": 295,
+      "svg": "svg/295-succulent.svg",
+      "png": "png/295-succulent.png",
+      "sha256": "cf08d43e7eca423a00039894dff2ab8ecad8c80dabb804330dbd8f19726cc05b",
+      "png_sha256": "93919156dd4a67ea4574d0314c0e7414e6e1e32b061ce82979948f9a37fb2191",
+      "ink_bbox": [
+        33,
+        70,
+        175,
+        230
+      ]
+    },
+    {
+      "id": "296-daisy",
+      "subject": "daisy",
+      "reference_slot": 296,
+      "svg": "svg/296-daisy.svg",
+      "png": "png/296-daisy.png",
+      "sha256": "4b526336b1f3bf6f7713c4d9b8f10fce863b5dabf1dad476120b8f5e22bc5eff",
+      "png_sha256": "8bc1f7d33bbab217a8a5e545ae62cb87aea2c247335c2fbff6083cc940094121",
+      "ink_bbox": [
+        21,
+        18,
+        183,
+        222
+      ]
+    },
+    {
+      "id": "297-daisy",
+      "subject": "daisy",
+      "reference_slot": 297,
+      "svg": "svg/297-daisy.svg",
+      "png": "png/297-daisy.png",
+      "sha256": "ca0b8d11af69f38b22706a5f84be78297992050c58712c967e7a65be03d2006f",
+      "png_sha256": "85710f3e5b8e29b56b70d83872daf9c6b43aedb28e9e4edc89e13f785d6b2354",
+      "ink_bbox": [
+        20,
+        18,
+        184,
+        222
+      ]
+    },
+    {
+      "id": "298-berries",
+      "subject": "berries",
+      "reference_slot": 298,
+      "svg": "svg/298-berries.svg",
+      "png": "png/298-berries.png",
+      "sha256": "40549973a0156abb1ea0249cac3cf94ce35dbebdc707e1ce4d721e49d4f99a49",
+      "png_sha256": "6c1b344c97b69bd10dc1d55952d9566123f2688d00db2735b9a635842c1e5d96",
+      "ink_bbox": [
+        21,
+        35,
+        176,
+        220
+      ]
+    },
+    {
+      "id": "299-berries",
+      "subject": "berries",
+      "reference_slot": 299,
+      "svg": "svg/299-berries.svg",
+      "png": "png/299-berries.png",
+      "sha256": "249554977d8ab538962294b9b9165a5fdbc6a7bb1b7d32c1f09b4e9b8620e237",
+      "png_sha256": "2a4c726b2f13dedde1cda0c54529ebedfef00f1b3430458aa34b2fa26b242b1e",
+      "ink_bbox": [
+        22,
+        34,
+        176,
+        220
+      ]
+    },
+    {
+      "id": "300-daisy",
+      "subject": "daisy",
+      "reference_slot": 300,
+      "svg": "svg/300-daisy.svg",
+      "png": "png/300-daisy.png",
+      "sha256": "2c09cfadb3921e54685cf3cb797c015ddfb39a81dd290b7a44c6241fed691438",
+      "png_sha256": "424d0ffa58430f410111ec32906cbe54049988a7b4eb9dfc280f7f20df84e2a8",
+      "ink_bbox": [
+        41,
+        20,
+        166,
+        222
+      ]
+    },
+    {
+      "id": "301-bell",
+      "subject": "bell",
+      "reference_slot": 301,
+      "svg": "svg/301-bell.svg",
+      "png": "png/301-bell.png",
+      "sha256": "edf5cc10d69a665bd270c346feea7ec8bb68e31f6efac1c7fcf82d3159844f56",
+      "png_sha256": "dd7d573165bf2009aec2bdb371a5b0eb03ea8861a868a6a4d5efbdf081d5e0fd",
+      "ink_bbox": [
+        34,
+        66,
+        156,
+        222
+      ]
+    },
+    {
+      "id": "302-rose",
+      "subject": "rose",
+      "reference_slot": 302,
+      "svg": "svg/302-rose.svg",
+      "png": "png/302-rose.png",
+      "sha256": "091b13778f65608f8e72d480f6e0aa7072171582eb8f142cd85526567a33377f",
+      "png_sha256": "17cab3a0943e40f3c8bd607e428afff2aa6a7216b94ad8e6cb262cd11c0e5da3",
+      "ink_bbox": [
+        27,
+        49,
+        156,
+        222
+      ]
+    },
+    {
+      "id": "303-sunflower",
+      "subject": "sunflower",
+      "reference_slot": 303,
+      "svg": "svg/303-sunflower.svg",
+      "png": "png/303-sunflower.png",
+      "sha256": "ea9610f643643012f10855d05566f2789b20f2158c7811bac0381de269e3175b",
+      "png_sha256": "c5ae0442e2ac53e9d7eaba1881b09c9f1dc9da4c634a261239a802890f7589f7",
+      "ink_bbox": [
+        40,
+        25,
+        160,
+        222
+      ]
+    },
+    {
+      "id": "304-grass",
+      "subject": "grass",
+      "reference_slot": 304,
+      "svg": "svg/304-grass.svg",
+      "png": "png/304-grass.png",
+      "sha256": "fb4f3d98848e56e48ed791414a4cb3ed475408cf3e3a13874331ae5adba2e1fc",
+      "png_sha256": "d499b594fe04f50062c477df673d1cb52485429d6283ae50b4bfe8598f656892",
+      "ink_bbox": [
+        14,
+        70,
+        186,
+        219
+      ]
+    },
+    {
+      "id": "305-clover",
+      "subject": "clover",
+      "reference_slot": 305,
+      "svg": "svg/305-clover.svg",
+      "png": "png/305-clover.png",
+      "sha256": "356f476ee9e9d8719fd179bd0295c404a718faf59e44c1a88be89c7a0108b4f0",
+      "png_sha256": "c9435eb0fa54f0396a2f72d4f14fa37dee4260bccc4ae275516890ce515b0e43",
+      "ink_bbox": [
+        18,
+        21,
+        180,
+        222
+      ]
+    },
+    {
+      "id": "306-clover",
+      "subject": "clover",
+      "reference_slot": 306,
+      "svg": "svg/306-clover.svg",
+      "png": "png/306-clover.png",
+      "sha256": "ffa3e5321d61a7928c66c34297beb9f4c9b6f2af4e2e949d5154e6ace943378c",
+      "png_sha256": "bb446bc7c3e27023ba30cb36ef2c0f739ec641ea016043c4c395741c2d535c60",
+      "ink_bbox": [
+        19,
+        21,
+        181,
+        223
+      ]
+    },
+    {
+      "id": "307-rose",
+      "subject": "rose",
+      "reference_slot": 307,
+      "svg": "svg/307-rose.svg",
+      "png": "png/307-rose.png",
+      "sha256": "dcee66816e0aadceb9271c1da608adc1325625fdf9869543a2be1e85ef4efbe0",
+      "png_sha256": "355b97ba81630757d6812387ae85b2672ee1674e72d70fdf5246cc9f0a8d508f",
+      "ink_bbox": [
+        27,
+        42,
+        157,
+        222
+      ]
+    },
+    {
+      "id": "308-stump",
+      "subject": "stump",
+      "reference_slot": 308,
+      "svg": "svg/308-stump.svg",
+      "png": "png/308-stump.png",
+      "sha256": "bc8b0edc9d2abe32097d83e37a7dc2032c82e86f7cc8c150ab5fc04c3699176f",
+      "png_sha256": "bcdfbe0c58e007f612cf4a53aeb0ec3be302000aa22c2f29d8e6f47883745e5d",
+      "ink_bbox": [
+        24,
+        90,
+        176,
+        222
+      ]
+    },
+    {
+      "id": "309-daisy",
+      "subject": "daisy",
+      "reference_slot": 309,
+      "svg": "svg/309-daisy.svg",
+      "png": "png/309-daisy.png",
+      "sha256": "38d0afdd3bbcf36c9c4f87f7ab5a3316cae392164002fd1723d62225c94ffedf",
+      "png_sha256": "e6b05db9a3b6cd72ae1ca965244f4e56bd551f5e3bd4694238a7253065f97bae",
+      "ink_bbox": [
+        43,
+        25,
+        159,
+        222
+      ]
+    },
+    {
+      "id": "310-berries",
+      "subject": "berries",
+      "reference_slot": 310,
+      "svg": "svg/310-berries.svg",
+      "png": "png/310-berries.png",
+      "sha256": "218a7341192193a648160592c6e29b7e974aed29129ae1cf2ce18dc2b61a2e37",
+      "png_sha256": "dde1ce6fb21272dd05839ea2281ae7cb53b1949cae6bddbfb34b0b3fb56252f0",
+      "ink_bbox": [
+        22,
+        35,
+        177,
+        221
+      ]
+    },
+    {
+      "id": "311-daisy",
+      "subject": "daisy",
+      "reference_slot": 311,
+      "svg": "svg/311-daisy.svg",
+      "png": "png/311-daisy.png",
+      "sha256": "0726000a09ffd3d543dfa6dbcd94a627335ce38c612064d638c558df734ce6e1",
+      "png_sha256": "296439f8add961dee22fbfc3b87bb0d082ec9076974af828f3283e28f19839e2",
+      "ink_bbox": [
+        33,
+        15,
+        159,
+        222
+      ]
+    },
+    {
+      "id": "312-raspberry",
+      "subject": "raspberry",
+      "reference_slot": 312,
+      "svg": "svg/312-raspberry.svg",
+      "png": "png/312-raspberry.png",
+      "sha256": "8a31efc00c3b3711a37b688ac95bd2eb46a1507bc77749d1c648b4f4882bb3ac",
+      "png_sha256": "2b471b9c1e06c6a2413eff56bbd33d5441fc6633d6c43ad05e2b0fbbf0414ded",
+      "ink_bbox": [
+        36,
+        26,
+        164,
+        198
+      ]
+    },
+    {
+      "id": "313-berries",
+      "subject": "berries",
+      "reference_slot": 313,
+      "svg": "svg/313-berries.svg",
+      "png": "png/313-berries.png",
+      "sha256": "d707b92dfa1ae1b91ca991a07529423ff3c8ee6ce8e6f4afb585475cfafaa644",
+      "png_sha256": "365fb1fe3ab0a79240c7d41a0fbb47f615b902ed27e790e3100ae5361cfced05",
+      "ink_bbox": [
+        21,
+        34,
+        177,
+        220
+      ]
+    },
+    {
+      "id": "314-vine",
+      "subject": "vine",
+      "reference_slot": 314,
+      "svg": "svg/314-vine.svg",
+      "png": "png/314-vine.png",
+      "sha256": "5c84d883ab59b8efd2adf6ca702eaf6d74f0ce561bed6d5e24bc8274c79b8ad7",
+      "png_sha256": "c0bdb68d19c26a5248fe651113fbcece2ed90a0ef75003bc8398ecff600b37dd",
+      "ink_bbox": [
+        44,
+        17,
+        161,
+        222
+      ]
+    },
+    {
+      "id": "315-clover",
+      "subject": "clover",
+      "reference_slot": 315,
+      "svg": "svg/315-clover.svg",
+      "png": "png/315-clover.png",
+      "sha256": "25f22d171451e05bdafd12b8cc57d9db87e0035bc83ae7cd8d0b4ff509a8effe",
+      "png_sha256": "f188fc033a259762da07f3860601d3ac3b718831d301dd342e382f24b40fbc75",
+      "ink_bbox": [
+        36,
+        30,
+        165,
+        222
+      ]
+    },
+    {
+      "id": "316-berries",
+      "subject": "berries",
+      "reference_slot": 316,
+      "svg": "svg/316-berries.svg",
+      "png": "png/316-berries.png",
+      "sha256": "c8a9cbd9cc66e72e172255117f0e951d2052640e788837695c19e7532f430599",
+      "png_sha256": "9551cc386050da760af4df3dd9abda6d911c801e6b487ab2f6539f08c07dea74",
+      "ink_bbox": [
+        21,
+        34,
+        178,
+        220
+      ]
+    },
+    {
+      "id": "317-bamboo",
+      "subject": "bamboo",
+      "reference_slot": 317,
+      "svg": "svg/317-bamboo.svg",
+      "png": "png/317-bamboo.png",
+      "sha256": "334bea9753506f24f5cb91558d71b3a88fde9ef306b6ee5df8e02a9c161b2bbb",
+      "png_sha256": "46d8400b8d559cb01bba87a1cd3d582db4e9658e2df427ed3ca915b5fe389588",
+      "ink_bbox": [
+        40,
+        39,
+        175,
+        225
+      ]
+    },
+    {
+      "id": "318-grass",
+      "subject": "grass",
+      "reference_slot": 318,
+      "svg": "svg/318-grass.svg",
+      "png": "png/318-grass.png",
+      "sha256": "9706d0ada209bd52e4cb617aa9f1db8ab6bf64bea99ad1c6bdfd9d5beebe24f9",
+      "png_sha256": "cdd6e6fa2071d6b57c369b587fd966f7a2191cc9d44b1c33b61d4b3eed94c39d",
+      "ink_bbox": [
+        14,
+        58,
+        185,
+        219
+      ]
+    },
+    {
+      "id": "319-clover",
+      "subject": "clover",
+      "reference_slot": 319,
+      "svg": "svg/319-clover.svg",
+      "png": "png/319-clover.png",
+      "sha256": "9060952535e9a895b56816bd2b6c9a99f43323ea0480e940d9f4bf3c56b77f5b",
+      "png_sha256": "a1fc35f2c70723da6415aa4182ed9f08b920fa681c6ac92d08a9f8c52e890b99",
+      "ink_bbox": [
+        15,
+        18,
+        184,
+        222
+      ]
+    },
+    {
+      "id": "320-succulent",
+      "subject": "succulent",
+      "reference_slot": 320,
+      "svg": "svg/320-succulent.svg",
+      "png": "png/320-succulent.png",
+      "sha256": "1a88ae24a3f9be70f51930750db8d3416c09f834278dfd71d0f6145f11200de7",
+      "png_sha256": "5328312e9dafecd86bf599ee6186bcda0c8b739d4c968f668bf972b19713f456",
+      "ink_bbox": [
+        33,
+        69,
+        174,
+        231
+      ]
+    },
+    {
+      "id": "321-sprout",
+      "subject": "sprout",
+      "reference_slot": 321,
+      "svg": "svg/321-sprout.svg",
+      "png": "png/321-sprout.png",
+      "sha256": "4fc89fa20c37714485906476350ef6e37b29f503404c06ee1e7d5a112755d422",
+      "png_sha256": "69a2dde2673a2491647e5c7fb0892a8fb46b2c6be95a49ca28c018e080a21bdf",
+      "ink_bbox": [
+        64,
+        32,
+        157,
+        222
+      ]
+    },
+    {
+      "id": "322-twig",
+      "subject": "twig",
+      "reference_slot": 322,
+      "svg": "svg/322-twig.svg",
+      "png": "png/322-twig.png",
+      "sha256": "c66a46ed6a49462c2702cd27d31e4c18d981281a7134512db0fc65e45a41ff4a",
+      "png_sha256": "77a7b33971fd6653cd6196d8ab2e33e03e28880d4f0c3f25200e4c405031572f",
+      "ink_bbox": [
+        44,
+        17,
+        183,
+        223
+      ]
+    },
+    {
+      "id": "323-tree",
+      "subject": "tree",
+      "reference_slot": 323,
+      "svg": "svg/323-tree.svg",
+      "png": "png/323-tree.png",
+      "sha256": "f670d4d88b23d64c3bed1012ffc7e84648ca584badf649eb1859c1165630e5d5",
+      "png_sha256": "bebd6ab6081ae372f48a5c49fc79da560ebb5a5d2b713ad0cabd7a5520d43065",
+      "ink_bbox": [
+        44,
+        36,
+        159,
+        223
+      ]
+    },
+    {
+      "id": "324-butterfly",
+      "subject": "butterfly",
+      "reference_slot": 324,
+      "svg": "svg/324-butterfly.svg",
+      "png": "png/324-butterfly.png",
+      "sha256": "dac823eaab7aeb31b63a455113bffd464ada3d799a0e9b5d971708bfb87f4d40",
+      "png_sha256": "55618fabe55438b8d7071454b87280692ac0ea423f5d1fbf8645ea3400d61a61",
+      "ink_bbox": [
+        25,
+        64,
+        176,
+        208
+      ]
+    },
+    {
+      "id": "325-sprout",
+      "subject": "sprout",
+      "reference_slot": 325,
+      "svg": "svg/325-sprout.svg",
+      "png": "png/325-sprout.png",
+      "sha256": "53444b064ff64160dae58022ddbf897beaa1b271409e3964ac181ec59e0869ff",
+      "png_sha256": "ad5b0f54617312452abf873aa28f517b0a90c67b6346ae00b2fd1e6d3ff12d19",
+      "ink_bbox": [
+        41,
+        31,
+        147,
+        222
+      ]
+    },
+    {
+      "id": "326-daisy",
+      "subject": "daisy",
+      "reference_slot": 326,
+      "svg": "svg/326-daisy.svg",
+      "png": "png/326-daisy.png",
+      "sha256": "36c3232fa02e9022f6147d0c201b3965fb94903f2ddf6f0badc75ef2362b8055",
+      "png_sha256": "1a12003a812cc6b949000bdfd291c73c796febf9931564114ba0e5eae5c5ca97",
+      "ink_bbox": [
+        40,
+        16,
+        162,
+        222
+      ]
+    },
+    {
+      "id": "327-succulent",
+      "subject": "succulent",
+      "reference_slot": 327,
+      "svg": "svg/327-succulent.svg",
+      "png": "png/327-succulent.png",
+      "sha256": "7498307ebd61a2378e7e21401ac9218f18d1d059bd3079bd719120f71e9404e8",
+      "png_sha256": "b01099080a1b4c520dec44c4c97ef388d5f6e48a53a9eda906fa2a6ece937255",
+      "ink_bbox": [
+        34,
+        70,
+        175,
+        231
+      ]
+    },
+    {
+      "id": "328-daisy",
+      "subject": "daisy",
+      "reference_slot": 328,
+      "svg": "svg/328-daisy.svg",
+      "png": "png/328-daisy.png",
+      "sha256": "b0fc7d0e05d938f4e94d1d84647735b4b8c7dcc0be1ed6672dfc63f8a7131538",
+      "png_sha256": "c6b035ac4ca7d8bbd315b08ee5d22290b2f1c666ab29998a38d9f58c30c8d6b4",
+      "ink_bbox": [
+        28,
+        19,
+        173,
+        222
+      ]
+    },
+    {
+      "id": "329-daisy",
+      "subject": "daisy",
+      "reference_slot": 329,
+      "svg": "svg/329-daisy.svg",
+      "png": "png/329-daisy.png",
+      "sha256": "f09662e9ec5bde4f4dccdadf2b85a70b3e62e03827d72117c5124570f58e854e",
+      "png_sha256": "941bee9618868420e897e56a19df11526b9a152eeffbe54adda05375f5114a9d",
+      "ink_bbox": [
+        32,
+        18,
+        173,
+        223
+      ]
+    },
+    {
+      "id": "330-bush",
+      "subject": "bush",
+      "reference_slot": 330,
+      "svg": "svg/330-bush.svg",
+      "png": "png/330-bush.png",
+      "sha256": "f7613853ec51e2dbe73405ba7217dee78876d60047f8353abeb9bf6946280cda",
+      "png_sha256": "cfc8961bdb4db0d4fdaed558ad5f09b9139e6b46b34c6af1a8c9236576704bb3",
+      "ink_bbox": [
+        41,
+        48,
+        163,
+        223
+      ]
+    },
+    {
+      "id": "331-bell",
+      "subject": "bell",
+      "reference_slot": 331,
+      "svg": "svg/331-bell.svg",
+      "png": "png/331-bell.png",
+      "sha256": "c2b05c7b26a09007748b8a653adad30fb2365fc686bc6eb23d426b66fb110c85",
+      "png_sha256": "3fd2b50630a4e61115838e58240c9e553e3497c98c59786773b6158f09b08d70",
+      "ink_bbox": [
+        41,
+        71,
+        156,
+        223
+      ]
+    },
+    {
+      "id": "332-sprout",
+      "subject": "sprout",
+      "reference_slot": 332,
+      "svg": "svg/332-sprout.svg",
+      "png": "png/332-sprout.png",
+      "sha256": "1f42e2054ea96c703a1cdecf99840cf1a5fd4831869eb546eb69118670eace5d",
+      "png_sha256": "d43b7d30293384aae469ec599cbe13feecd2d56c6e87d73ca2b244196cf9a477",
+      "ink_bbox": [
+        56,
+        31,
+        148,
+        222
+      ]
+    },
+    {
+      "id": "333-mushroom",
+      "subject": "mushroom",
+      "reference_slot": 333,
+      "svg": "svg/333-mushroom.svg",
+      "png": "png/333-mushroom.png",
+      "sha256": "e1bfdadf1025b46e138a961295ce337767fbe08cef894b2af7cd11e334e4e760",
+      "png_sha256": "3f2b0c56da3fdd735f48bc22bc86499b39771ca51b967fb813a58a0a4731a73a",
+      "ink_bbox": [
+        45,
+        60,
+        157,
+        222
+      ]
+    },
+    {
+      "id": "334-rosemary",
+      "subject": "rosemary",
+      "reference_slot": 334,
+      "svg": "svg/334-rosemary.svg",
+      "png": "png/334-rosemary.png",
+      "sha256": "81ace3a45b56ca00768e8fc120aa84b170c08e7cf3098e484c6c753f714627a4",
+      "png_sha256": "73deb636ae2353795c900a1ecba472842f8acf857800c62de6534b2478a9e8d1",
+      "ink_bbox": [
+        64,
+        29,
+        136,
+        223
+      ]
+    },
+    {
+      "id": "335-clover",
+      "subject": "clover",
+      "reference_slot": 335,
+      "svg": "svg/335-clover.svg",
+      "png": "png/335-clover.png",
+      "sha256": "0195ebd09ae4b26b522e09efb5364733ced9663dfcca162989b7eca6f17a2beb",
+      "png_sha256": "1161dcc71c5bd86bdd9dc663d6acd3862dd2c4c1d25a1cb716552731a79990f8",
+      "ink_bbox": [
+        30,
+        23,
+        166,
+        222
+      ]
+    },
+    {
+      "id": "336-berries",
+      "subject": "berries",
+      "reference_slot": 336,
+      "svg": "svg/336-berries.svg",
+      "png": "png/336-berries.png",
+      "sha256": "28bac7c6a950ae33d35e7f664b2a518d874a9359d306f8ebe0120736943d7ec5",
+      "png_sha256": "e71b89277f4d0f284faf99a439198a433c6ec2a5b31792d9ff7724946102d642",
+      "ink_bbox": [
+        22,
+        35,
+        177,
+        221
+      ]
+    },
+    {
+      "id": "337-bush",
+      "subject": "bush",
+      "reference_slot": 337,
+      "svg": "svg/337-bush.svg",
+      "png": "png/337-bush.png",
+      "sha256": "7c5bf7065783ec0c0131e125994565bc73fab0df59b9e3b1160c6e8a9d5439fb",
+      "png_sha256": "fd6df6c2902902f7384e3674744a6b1f17b1919535d88be773ca8197e31ecf00",
+      "ink_bbox": [
+        42,
+        48,
+        161,
+        222
+      ]
+    },
+    {
+      "id": "338-mouse",
+      "subject": "mouse",
+      "reference_slot": 338,
+      "svg": "svg/338-mouse.svg",
+      "png": "png/338-mouse.png",
+      "sha256": "ac0b44f4103fc8ed799ee0bfc844304a13657c05df9034f87fba69e5c55a7cf1",
+      "png_sha256": "d9fd7afc36281c75b6ff70ccb675ceb098a2c53aa981d625f37f47f426abc810",
+      "ink_bbox": [
+        19,
+        86,
+        184,
+        216
+      ]
+    },
+    {
+      "id": "339-clover",
+      "subject": "clover",
+      "reference_slot": 339,
+      "svg": "svg/339-clover.svg",
+      "png": "png/339-clover.png",
+      "sha256": "5f249b46cab1e34ef3fd6251277bae71793c44a70069f92cd55209e5a7896657",
+      "png_sha256": "9ab667d72b93ab21711b2d9eae8ab67f45030c0323eabc5ed9acfd2ad2a464f6",
+      "ink_bbox": [
+        35,
+        24,
+        163,
+        223
+      ]
+    },
+    {
+      "id": "340-twig",
+      "subject": "twig",
+      "reference_slot": 340,
+      "svg": "svg/340-twig.svg",
+      "png": "png/340-twig.png",
+      "sha256": "bcb0d37d606a573f54c9362dcafa2d373923c818ca55a70a8087b22107d12652",
+      "png_sha256": "859bad5138423315d6a0c1902e0693b58b74d6c2e8e054c8c621a2cc1e85ac08",
+      "ink_bbox": [
+        52,
+        17,
+        171,
+        223
+      ]
+    },
+    {
+      "id": "341-daisy",
+      "subject": "daisy",
+      "reference_slot": 341,
+      "svg": "svg/341-daisy.svg",
+      "png": "png/341-daisy.png",
+      "sha256": "edebf166e80d07a1362e446ce8f90c350d4b20d5a4241fe9888cf208b71f5837",
+      "png_sha256": "ee477492925d76bd391ecf5a3b2f33e31cc1d13e2f36e544558651d942c84580",
+      "ink_bbox": [
+        17,
+        27,
+        177,
+        223
+      ]
+    },
+    {
+      "id": "342-clover",
+      "subject": "clover",
+      "reference_slot": 342,
+      "svg": "svg/342-clover.svg",
+      "png": "png/342-clover.png",
+      "sha256": "5b56223b2c148529613d5502035a2efb79ff2a077390111f0ba720952b49e863",
+      "png_sha256": "8450e24317a28ad263a08b4d86ee436a186470474fd24cdfb1c755aeeebc0af1",
+      "ink_bbox": [
+        15,
+        16,
+        185,
+        223
+      ]
+    },
+    {
+      "id": "343-clover",
+      "subject": "clover",
+      "reference_slot": 343,
+      "svg": "svg/343-clover.svg",
+      "png": "png/343-clover.png",
+      "sha256": "8c6d85f56fd9562e0c43e64e3d1ce188400cc18b460f224349ba7e5e660866aa",
+      "png_sha256": "738792653b2d92717aee59661032564900c38c367afd5d8a6bca39109ca5ba2b",
+      "ink_bbox": [
+        19,
+        21,
+        183,
+        222
+      ]
+    },
+    {
+      "id": "344-droop",
+      "subject": "droop",
+      "reference_slot": 344,
+      "svg": "svg/344-droop.svg",
+      "png": "png/344-droop.png",
+      "sha256": "17c7f95769ae921800d47798587c431dc72f5c1c2a74d10952b5643d39183bf7",
+      "png_sha256": "866ee525db5a250016a32e270fe9107dd7afe829db388de39d7fad9ac3fcddf9",
+      "ink_bbox": [
+        52,
+        64,
+        158,
+        222
+      ]
+    },
+    {
+      "id": "345-mushroom",
+      "subject": "mushroom",
+      "reference_slot": 345,
+      "svg": "svg/345-mushroom.svg",
+      "png": "png/345-mushroom.png",
+      "sha256": "0fca835d7b568a8cf41cd5b7f99c9272bdee942e70d85b45ccd436d51135ac78",
+      "png_sha256": "92db323d6132d2e86b5dace130ff2d5a3fab73fa5325d650f2d7a6c4537a9c8f",
+      "ink_bbox": [
+        45,
+        71,
+        157,
+        222
+      ]
+    },
+    {
+      "id": "346-bush",
+      "subject": "bush",
+      "reference_slot": 346,
+      "svg": "svg/346-bush.svg",
+      "png": "png/346-bush.png",
+      "sha256": "ffd22b7f30cf0069faf3e08adad66c84c765db3a20da6216a26203524d37cf0b",
+      "png_sha256": "5276f94e5d7b3e9d7d35cbc08ceafa115c83abba3ff1cf1d55d7deb6d8761646",
+      "ink_bbox": [
+        40,
+        48,
+        163,
+        222
+      ]
+    },
+    {
+      "id": "347-clover",
+      "subject": "clover",
+      "reference_slot": 347,
+      "svg": "svg/347-clover.svg",
+      "png": "png/347-clover.png",
+      "sha256": "e73dacb9b0ff6e4fed03086bef9ade6f6cabb291b436ba0df04052532a384e13",
+      "png_sha256": "b2edca53122d4be118a3040d9307fd26a2fb067ade64bd71e5baefaffb08326c",
+      "ink_bbox": [
+        17,
+        19,
+        185,
+        223
+      ]
+    },
+    {
+      "id": "348-daisy",
+      "subject": "daisy",
+      "reference_slot": 348,
+      "svg": "svg/348-daisy.svg",
+      "png": "png/348-daisy.png",
+      "sha256": "302a732bde51c4aad825023a579449851ce6093ed5bb5da8add28bcf4f3c2dd9",
+      "png_sha256": "e8477ed9c0e9ce1d616b3cecfe4618c64092208751e558bfc77446bfb98ddc4f",
+      "ink_bbox": [
+        41,
+        24,
+        160,
+        223
+      ]
+    },
+    {
+      "id": "349-clover",
+      "subject": "clover",
+      "reference_slot": 349,
+      "svg": "svg/349-clover.svg",
+      "png": "png/349-clover.png",
+      "sha256": "be6cf3136dcf406b74489afa088fe0469697f6309bf7044ed5a84665ef81e569",
+      "png_sha256": "220375320f8d8fbd842124836f6c9c0aa34bee1afb6199a16df9437531f4801d",
+      "ink_bbox": [
+        34,
+        18,
+        167,
+        222
+      ]
+    },
+    {
+      "id": "350-raspberry",
+      "subject": "raspberry",
+      "reference_slot": 350,
+      "svg": "svg/350-raspberry.svg",
+      "png": "png/350-raspberry.png",
+      "sha256": "59494fba63f2fe9a44c3e8580a8b28eee7030ced998a1c0da09a8c8208fe5f0d",
+      "png_sha256": "62eeb7559ce71101ece49e65caa99061b6804aa173c93db109a029d9f06192e0",
+      "ink_bbox": [
+        37,
+        26,
+        164,
+        198
+      ]
+    },
+    {
+      "id": "351-succulent",
+      "subject": "succulent",
+      "reference_slot": 351,
+      "svg": "svg/351-succulent.svg",
+      "png": "png/351-succulent.png",
+      "sha256": "713ff19fe09cebee8e6f850d06bc5963c717fc732ce638e6dfa9681c46e1f3ad",
+      "png_sha256": "ee76a2287e6493eef5a31e6ce1594a1381c1ea0d9f5add94c99cbcbbcb9124ba",
+      "ink_bbox": [
+        33,
+        70,
+        174,
+        231
+      ]
+    },
+    {
+      "id": "352-snail",
+      "subject": "snail",
+      "reference_slot": 352,
+      "svg": "svg/352-snail.svg",
+      "png": "png/352-snail.png",
+      "sha256": "fab601112ab5d2275cb77f9bb1c39d30895b3bda0d0ea3a5420caa1e4b6bb946",
+      "png_sha256": "ddbbdce06f6479c44b59d0e771250304257a69867c1fce1634cd9934ad7f844e",
+      "ink_bbox": [
+        25,
+        115,
+        181,
+        224
+      ]
+    },
+    {
+      "id": "353-clover",
+      "subject": "clover",
+      "reference_slot": 353,
+      "svg": "svg/353-clover.svg",
+      "png": "png/353-clover.png",
+      "sha256": "b09932ae37f19a23536f718bf075dcaa1b6b34138ea0e1d3a6ba0da659ddf071",
+      "png_sha256": "2bf0d468d76566de7375d4ab39a2170a7e60dd5131aa1cc8f76424c331890404",
+      "ink_bbox": [
+        18,
+        23,
+        180,
+        223
+      ]
+    },
+    {
+      "id": "354-tulip",
+      "subject": "tulip",
+      "reference_slot": 354,
+      "svg": "svg/354-tulip.svg",
+      "png": "png/354-tulip.png",
+      "sha256": "7c3b817f2f5cb7f8957ec423c6729b5c3c905516f41864fa3899181cabd081aa",
+      "png_sha256": "18e0362f3402eb20b9aaa5afbf875a271b099ebcde96b51b664c12d9bbd210f0",
+      "ink_bbox": [
+        54,
+        17,
+        160,
+        222
+      ]
+    },
+    {
+      "id": "355-pumpkin",
+      "subject": "pumpkin",
+      "reference_slot": 355,
+      "svg": "svg/355-pumpkin.svg",
+      "png": "png/355-pumpkin.png",
+      "sha256": "394d2628831af671a50ad8ad077230fb8da790cc71789ccf63723c6190e45ec7",
+      "png_sha256": "03318737e5fefe292e05d490aca5e74599fe20f52913b9916cdb3a5395a12bce",
+      "ink_bbox": [
+        31,
+        40,
+        170,
+        218
+      ]
+    },
+    {
+      "id": "356-bush",
+      "subject": "bush",
+      "reference_slot": 356,
+      "svg": "svg/356-bush.svg",
+      "png": "png/356-bush.png",
+      "sha256": "23d763db4d5929aa2541f049579ab0d76ac40fd801c2650f26dd3ea2543f9ed0",
+      "png_sha256": "dedbb38693de9ce373d18052fb57f884249993d34b8705bf4afef64c69c46610",
+      "ink_bbox": [
+        37,
+        43,
+        172,
+        223
+      ]
+    },
+    {
+      "id": "357-seaweed",
+      "subject": "seaweed",
+      "reference_slot": 357,
+      "svg": "svg/357-seaweed.svg",
+      "png": "png/357-seaweed.png",
+      "sha256": "579f7d7c9064526a1a6d6721bcb634758bde338c38843636ae97b2477a28b365",
+      "png_sha256": "cc2f1bec668eaa470a88a579deaaeebeade0d471b1598cfd5784d4d5cf07e554",
+      "ink_bbox": [
+        23,
+        54,
+        176,
+        219
+      ]
+    },
+    {
+      "id": "358-bird",
+      "subject": "bird",
+      "reference_slot": 358,
+      "svg": "svg/358-bird.svg",
+      "png": "png/358-bird.png",
+      "sha256": "19f5715786b2f1708a3bc6e742ebdaf5e17e8499483e3f1ecb168ae626a01df2",
+      "png_sha256": "30832d446264cb19f159817f96b42d63a85d405a7075f1ee327a4921ce5cef42",
+      "ink_bbox": [
+        26,
+        46,
+        157,
+        220
+      ]
+    },
+    {
+      "id": "359-clover",
+      "subject": "clover",
+      "reference_slot": 359,
+      "svg": "svg/359-clover.svg",
+      "png": "png/359-clover.png",
+      "sha256": "cdf7bd1fa8836790ff52e3fc0e39f5fb31a873db8c8642ec4b4ed8732d01b1af",
+      "png_sha256": "25c8eb51cc3ecfb7f9b352f17e21f49d302c519a97587051b4ee15aaab0dc369",
+      "ink_bbox": [
+        35,
+        23,
+        166,
+        222
+      ]
+    },
+    {
+      "id": "360-fig",
+      "subject": "fig",
+      "reference_slot": 360,
+      "svg": "svg/360-fig.svg",
+      "png": "png/360-fig.png",
+      "sha256": "51139a9ffd09efe9c9b74ae543fe83d0a8abff9aa54f05918dc21b4362108bc1",
+      "png_sha256": "5254d58b444e18107897224e15b921591e7af1297a30e67bd75bcaca9387e4f3",
+      "ink_bbox": [
+        37,
+        60,
+        164,
+        216
+      ]
+    },
+    {
+      "id": "361-bell",
+      "subject": "bell",
+      "reference_slot": 361,
+      "svg": "svg/361-bell.svg",
+      "png": "png/361-bell.png",
+      "sha256": "77fd7cdcc5c6ee841765be6c111a1d44287569f726cc27599b6088c74748d7c2",
+      "png_sha256": "bfc6a6582aa603a7480d291d7015458ddd24a8372f73bf56ff26db8ff7e4f592",
+      "ink_bbox": [
+        38,
+        60,
+        155,
+        223
+      ]
+    },
+    {
+      "id": "362-vine",
+      "subject": "vine",
+      "reference_slot": 362,
+      "svg": "svg/362-vine.svg",
+      "png": "png/362-vine.png",
+      "sha256": "e4e8aa84d8cd0d1b6927c175247570aada3a0e3992b9ab3314e8be7f1a63ded2",
+      "png_sha256": "77e9857825847e5c03931662a20a74a6646ddd256a11df5e81755ed4c179fd7a",
+      "ink_bbox": [
+        31,
+        16,
+        158,
+        223
+      ]
+    },
+    {
+      "id": "363-clover",
+      "subject": "clover",
+      "reference_slot": 363,
+      "svg": "svg/363-clover.svg",
+      "png": "png/363-clover.png",
+      "sha256": "339a8ccd28fdef9788fd563c78e304402470b934c1cfa7e68024c7f1512d9ba4",
+      "png_sha256": "bd0454183b41371e1df5134900dfa3aa2bf635979e742132b65d2f032f886d4e",
+      "ink_bbox": [
+        34,
+        18,
+        164,
+        222
+      ]
+    },
+    {
+      "id": "364-hedgehog",
+      "subject": "hedgehog",
+      "reference_slot": 364,
+      "svg": "svg/364-hedgehog.svg",
+      "png": "png/364-hedgehog.png",
+      "sha256": "4f89762c83b22067c0d9b217aa0e81709fcc506fa5181ccccb58715654943529",
+      "png_sha256": "6270645d4e15b6dce4e94adc8820cbef5e8ab864fa62dc4ef8c058d5a1e28b68",
+      "ink_bbox": [
+        10,
+        69,
+        194,
+        219
+      ]
+    },
+    {
+      "id": "365-pine",
+      "subject": "pine",
+      "reference_slot": 365,
+      "svg": "svg/365-pine.svg",
+      "png": "png/365-pine.png",
+      "sha256": "d6925bc5d13f1c3c659d835171a51ba21109ec1c7d231f932998ed70dae93cd7",
+      "png_sha256": "461038f2e3713e62bebb5487f74db46f91197afe09498495b3cad2e70b545411",
+      "ink_bbox": [
+        27,
+        28,
+        173,
+        223
+      ]
+    }
+  ],
+  "leap_day": {
+    "svg": "svg/leap-day.svg",
+    "png": "png/leap-day.png"
+  }
+}

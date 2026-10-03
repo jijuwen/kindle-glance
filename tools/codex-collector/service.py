@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import copy
-from datetime import datetime
 import hmac
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
@@ -15,9 +14,9 @@ import threading
 import time
 from urllib.parse import urlsplit
 import uuid
-from zoneinfo import ZoneInfo
 
 from rpc import CodexRPC, RpcError
+import subscriptions
 
 STATE = Path(os.getenv("COLLECTOR_STATE_DIR", "/state"))
 PUBLIC = Path(os.getenv("COLLECTOR_PUBLIC_DIR", "/public"))
@@ -54,20 +53,31 @@ def initialize():
     PUBLIC.mkdir(parents=True, exist_ok=True, mode=0o700)
     path = STATE / "state.json"
     MODEL = json.loads(path.read_text()) if path.exists() else {
-        "version": 1, "enabled": False,
+        "version": 2, "enabled": False,
         "slots": [{"slot": i, "bound": False, "email": None, "plan": None,
                    "last_success": None, "last_attempt": None, "next_attempt": 0,
                    "failures": 0, "error": None, "state": "unbound",
-                   "expires_at": None, "plan_label": "", "snapshot": None} for i in range(1, 5)],
+                   "snapshot": None} for i in range(1, 5)],
     }
     for slot in MODEL["slots"]:
+        # Remove manual overrides, without touching the existing account home/token file.
+        slot.pop("expires_at", None)
+        slot.pop("plan_label", None)
+        if slot.get("snapshot"):
+            slot["snapshot"]["expires_at"] = None
+        slot.setdefault("subscription", subscriptions.empty())
+        slot.setdefault("subscription_error", None)
+        slot.setdefault("subscription_failures", 0)
+        slot["subscription_next_attempt"] = 0
         if slot["bound"] and slot["state"] != "reauth_required":
             slot["next_attempt"] = 0
+    MODEL["version"] = 2
     # Unconfirmed login stages are disposable; they are never active credentials.
     for path in STATE.glob("pending-*"):
         if path.is_dir():
             shutil.rmtree(path)
     persist()
+    publish()
 
 
 def persist():
@@ -82,9 +92,13 @@ def slot_at(number):
 
 def public_state():
     with LOCK:
-        result = {"enabled": MODEL["enabled"], "interval_seconds": INTERVAL, "slots": []}
+        result = {"enabled": MODEL["enabled"], "interval_seconds": INTERVAL,
+                  "subscription_interval_seconds": subscriptions.INTERVAL, "slots": []}
         for value in MODEL["slots"]:
-            slot = {k: copy.deepcopy(v) for k, v in value.items() if k not in ("snapshot", "failures", "next_attempt")}
+            fields = ("slot", "bound", "email", "plan", "last_success", "last_attempt", "error", "state",
+                      "subscription", "subscription_error")
+            slot = {k: copy.deepcopy(value.get(k)) for k in fields}
+            slot["plan"] = display_plan(value)
             snapshot = value.get("snapshot")
             slot["windows"] = snapshot.get("windows", []) if snapshot else []
             slot["reset_credits"] = snapshot.get("reset_credits") if snapshot else None
@@ -92,6 +106,13 @@ def public_state():
             slot["login"] = copy.deepcopy(session["public"]) if session else None
             result["slots"].append(slot)
         return result
+
+
+def display_plan(slot):
+    sub = slot["subscription"]
+    if sub["plan_code"] and (sub["status"] == "ok" or not slot.get("plan")):
+        return subscriptions.plan_name(sub["plan_code"])
+    return slot.get("plan") or subscriptions.plan_name(sub["plan_code"])
 
 
 def publish():
@@ -106,14 +127,15 @@ def publish():
             "id": f'codex-slot-{slot["slot"]}', "name": slot["email"], "plan": slot["plan"] or "未知",
             "updated_at": None, "expires_at": None, "reset_credits": None, "status": "unknown", "windows": [],
         }
-        account["plan"] = slot["plan_label"] or account["plan"]
-        account["expires_at"] = slot["expires_at"]
+        account["plan"] = display_plan(slot)
+        account.pop("expires_at", None)
+        account["subscription"] = copy.deepcopy(slot["subscription"])
         if slot["state"] == "reauth_required":
             account["status"] = "reauth_required"
         elif slot["state"] == "error":
             account["status"] = "refresh_error"
         accounts.append(account)
-    atomic_json(PUBLIC / "ai-accounts.json", {"schema_version": 1, "collected_at": now(), "accounts": accounts})
+    atomic_json(PUBLIC / "ai-accounts.json", {"schema_version": 2, "collected_at": now(), "accounts": accounts})
 
 
 def identity(account):
@@ -153,7 +175,7 @@ def normalize(number, account, quotas, timestamp):
     if type(count) is not int or count < 0:
         count = None
     return {"id": f"codex-slot-{number}", "name": email,
-            "plan": str(bucket.get("planType") or account.get("planType") or "未知").upper(),
+            "plan": subscriptions.plan_name(bucket.get("planType") or account.get("planType")),
             "updated_at": timestamp, "expires_at": None, "reset_credits": count,
             "status": "ok", "windows": windows}
 
@@ -184,19 +206,46 @@ def sync_slot(number):
                 slot = slot_at(number)
                 if not slot["bound"]:
                     return
+                previous_state = slot["state"]
                 slot["last_attempt"] = now()
                 slot["state"] = "syncing"
                 persist()
-            rpc = CodexRPC(STATE / f"account-{number}")
-            account = rpc.call("account/read", {"refreshToken": False}).get("account")
-            if not account:
-                raise RpcError("not logged in")
-            if identity(account) != slot["email"].casefold():
-                raise RpcError("reauth: identity mismatch")
-            snapshot = normalize(number, account, rpc.call("account/rateLimits/read"), now())
+                quota_due = slot["next_attempt"] <= now()
+                sub_due = slot["subscription_next_attempt"] <= now()
+            home = STATE / f"account-{number}"
+            try:
+                # The official CLI remains the sole owner of token refresh/persistence.
+                rpc = CodexRPC(home)
+                account = rpc.call("account/read", {"refreshToken": False}).get("account")
+                if not account:
+                    raise RpcError("not logged in")
+                if identity(account) != slot["email"].casefold():
+                    raise RpcError("reauth: identity mismatch")
+                if quota_due:
+                    snapshot = normalize(number, account, rpc.call("account/rateLimits/read"), now())
+                    with LOCK:
+                        # Refresh subscription immediately when the quota API reports a plan change.
+                        if slot["subscription"]["plan_code"] and snapshot["plan"] != display_plan(slot):
+                            sub_due = True
+                        slot.update(snapshot=snapshot, plan=snapshot["plan"], last_success=snapshot["updated_at"],
+                                    state="ok", error=None, failures=0, next_attempt=now() + INTERVAL)
+                else:
+                    with LOCK:
+                        slot["state"] = previous_state
+            except Exception as error:
+                with LOCK:
+                    state, message = safe_error(error)
+                    slot["failures"] += 1
+                    delay = min(21600, INTERVAL * 2 ** min(slot["failures"], 4))
+                    slot.update(state=state, error=message, next_attempt=now() + delay)
+            finally:
+                if rpc:
+                    rpc.close()
+                    rpc = None
+            # Read credentials only after the CLI has finished saving refreshed tokens.
+            if sub_due and slot["state"] != "reauth_required":
+                refresh_subscription(slot, home)
             with LOCK:
-                slot.update(snapshot=snapshot, plan=snapshot["plan"], last_success=snapshot["updated_at"],
-                            state="ok", error=None, failures=0, next_attempt=now() + INTERVAL)
                 persist()
                 publish()
     except Exception as error:
@@ -212,6 +261,30 @@ def sync_slot(number):
         if rpc:
             rpc.close()
         SLOTS[number].release()
+
+
+def refresh_subscription(slot, home):
+    try:
+        observed = now()
+        sub = subscriptions.fetch(home, observed)
+        next_attempt = observed + subscriptions.INTERVAL
+        if sub["cycle_ends_at"] and sub["cycle_ends_at"] > observed:
+            next_attempt = min(next_attempt, sub["cycle_ends_at"])
+        with LOCK:
+            slot.update(subscription=sub, subscription_error=None, subscription_failures=0,
+                        subscription_next_attempt=next_attempt)
+    except Exception as error:
+        with LOCK:
+            # A failed HTTP request must not turn a working quota login into reauth_required.
+            sub = copy.deepcopy(slot["subscription"])
+            if sub["source"] == "none":
+                sub = subscriptions.token_cache(home) or sub
+            if sub["source"] != "none":
+                sub["status"] = "cached"
+            slot["subscription_failures"] += 1
+            delay = min(21600, INTERVAL * 2 ** min(slot["subscription_failures"] - 1, 4))
+            slot.update(subscription=sub, subscription_error=subscriptions.error_message(error),
+                        subscription_next_attempt=now() + delay)
 
 
 def start_login(number):
@@ -261,12 +334,14 @@ def login_worker(number, session):
                     # Finish token persistence before exposing the confirmation button.
                     rpc.close()
                     rpc = None
+                    subscription_slot = {"subscription": subscriptions.empty(), "subscription_failures": 0}
+                    refresh_subscription(subscription_slot, session["path"])
                     with LOCK:
                         if session["cancel"].is_set():
                             return
-                        session.update(account=account, snapshot=snapshot)
+                        session.update(account=account, snapshot=snapshot, subscription_slot=subscription_slot)
                         session["public"] = {"state": "ready", "email": email,
-                                             "plan": str(account.get("planType") or "未知").upper(),
+                                             "plan": subscriptions.plan_name(account.get("planType")),
                                              "windows": snapshot["windows"] if snapshot else [],
                                              "error": quota_error, "expires_at": now() + 900}
                     return
@@ -301,6 +376,7 @@ def confirm_login(number):
                     state="ok" if session["snapshot"] else "error", failures=0, next_attempt=now() + (INTERVAL if session["snapshot"] else 60),
                     snapshot=session["snapshot"], last_success=session["snapshot"]["updated_at"] if session["snapshot"] else None,
                     last_attempt=now())
+        slot.update(session["subscription_slot"])
         shutil.rmtree(session["path"], ignore_errors=True)
         del LOGINS[number]
         persist()
@@ -334,19 +410,8 @@ def action(number, name, body):
             if slot["failures"] and slot["next_attempt"] > now():
                 raise ValueError("正在等待重试，请勿连续刷新")
             slot["next_attempt"] = 0
+            slot["subscription_next_attempt"] = 0
             persist()
-    elif name == "metadata":
-        label = body.get("plan_label", "")
-        expiry = body.get("expires_at")
-        if not isinstance(label, str) or len(label) > 40 or any(ord(c) < 32 for c in label):
-            raise ValueError("套餐备注最多 40 个字符")
-        if expiry is not None and (type(expiry) is not int or not 946684800 <= expiry <= 7258118400):
-            raise ValueError("订阅到期时间无效")
-        with LOCK:
-            slot = slot_at(number)
-            slot.update(plan_label=label.strip(), expires_at=expiry)
-            persist()
-            publish()
     elif name == "unlink":
         with SLOTS[number], LOCK:
             session = LOGINS.get(number)
@@ -360,7 +425,9 @@ def action(number, name, body):
             shutil.rmtree(STATE / f"account-{number}", ignore_errors=True)
             slot = slot_at(number)
             slot.update(bound=False, email=None, plan=None, state="unbound", snapshot=None, error=None,
-                        last_success=None, last_attempt=None, failures=0, next_attempt=0, expires_at=None, plan_label="")
+                        last_success=None, last_attempt=None, failures=0, next_attempt=0,
+                        subscription=subscriptions.empty(), subscription_error=None,
+                        subscription_failures=0, subscription_next_attempt=0)
             persist()
             publish()
     else:
@@ -371,7 +438,8 @@ def scheduler():
     while True:
         try:
             with LOCK:
-                due = [s["slot"] for s in MODEL["slots"] if s["bound"] and s["state"] != "reauth_required" and s["next_attempt"] <= now()]
+                due = [s["slot"] for s in MODEL["slots"] if s["bound"] and s["state"] != "reauth_required"
+                       and min(s["next_attempt"], s["subscription_next_attempt"]) <= now()]
                 for session in LOGINS.values():
                     if session["public"]["state"] == "ready" and session["public"]["expires_at"] < now():
                         shutil.rmtree(session["path"], ignore_errors=True)
@@ -427,7 +495,7 @@ class Handler(BaseHTTPRequestHandler):
                     persist()
                     publish()
             else:
-                match = re.fullmatch(r"/slots/([1-4])/(login|confirm|cancel|sync|metadata|unlink)", self.path)
+                match = re.fullmatch(r"/slots/([1-4])/(login|confirm|cancel|sync|unlink)", self.path)
                 if not match:
                     return self.respond(404, {"detail": "not found"})
                 action(int(match[1]), match[2], body)

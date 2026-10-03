@@ -92,7 +92,7 @@ def validate(value):
         raise SettingsError("显示偏好无效")
     if value.get("device_profile") != "kpw11":
         raise SettingsError("当前仅提供 KPW11 设备档案")
-    if not isinstance(value.get("selected_pages"), list) or not value["selected_pages"] or len(value["selected_pages"]) > 9 or any(not isinstance(p, str) for p in value["selected_pages"]):
+    if not isinstance(value.get("selected_pages"), list) or not value["selected_pages"] or len(value["selected_pages"]) > 10 or any(not isinstance(p, str) for p in value["selected_pages"]):
         raise SettingsError("请至少选择一种看板内容")
     return value
 

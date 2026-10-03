@@ -38,13 +38,10 @@ def sample_weather(now):
     }
 
 
-def run(now, output):
+def run(now, output, images_only=False, pages=None):
     # Import only after binding DATA_DIR to a new temporary directory. Never read
     # a deployed account, token, weather cache or persistent configuration.
     from app import main, settings
-    from app.shan_shui import _chromium_executable
-    from playwright.sync_api import sync_playwright
-    import uvicorn
     original_font=main.font
     def preview_font(size, bold=False):
         face=original_font(size,bold)
@@ -65,12 +62,29 @@ def run(now, output):
         'hourly-weather': lambda: main.draw_hourly_weather(weather,now,main.font,'厦门市'),
         'shan-shui': lambda: main.render_original(1648,1236,'2026-09-30:night'),
         'year-progress': lambda: main.draw_year_progress(now,main.font),
+        'annual-garden': lambda: main.draw_annual_garden(now,'public-example-garden'),
         'daily-overview': lambda: main.draw_overview(1648,1236,weather,now,main.font,'厦门市'),
         'time-scales': lambda: main.draw_time_scales(now,main.font),
     }
+    if pages:
+        unknown=set(pages)-renderers.keys()
+        if unknown:
+            raise ValueError('Unknown pages: '+', '.join(sorted(unknown)))
+        renderers={page_id:renderers[page_id] for page_id in pages}
     for page_id, render in renderers.items():
         render().save(output/(page_id+'.png'),optimize=True)
         print('Rendered '+page_id,flush=True)
+
+    manifest={'source':'current main','rendered_at':now.isoformat(),
+        'weather':'synthetic demonstration','city':'厦门市','pages':list(renderers),
+        'garden_seed':'public-example-garden','private_data':False}
+    manifest_name='selected-render-manifest.json' if pages else 'render-manifest.json'
+    (output/manifest_name).write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+    if images_only:
+        return
+    from app.shan_shui import _chromium_executable
+    from playwright.sync_api import sync_playwright
+    import uvicorn
 
     settings.bootstrap(main.DATA_DIR)
     credentials=settings.credentials(main.DATA_DIR)
@@ -106,7 +120,7 @@ def run(now, output):
             .grid{display:grid;grid-template-columns:1fr 1fr;gap:26px}figure{margin:0;padding:12px 12px 0;background:white;border:1px solid #d5dbd3;border-radius:12px;overflow:hidden}
             img{display:block;width:100%;aspect-ratio:4/3;object-fit:contain;background:white}figcaption{padding:16px 8px 18px;font-size:23px;border-top:1px solid #e9ede6}figcaption span{font-size:16px;color:#778775;margin-right:14px}
             footer{margin-top:26px;font-size:16px;color:#657263}
-            </style><main><header><div><h1>KindleGlance</h1><p>天气 · 日历 · 世界昼夜 · 山水 · 时间进度</p></div><div class="version">v0.2.0 正式版</div></header><div class="grid">'''+cards+'''</div><footer>当前版本原生渲染 · 示例日期 '''+now.date().isoformat()+''' · 天气为演示数据</footer></main>'''
+            </style><main><header><div><h1>KindleGlance</h1><p>天气 · 日历 · 世界昼夜 · 山水 · 年度花园 · 时间进度</p></div><div class="version">main 源码预览</div></header><div class="grid">'''+cards+'''</div><footer>当前源码原生渲染 · 示例日期 '''+now.date().isoformat()+''' · 天气为演示数据</footer></main>'''
             gallery=Path(os.environ['DATA_DIR'])/'gallery.html';gallery.write_text(document,encoding='utf-8')
             page.set_viewport_size({'width':1600,'height':1200})
             page.goto(gallery.as_uri(),wait_until='networkidle')
@@ -115,17 +129,19 @@ def run(now, output):
             browser.close()
     finally:
         server.should_exit=True;thread.join(timeout=10);listener.close()
-    (output/'render-manifest.json').write_text(json.dumps({'version':'0.2.0','rendered_at':now.isoformat(),
-        'weather':'synthetic demonstration','city':'厦门市','pages':list(renderers),'private_data':False},ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--at',default='2026-09-30T00:05:00+08:00')
+    parser.add_argument('--images-only',action='store_true',help='Skip the browser UI and gallery screenshots')
+    parser.add_argument('--pages',nargs='+',help='Render selected pages only; requires --images-only')
     args=parser.parse_args()
+    if args.pages and not args.images_only:
+        parser.error('--pages requires --images-only')
     now=datetime.fromisoformat(args.at).astimezone(ZoneInfo('Asia/Shanghai'))
     output=ROOT/'previews';output.mkdir(exist_ok=True)
     with tempfile.TemporaryDirectory(prefix='kindleglance-public-') as temporary:
         os.environ['DATA_DIR']=temporary
         os.environ['ADMIN_COOKIE_SECURE']='0'
-        run(now,output)
+        run(now,output,args.images_only,args.pages)

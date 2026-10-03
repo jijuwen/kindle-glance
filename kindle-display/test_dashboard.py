@@ -178,7 +178,7 @@ class DashboardTest(unittest.TestCase):
         self.assertEqual(migrated["version"], main.PLAYLIST_VERSION)
         self.assertEqual([item["page_id"] for item in migrated["items"]],
                          ["daily-overview", "simple-calendar", "weather-glance", "hourly-weather",
-                          "day-night", "year-progress", "time-scales", "shan-shui", "ai-accounts"])
+                          "day-night", "year-progress", "annual-garden", "time-scales", "shan-shui", "ai-accounts"])
         overview = next(item for item in migrated["items"] if item["page_id"] == "daily-overview")
         self.assertEqual(overview["rotation"], 90)
 
@@ -216,6 +216,38 @@ class DashboardTest(unittest.TestCase):
         with main.Image.open(main.DATA_DIR / rendered["filename"]) as image:
             self.assertEqual(image.size, main.TRANSPORT_SIZE)
         self.assertEqual((native["width"], native["height"]), (1648, 1236))
+
+    def test_authenticated_item_and_current_previews_follow_screen_direction(self):
+        from io import BytesIO
+        native = main.Image.new('L',(1648,1236),255)
+        native.putpixel((0,0),19)
+        native.putpixel((1647,1235),87)
+        native.save(main.DATA_DIR/'page-preview-fixture.png')
+        page={'filename':'page-preview-fixture.png','width':1648,'height':1236,
+              'rendered_at':int(time.time()),'config_revision':main.board_settings()['revision']}
+        main.write_pages_state({'pages':{'daily-overview':page}})
+        item=main.default_playlist_item('daily-overview')
+        self.assertEqual(self.client.get(f"/admin/playlist/items/{item['id']}/preview?upright=true").status_code,401)
+        self.client.post('/admin/login',json={'password':'admin123!'})
+        with patch.object(main,'page_needs_render',return_value=False):
+            for rotation in (90,270,0):
+                with self.subTest(rotation=rotation):
+                    item['rotation']=rotation
+                    main.write_playlist_state({'version':main.PLAYLIST_VERSION,'revision':1,'smart_skip':True,'items':[item]})
+                    rendered=main.compose_playlist_item(item)
+                    main.write_state({**rendered,'active_item_id':item['id'],'active_page_id':item['page_id']})
+                    path=main.DATA_DIR/rendered['filename']
+                    transport=path.read_bytes()
+                    for url in [f"/admin/playlist/items/{item['id']}/preview",'/admin/preview']:
+                        self.assertEqual(self.client.get(url).content,transport)
+                        response=self.client.get(url+'?upright=true')
+                        self.assertEqual(response.status_code,200)
+                        with main.Image.open(BytesIO(response.content)) as readable:
+                            self.assertEqual(readable.size,(1648,1236) if rotation else (1236,1648))
+                            if rotation:
+                                self.assertEqual(readable.tobytes(),native.tobytes())
+                        self.assertEqual(path.read_bytes(),transport)
+                    self.assertEqual(main.admin_bootstrap('dashboard')['current']['rotation'],rotation)
 
     def test_unchanged_transport_image_is_reused_without_re_encoding(self) -> None:
         """A device fetch that changes nothing must not redo the rotate/pad/encode."""
