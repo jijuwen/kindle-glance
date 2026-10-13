@@ -11,7 +11,7 @@ import random
 
 from PIL import Image, ImageDraw, ImageFont
 
-RENDER_REVISION = 6
+RENDER_REVISION = 7
 SIZE = (1648, 1236)
 ASSETS = Path(__file__).with_name('assets') / 'annual-garden'
 INK = 0
@@ -22,6 +22,37 @@ WEEKDAYS = '一二三四五六日'
 GRID = (44, 174, 1604, 1176)
 COLUMNS = 25
 OUTLINE_GAP = 2
+# Header feature for the drawing that grew today: right edge, bottom, size cap.
+TODAY_RIGHT, TODAY_BOTTOM, TODAY_HEIGHT, TODAY_WIDTH = 1590, 146, 112, 150
+
+SUBJECT_NAMES = {
+    'acorn': '橡果', 'apple': '苹果', 'bamboo': '竹子', 'banana': '香蕉', 'bee': '蜜蜂', 'bell': '风铃草',
+    'berries': '浆果', 'bird': '小鸟', 'bush': '灌木', 'butterfly': '蝴蝶', 'cactus': '仙人掌', 'camp': '帐篷',
+    'carrot': '胡萝卜', 'caterpillar': '毛毛虫', 'cherry': '樱桃', 'clover': '小野花', 'cow': '奶牛',
+    'daisy': '雏菊', 'droop': '垂头花', 'fern': '蕨叶', 'fig': '无花果', 'fish': '小鱼', 'frog': '青蛙',
+    'grapes': '葡萄', 'grass': '草丛', 'hedgehog': '刺猬', 'heron': '苍鹭', 'honeycomb': '蜂巢',
+    'house': '小屋', 'ladybug': '瓢虫', 'lily': '百合', 'log': '原木', 'moon': '月亮', 'mouse': '小老鼠',
+    'mushroom': '蘑菇', 'onion': '洋葱', 'owl': '猫头鹰', 'palm': '棕榈', 'pepper': '甜椒', 'pine': '松树',
+    'pumpkin': '南瓜', 'rainbow': '彩虹', 'rake': '耙子', 'raspberry': '树莓', 'rose': '玫瑰',
+    'rosemary': '迷迭香', 'sailboat': '帆船', 'seaweed': '水草', 'sheep': '绵羊', 'shrub': '树丛',
+    'signpost': '路牌', 'slug': '蛞蝓', 'snail': '蜗牛', 'snake': '小蛇', 'snowman': '雪人', 'spade': '铲子',
+    'spiderweb': '蛛网', 'spiralflower': '黑心菊', 'sprout': '新芽', 'star': '星星', 'stones': '叠石',
+    'strawberry': '草莓', 'stump': '树桩', 'succulent': '多肉', 'sun': '太阳', 'sunflower': '向日葵',
+    'tortoise': '乌龟', 'tree': '小树', 'tulip': '郁金香', 'twig': '枝条', 'vine': '藤蔓',
+    'wateringcan': '洒水壶', 'waterlily': '睡莲', 'well': '水井', 'witch': '小女巫', 'worm': '小虫',
+    'leap-day': '闰日花',
+}
+
+# Years from this one place seasonal subjects in their months. Earlier years
+# keep the original shuffle so gardens already growing do not change.
+SEASONAL_FROM_YEAR = 2027
+# Northern-hemisphere months; the southern hemisphere shifts them by six.
+SEASONS = {
+    'tulip': (3, 4, 5), 'cherry': (5, 6), 'strawberry': (5, 6, 7), 'raspberry': (6, 7, 8),
+    'waterlily': (6, 7, 8), 'sunflower': (7, 8, 9), 'grapes': (8, 9, 10), 'fig': (8, 9, 10),
+    'apple': (9, 10, 11), 'pumpkin': (10, 11), 'acorn': (10, 11), 'snowman': (12, 1, 2),
+}
+MONTH_OF_DAY = tuple(month for month in range(1, 13) for _ in range(calendar.mdays[month]))
 
 
 @lru_cache(maxsize=1)
@@ -78,11 +109,41 @@ def day_counts(now):
     return ordinal, total
 
 
+def subject_of(asset_id: str) -> str:
+    return asset_id if asset_id == 'leap-day' else asset_id.split('-', 1)[1]
+
+
+def season_months(subject: str, southern: bool) -> tuple[int, ...]:
+    months = SEASONS.get(subject, ())
+    return tuple((month+5) % 12 + 1 for month in months) if southern else months
+
+
+def seasonal_order(order, rng, southern: bool) -> list[str]:
+    """Give seasonal drawings a day in their months, spread apart, and fill the
+    remaining days with the other drawings in their shuffled order."""
+    days = [None]*len(order)
+    for asset_id in order:
+        months = season_months(subject_of(asset_id), southern)
+        if not months:
+            continue
+        free = [day for day, month in enumerate(MONTH_OF_DAY) if month in months and days[day] is None]
+        same = [day for day, other in enumerate(days) if other and subject_of(other) == subject_of(asset_id)]
+        distance = {day: min((abs(day-other) for other in same), default=len(order)) for day in free}
+        # Prefer a week between repeats; settle for the widest gap when crowded.
+        spacing = min(7, max(distance.values()))
+        days[rng.choice([day for day in free if distance[day] >= spacing])] = asset_id
+    rest = iter(asset_id for asset_id in order if not SEASONS.get(subject_of(asset_id)))
+    return [asset_id or next(rest) for asset_id in days]
+
+
 @lru_cache(maxsize=128)
-def order_for_year(year: int, seed: str) -> tuple[str, ...]:
+def order_for_year(year: int, seed: str, southern: bool = False) -> tuple[str, ...]:
     order = list(library())
     digest = hashlib.sha256(f'annual-garden:v1:{year}:{seed}'.encode()).digest()
-    random.Random(int.from_bytes(digest,'big')).shuffle(order)
+    rng = random.Random(int.from_bytes(digest,'big'))
+    rng.shuffle(order)
+    if year >= SEASONAL_FROM_YEAR:
+        order = seasonal_order(order, rng, southern)
     if calendar.isleap(year):
         order.insert(59,'leap-day')
     return tuple(order)
@@ -113,7 +174,9 @@ def silhouette_rows(asset_id: str, width: int, height: int):
     Fill the span between the outermost ink pixels on each scanline. Unlike a
     bounding rectangle this retains the narrower stem and concave sides, while
     preventing another plant from entering a flower, rainbow or bamboo clump.
-    Include antialiasing, the future seed and the possible today underline.
+    Include antialiasing, the future seed and a short strip below the stem.
+    That strip once held the today underline; it stays reserved so existing
+    yearly layouts keep every plant where it is.
     """
     original = asset_mask(asset_id)
     mask = original.crop(original.getbbox()).resize((width, height), Image.Resampling.LANCZOS)
@@ -216,14 +279,14 @@ def place_plant(plant, cx, cy, occupied, row_top, row_bottom, fallback):
 
 
 @lru_cache(maxsize=32)
-def planned_slots(year: int, seed: str):
+def planned_slots(year: int, seed: str, southern: bool = False):
     """Compose the whole year once; daily growth never moves existing plants.
 
     Unequal widths drive horizontal positions. Small groups sit closer together
     with wider pockets between them, and their baselines rise and fall.
     Silhouette-aware placement forbids overlaps, including white interiors.
     """
-    order = order_for_year(year, seed)
+    order = order_for_year(year, seed, southern)
     left,top,right,bottom = GRID
     rows=math.ceil(len(order)/COLUMNS)
     sy=(bottom-top)/rows
@@ -306,32 +369,43 @@ def planned_slots(year: int, seed: str):
     return tuple(slots)
 
 
-def garden_slots(year: int, seed: str):
+def garden_slots(year: int, seed: str, southern: bool = False):
     # Do not expose the cached dictionaries for mutation by callers.
-    return (dict(slot) for slot in planned_slots(year,seed))
+    return (dict(slot) for slot in planned_slots(year,seed,southern))
 
 
-def draw_annual_garden(now, seed: str, *, full: bool = False) -> Image.Image:
+def paste_drawing(image, asset_id, bounds, x, y, w, h):
+    mask=asset_mask(asset_id).crop(bounds).resize((w,h),Image.Resampling.LANCZOS)
+    image.paste(INK,(x,y,x+w,y+h),mask)
+
+
+def draw_today(image, draw, asset_id):
+    """Feature the drawing that grew today at header scale, with its name."""
+    bounds=asset_mask(asset_id).getbbox()
+    width,height=bounds[2]-bounds[0],bounds[3]-bounds[1]
+    scale=min(TODAY_HEIGHT/height,TODAY_WIDTH/width)
+    w,h=round(width*scale),round(height*scale)
+    x,y=TODAY_RIGHT-w,TODAY_BOTTOM-h
+    paste_drawing(image,asset_id,bounds,x,y,w,h)
+    hand_text(draw,(x-24,46),'今日',28,'rt',ink=SECONDARY_INK)
+    hand_text(draw,(x-24,84),SUBJECT_NAMES[subject_of(asset_id)],40,'rt')
+
+
+def draw_annual_garden(now, seed: str, *, full: bool = False, southern: bool = False) -> Image.Image:
     ordinal,total=day_counts(now)
     image=Image.new('L',SIZE,PAPER)
     draw=ImageDraw.Draw(image)
-    hand_text(draw,(54,40),'年度花园',48)
-    hand_text(draw,(58,98),f'{now.month}月{now.day}日 · 周{WEEKDAYS[now.weekday()]}',30)
-    hand_text(draw,(824,53),f'第 {ordinal} 天 · 还剩 {total-ordinal} 天',30,'mt')
-    hand_text(draw,(1590,50),f'{now.year} · 已过 {ordinal/total*100:.1f}%',32,'rt',ink=SECONDARY_INK)
+    slots=list(garden_slots(now.year,seed,southern))
+    hand_text(draw,(54,40),f'{now.month}月{now.day}日 · 周{WEEKDAYS[now.weekday()]}',48)
+    hand_text(draw,(58,100),f'{now.year} · 第 {ordinal} 天 · 还剩 {total-ordinal} 天 · 已过 {ordinal/total*100:.1f}%',
+              30,ink=SECONDARY_INK)
+    draw_today(image,draw,slots[ordinal-1]['asset_id'])
 
     grown=total if full else ordinal
-    slots=list(garden_slots(now.year,seed))
-    # Each future seed and today marker has space reserved by the annual plan.
+    # Each future seed has space reserved by the annual plan.
     for slot in slots[grown:]:
         cx,cy=slot['seed_x'],slot['seed_y']
         draw.ellipse((cx-2,cy-2,cx+2,cy+2),fill=SEED_INK)
     for slot in slots[:grown]:
-        x,y,w,h=slot['x'],slot['y'],slot['width'],slot['height']
-        mask=asset_mask(slot['asset_id']).crop(slot['bounds']).resize((w,h),Image.Resampling.LANCZOS)
-        image.paste(INK,(x,y,x+w,y+h),mask)
-    if not full:
-        slot=slots[ordinal-1];middle=slot['x']+slot['width']/2
-        y=slot['y']+slot['height']+2
-        draw.line([(middle-6,y),(middle-1,y+1),(middle+6,y)],fill=INK,width=2)
+        paste_drawing(image,slot['asset_id'],slot['bounds'],slot['x'],slot['y'],slot['width'],slot['height'])
     return image

@@ -117,6 +117,18 @@ class PreviewTest(unittest.TestCase):
             main.render_preview_pass()
         render.assert_called_once_with('weather-glance')
 
+    def test_garden_rerenders_only_when_the_hemisphere_changes(self):
+        self.configure(pages=('annual-garden', 'weather-glance'))
+        with patch.object(main, 'render_page_if_stale', side_effect=self.fake_render):
+            main.render_preview_pass()
+        region = main.board_settings()['location']
+        for latitude, expected in ((1, {'weather-glance'}), (-33.87, {'weather-glance', 'annual-garden'})):
+            response = self.client.post('/admin/api/settings', headers=self.csrf(), json={'revision': main.board_settings()['revision'], 'location': {**region, 'latitude': latitude}})
+            self.assertEqual(response.status_code, 200)
+            with patch.object(main, 'render_page_if_stale', side_effect=self.fake_render) as render:
+                main.render_preview_pass()
+            self.assertEqual({call.args[0] for call in render.call_args_list}, expected)
+
     def test_changed_configuration_and_restart_do_not_leave_jobs_stuck(self):
         self.configure()
         revision = main.board_settings()['revision']

@@ -776,7 +776,7 @@ def _render_page_impl(page_id: str, settings: dict[str, Any]) -> dict[str, Any]:
     elif page_id == "year-progress":
         image = draw_year_progress(now, font)
     elif page_id == "annual-garden":
-        image = draw_annual_garden(now, annual_garden_seed())
+        image = draw_annual_garden(now, annual_garden_seed(), southern=settings["latitude"] < 0)
     elif page_id == "time-scales":
         image = draw_time_scales(now, font)
     elif page_id == "daily-overview":
@@ -1221,6 +1221,9 @@ def save_board_settings(candidate, revision):
             affected.update(PAGE_DEFINITIONS)
         if before['location'] != updated['location']:
             affected.update(('weather-glance', 'hourly-weather', 'daily-overview', 'day-night'))
+            # Garden seasons follow the hemisphere, not the exact place.
+            if ((before['location'] or {}).get('latitude', 0) < 0) != ((updated['location'] or {}).get('latitude', 0) < 0):
+                affected.add('annual-garden')
         old, new = before['display_preferences'], updated['display_preferences']
         if old['temperature_unit'] != new['temperature_unit']:
             affected.update(('weather-glance', 'hourly-weather', 'daily-overview'))
