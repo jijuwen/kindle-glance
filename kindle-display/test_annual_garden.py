@@ -63,9 +63,10 @@ class AnnualGardenTest(unittest.TestCase):
         self.assertEqual(first.mode,'L')
         self.assertEqual(first.size,(1648,1236))
         self.assertEqual(first.getpixel((0,0)),255)
-        for rectangle in [(48,35,285,88),(640,45,1010,88)]:
+        # Black date and today's featured drawing; the merged counts are gray.
+        for rectangle in [(50,38,320,90),(1340,30,1600,150)]:
             self.assertEqual(first.crop(rectangle).getextrema()[0],0)
-        self.assertEqual(first.crop((1150,40,1600,95)).getextrema()[0],96)
+        self.assertEqual(first.crop((55,97,620,132)).getextrema()[0],96)
 
     def test_year_boundaries_and_positions_stay_in_frame(self):
         for year in (2024,2026,2027):
@@ -82,8 +83,8 @@ class AnnualGardenTest(unittest.TestCase):
 
     def test_tight_header_and_dense_garden_preserve_readable_shapes(self):
         image=garden.draw_annual_garden(datetime(2026,12,31),'density')
-        self.assertEqual(image.crop((1150,40,1600,95)).getextrema()[0],garden.SECONDARY_INK)
-        self.assertEqual(image.crop((48,35,285,88)).getextrema()[0],0)
+        self.assertEqual(image.crop((55,97,620,132)).getextrema()[0],garden.SECONDARY_INK)
+        self.assertEqual(image.crop((50,38,320,90)).getextrema()[0],0)
         # The garden starts below the compact date line and occupies substantially
         # more of the paper, without becoming a field of solid black.
         body=image.crop((44,174,1604,1184))
@@ -105,7 +106,7 @@ class AnnualGardenTest(unittest.TestCase):
         for slot in slots[:grown-1]:
             x,y,w,h=(slot[k] for k in ('x','y','width','height'))
             mask=garden.asset_mask(slot['asset_id']).crop(slot['bounds']).resize((w,h),Image.Resampling.LANCZOS)
-            # Check solid strokes, excluding yesterday's movable today marker.
+            # Every solid stroke of an earlier day stays in place.
             for offset,value in enumerate(mask.tobytes()):
                 if value==255:
                     px=x+offset%w;py=y+offset//w
@@ -135,7 +136,8 @@ class AnnualGardenTest(unittest.TestCase):
     def test_complete_year_contours_seeds_and_markers_have_clearance(self):
         # Rebuild the visible envelopes independently with Pillow. Test the
         # actual resized ink (including faint antialiasing), enclosed white
-        # space, future seeds and today's underline, rather than planner scores.
+        # space, future seeds and the strip reserved below each stem, rather
+        # than planner scores.
         for year,seed in ((2024,'public-example-garden'),(2026,'public-example-garden'),
                           (2026,'touching'),(2027,'composition')):
             with self.subTest(year=year,seed=seed):
@@ -163,6 +165,43 @@ class AnnualGardenTest(unittest.TestCase):
                 self.assertGreaterEqual(bounds[1],top+garden.OUTLINE_GAP)
                 self.assertLessEqual(bounds[2],right-garden.OUTLINE_GAP)
                 self.assertLessEqual(bounds[3],bottom-garden.OUTLINE_GAP)
+
+    def test_today_is_featured_in_the_header_without_an_underline(self):
+        names={garden.subject_of(asset_id) for asset_id in garden.library()+('leap-day',)}
+        self.assertLessEqual(names,set(garden.SUBJECT_NAMES))
+        seed='featured'
+        slots=list(garden.garden_slots(2026,seed))
+        today=garden.draw_annual_garden(datetime(2026,10,3),seed)
+        tomorrow=garden.draw_annual_garden(datetime(2026,10,4),seed)
+        # The header follows the newest drawing while the garden keeps growing.
+        self.assertNotEqual(today.crop((1340,30,1600,150)).tobytes(),tomorrow.crop((1340,30,1600,150)).tobytes())
+        slot=slots[275];middle=slot['x']+slot['width']//2;bottom=slot['y']+slot['height']+1
+        self.assertEqual(today.crop((middle-7,bottom,middle+8,bottom+4)).getextrema(),(255,255))
+        leap=garden.draw_annual_garden(datetime(2028,2,29),seed)
+        self.assertEqual(leap.crop((1340,30,1600,150)).getextrema()[0],0)
+
+    def test_seasons_start_next_year_and_follow_the_hemisphere(self):
+        # The garden already growing in 2026 keeps every drawing and position.
+        order=garden.order_for_year(2026,'public-example-garden')
+        self.assertEqual(hashlib.sha256('|'.join(order).encode()).hexdigest()[:16],'b68a7f5badce4593')
+        layout=[(s['asset_id'],s['x'],s['y'],s['width'],s['height'])
+                for s in garden.planned_slots(2026,'public-example-garden')]
+        self.assertEqual(hashlib.sha256(json.dumps(layout).encode()).hexdigest()[:16],'9a7478f9801eb338')
+        self.assertEqual(garden.order_for_year(2026,'public-example-garden',True),order)
+        for year in (2027,2028):
+            for southern in (False,True):
+                with self.subTest(year=year,southern=southern):
+                    order=garden.order_for_year(year,'seasons',southern)
+                    self.assertEqual(set(order)-{'leap-day'},set(garden.library()))
+                    if year==2028:self.assertEqual(order[59],'leap-day')
+                    for day,asset_id in enumerate(order):
+                        months=garden.season_months(garden.subject_of(asset_id),southern)
+                        if months:
+                            self.assertIn((datetime(year,1,1)+timedelta(day)).month,months,asset_id)
+                    tulips=[day for day,asset_id in enumerate(order) if asset_id.endswith('-tulip')]
+                    self.assertGreaterEqual(min(b-a for a,b in zip(tulips,tulips[1:])),3)
+        self.assertEqual(garden.season_months('snowman',True),(6,7,8))
+        self.assertNotEqual(garden.order_for_year(2027,'seasons'),garden.order_for_year(2027,'seasons',True))
 
     def test_persistent_identity_concurrent_calls_and_corruption(self):
         with tempfile.TemporaryDirectory() as directory,patch.object(main,'DATA_DIR',Path(directory)):
