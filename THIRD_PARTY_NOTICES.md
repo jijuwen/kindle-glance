@@ -12,7 +12,7 @@
 | 年度花园中文手写字体 Yozai | [OFL](kindle-display/app/assets/annual-garden/fonts/Yozai-OFL.txt)，来源与校验见字体目录 sources.json |
 | 年度花园数字手写字体 Shantell Sans | [OFL](kindle-display/app/assets/annual-garden/fonts/ShantellSans-OFL.txt)，来源与校验见字体目录 sources.json |
 
-年度花园图案是根据用户提供的 One Year 花园截图重新绘制的矢量插画。图案主题和手绘视觉参考 One Year: Daily Journal（Wind Down Studio，原画 Sam Peitz），不代表获取到了原应用的素材源文件。365 幅基础图案与闰日补充图案的清单、文件校验保存在年度花园素材目录 manifest.json。
+年度花园图案是根据用户提供的 One Year 花园截图重新绘制的矢量插画。图案主题和手绘视觉参考 One Year: Daily Journal（Wind Down Studio，原画 Sam Peitz），不代表获取到了原应用的素材源文件。365 幅基础图案与闰日补充图案的清单、文件校验保存在年度花园素材目录 manifest.json。另有 54 幅新增图案由本项目原创绘制，不依据参考截图，随项目自有代码采用 MIT 授权，清单 additions 一节单独记录。
 
 Lupa 等 Python 依赖按 requirements 安装至本地虚拟环境，其发行包保留各自授权，不随 Git 提交平台二进制。插件发布包只携带插件代码及其 LICENSE，不包含 KOReader 测试夹具。
 

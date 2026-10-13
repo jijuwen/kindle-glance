@@ -19,8 +19,25 @@ DEST = ROOT / 'kindle-display/app/assets/annual-garden'
 TAU = math.tau
 
 
+def map_path(d: str, T) -> str:
+    """Apply a point map to every coordinate pair of an absolute path."""
+    tokens = re.findall(r'[MLCQZ]|-?\d+(?:\.\d+)?', d)
+    out, pair = [], []
+    for token in tokens:
+        if token.isalpha():
+            out.append(token)
+            continue
+        pair.append(float(token))
+        if len(pair) == 2:
+            out.append('%.2f %.2f' % T(*pair))
+            pair = []
+    return ' '.join(out)
+
+
 class Pen:
     """Small absolute SVG path authoring surface, with matching Pillow output."""
+    # Optional point map (move, turn, mirror) for later paths; stroke width stays.
+    T = None
     def __init__(self, number: int):
         self.rng = random.Random(48371 + number * 7919)
         self.stroke_rng = random.Random(7351 + number * 3571)
@@ -30,6 +47,8 @@ class Pen:
         self.weight = 3.7
 
     def path(self, d: str, fill: str = 'none', weight: float | None = None):
+        if self.T:
+            d = map_path(d, self.T)
         tokens = re.findall(r'[MLCQZ]|-?\d+(?:\.\d+)?', d)
         command, index, current, first = '', 0, (0., 0.), (0., 0.)
         points, subpaths, normalized = [], [], []
@@ -168,11 +187,17 @@ class Pen:
             points.append((x+math.cos(t)*radius,y+math.sin(t)*radius))
         self.curve(points,weight=2.5)
 
-    def output(self,path):
-        path.with_suffix('.svg').write_text('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round">\n'+ '\n'.join(self.svg)+'\n</svg>\n',encoding='utf-8')
+    def output(self,svg_path,png_path):
+        # The committed assets use CRLF; write the same bytes on every platform.
+        svg_path.write_text('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round">\n'+ '\n'.join(self.svg)+'\n</svg>\n',encoding='utf-8',newline='\r\n')
         mask=ImageOps.invert(self.image.resize((200,240),Image.Resampling.LANCZOS))
+        # PNG compression differs between zlib builds; keep a file whose pixels match.
+        if png_path.exists():
+            with Image.open(png_path) as existing:
+                if existing.mode=='RGBA' and existing.getchannel('A').tobytes()==mask.tobytes():
+                    return mask
         rgba=Image.new('RGBA',mask.size,(0,0,0,0)); rgba.putalpha(mask)
-        rgba.save(path.with_suffix('.png'),optimize=True)
+        rgba.save(png_path,optimize=True)
         return mask
 
 
@@ -540,6 +565,627 @@ def special(p:Pen,kind:str,v:int):
     return True
 
 
+# Additions: original drawings authored for KindleGlance with the same pen. They
+# are not derived from the reference screenshots. Each takes a variant (0 or 1).
+def transform(scale=1, deg=0, dx=0, dy=0, cx=50, cy=60, mirror=False):
+    a = math.radians(deg); c, s = math.cos(a), math.sin(a)
+    def T(x, y):
+        x, y = x-cx, y-cy
+        if mirror: x = -x
+        return cx+dx+scale*(x*c-y*s), cy+dy+scale*(x*s+y*c)
+    return T
+
+
+def P(points, close=True):
+    return 'M '+' L '.join(f'{x:.2f} {y:.2f}' for x, y in points)+(' Z' if close else '')
+
+
+def oval(p, x, y, rx, ry, angle=0, weight=None, fill='white'):
+    a = math.radians(angle); pts = []
+    for i in range(16):
+        t = TAU*i/16; px, py = rx*math.cos(t), ry*math.sin(t)
+        pts.append((x+px*math.cos(a)-py*math.sin(a), y+px*math.sin(a)+py*math.cos(a)))
+    p.curve(pts, True, fill, weight)
+
+
+def heart(p, cx, cy, s, point_dir):
+    """Heart whose tip points along point_dir (degrees, screen coordinates)."""
+    rot = math.radians(point_dir-90); pts = []
+    for i in range(24):
+        t = TAU*i/24
+        x = 16*math.sin(t)**3; y = -(13*math.cos(t)-5*math.cos(2*t)-2*math.cos(3*t)-math.cos(4*t))
+        x, y = x*s/16, (y+2)*s/16
+        pts.append((cx+x*math.cos(rot)-y*math.sin(rot), cy+x*math.sin(rot)+y*math.cos(rot)))
+    p.curve(pts, True, 'white')
+
+
+def at(cx, cy, r, deg):
+    a = math.radians(deg)
+    return cx+math.cos(a)*r, cy+math.sin(a)*r
+
+
+
+def dandelion(p, v):
+    p.path('M 48 112 L 33 107 L 36 103 L 24 100 L 28 96 L 17 91 Q 36 92 48 106', 'white')
+    p.path('M 53 112 L 67 106 L 64 102 L 76 98 L 72 94 L 83 89 Q 64 91 53 106', 'white')
+    p.path('M 50 112 C 53 92 46 70 52 52')
+    cx, cy, r = 52, 36, 18
+    for i in range(18):
+        a = TAU*i/18+.1
+        if v and math.cos(a) > .3:
+            continue
+        x2, y2 = cx+math.cos(a)*r, cy+math.sin(a)*r
+        p.path(f'M {cx+math.cos(a)*5:.2f} {cy+math.sin(a)*5:.2f} L {x2:.2f} {y2:.2f}', weight=1.2)
+        p.dot(x2, y2, 1.3)
+    p.ellipse(cx, cy, 4.5)
+    if v:
+        for x, y in [(76, 26), (87, 12), (91, 38)]:
+            p.path(f'M {x} {y} L {x-2} {y+9}', weight=1.1)
+            for dx in (-4, 0, 4):
+                p.path(f'M {x} {y} L {x+dx} {y-4}', weight=1.1)
+            p.dot(x-2, y+9, 1.1)
+
+
+def fuzzy_head(p, tx, ty, side, length=32):
+    """A bristly spike hanging from the arched stem tip."""
+    T, C, E = (tx, ty), (tx+side*length*.4, ty+2), (tx+side*length*.5, ty+length*.9)
+    centre, normal, width = [], [], []
+    for i in range(13):
+        t = i/12; u = 1-t
+        q = (u*u*T[0]+2*u*t*C[0]+t*t*E[0], u*u*T[1]+2*u*t*C[1]+t*t*E[1])
+        dx, dy = 2*u*(C[0]-T[0])+2*t*(E[0]-C[0]), 2*u*(C[1]-T[1])+2*t*(E[1]-C[1])
+        L = math.hypot(dx, dy)
+        centre.append(q); normal.append((-dy/L, dx/L)); width.append(1.5+3.6*math.sin(math.pi*min(1, .2+t)))
+    left = [(q[0]+n[0]*w, q[1]+n[1]*w) for q, n, w in zip(centre, normal, width)]
+    right = [(q[0]-n[0]*w, q[1]-n[1]*w) for q, n, w in zip(centre, normal, width)]
+    p.curve(left+right[::-1], True, 'white')
+    for q, n, w in list(zip(centre, normal, width))[2:-1]:
+        for k in (1, -1):
+            p.path(f'M {q[0]+n[0]*k*w:.2f} {q[1]+n[1]*k*w:.2f} L {q[0]+n[0]*k*(w+3):.2f} {q[1]+n[1]*k*(w+3):.2f}', weight=1.05)
+
+
+def foxtail(p, v):
+    stems = [(44, 32, 32, -1), (50, 60, 20, 1), (56, 72, 42, 1)] if v == 0 else [(46, 34, 26, -1), (54, 66, 34, 1)]
+    p.leaf(49, 108, -26, -22, 3.5); p.leaf(53, 106, 24, -26, 3.5)
+    for bx, tx, ty, side in stems:
+        p.path(f'M {bx} 112 C {bx} 70 {tx-side*10} {ty-18} {tx} {ty}')
+        fuzzy_head(p, tx, ty, side)
+
+
+def shamrock(p, v):
+    if v == 0:
+        p.path('M 50 113 C 55 96 44 78 50 58')
+        for d in (-150, -90, -30):
+            x, y = at(50, 58, 12, d); heart(p, x, y, 11, d+180)
+        p.path('M 40 113 C 38 100 34 92 30 84')
+        for d in (-150, -90, -30):
+            x, y = at(30, 84, 8, d); heart(p, x, y, 7.5, d+180)
+    else:
+        p.path('M 52 113 C 60 98 44 82 50 58')
+        for d in (-135, -45, 45, 135):
+            x, y = at(50, 54, 12, d); heart(p, x, y, 11.5, d+180)
+        p.dot(50, 54, 1.4)
+
+
+# --------------------------------------------------------------------- flowers
+
+def lavender(p, v):
+    stems = [(36, 30, -1), (50, 16, 0), (64, 26, 1)] if v == 0 else [(32, 34, -1), (44, 20, -1), (56, 12, 1), (68, 28, 1)]
+    for x, top, side in stems:
+        p.path(f'M {50+side*2} 112 Q {x-side*3:.1f} {(top+112)/2+12:.1f} {x} {top+28}')
+        for k in range(5):
+            y = top+26-k*5.6; r = 2.7-k*.22
+            oval(p, x-2.4, y, r, 3.6-k*.3, -28, weight=1.3)
+            oval(p, x+2.4, y-1, r, 3.6-k*.3, 28, weight=1.3)
+        p.dot(x, top-2, 1.3)
+    p.leaf(50, 104, -22, -12, 3); p.leaf(51, 100, 22, -16, 3)
+
+
+def trumpet(p, cx, cy, ax, ay, rx=17, tube=20, depth=7):
+    L = math.hypot(ax, ay); ux, uy = ax/L, ay/L; nx, ny = -uy, ux
+    tip = (cx+ux*tube, cy+uy*tube)
+    for k in (1, -1):
+        sx, sy = cx+nx*k*(rx-2), cy+ny*k*(rx-2)
+        p.path(f'M {sx:.2f} {sy:.2f} Q {cx+ux*8+nx*k*3:.2f} {cy+uy*8+ny*k*3:.2f} {tip[0]+nx*k*1.5:.2f} {tip[1]+ny*k*1.5:.2f}')
+    pts = [(cx+nx*rx*math.cos(t)+ux*depth*math.sin(t), cy+ny*rx*math.cos(t)+uy*depth*math.sin(t))
+           for t in [TAU*i/18 for i in range(18)]]
+    p.curve(pts, True, 'white')
+    for i in range(5):
+        t = TAU*i/5+.3
+        p.path(f'M {cx:.2f} {cy:.2f} L {cx+nx*rx*.8*math.cos(t)+ux*depth*.8*math.sin(t):.2f} {cy+ny*rx*.8*math.cos(t)+uy*depth*.8*math.sin(t):.2f}', weight=1.1)
+    p.dot(cx, cy, 1.2)
+
+
+def morning_glory(p, v):
+    if v == 0:
+        p.path('M 48 113 C 30 96 66 84 50 68 C 40 58 52 54 50 50')
+        heart(p, 30, 88, 11, 160); heart(p, 70, 78, 10, 20)
+        trumpet(p, 60, 30, -.45, .89, 21, 22, 9)
+    else:
+        p.path('M 50 113 C 70 96 32 82 50 64 C 56 58 60 58 62 59 M 50 64 C 44 56 40 50 38 46')
+        heart(p, 32, 94, 10, 160); heart(p, 72, 90, 10, 20)
+        trumpet(p, 28, 30, .5, .87, 17, 19, 7.5)
+        trumpet(p, 78, 50, -.87, .5, 16, 18, 7)
+
+
+def floret(p, x, y, r=6.4):
+    for k in range(4):
+        a = 45+k*90; fx, fy = at(x, y, r*.52, a)
+        oval(p, fx, fy, r*.5, r*.36, a, weight=1.35)
+    p.dot(x, y, .9)
+
+
+def hydrangea(p, v):
+    if v == 0:
+        p.path('M 50 113 L 50 62')
+        p.leaf(49, 96, -30, -14, 10, True); p.leaf(51, 88, 30, -16, 10, True)
+        for k in range(6):
+            floret(p, *at(50, 40, 14, -90+k*60))
+        floret(p, 50, 40)
+    else:
+        p.path('M 46 113 Q 44 82 38 64 M 48 104 Q 62 92 72 78')
+        p.leaf(47, 98, -28, -10, 9, True)
+        for k in range(6):
+            floret(p, *at(38, 40, 13, -90+k*60), 6)
+        floret(p, 38, 40, 6)
+        for k in range(4):
+            floret(p, *at(73, 70, 9, k*90), 5.4)
+
+
+def lotus_leaf(p, cx, cy, rx=21, ry=8):
+    p.path(f'M {cx} {cy+2} Q {cx-2} {(cy+113)/2:.1f} {cx+1} 113')
+    pts = [(cx+rx*math.cos(t), cy+ry*math.sin(t)) for t in [TAU*i/20 for i in range(20)]]
+    p.curve(pts, True, 'white')
+    for d in (200, 250, 290, 340, 20):
+        x, y = cx+math.cos(math.radians(d))*rx*.82, cy+math.sin(math.radians(d))*ry*.82
+        p.path(f'M {cx} {cy} L {x:.2f} {y:.2f}', weight=1.1)
+
+
+def lotus(p, v):
+    if v == 0:
+        lotus_leaf(p, 68, 82)
+        p.path('M 40 49 Q 37 84 41 113')
+        p.path('M 22 32 Q 28 44 38 49 L 43 49 Q 53 44 59 32 Z', 'white')
+        oval(p, 40.5, 32, 18.5, 6.5)
+        for x, y in [(31, 32), (38, 29), (46, 29), (50, 33), (41, 35), (35, 35), (43, 32)]:
+            oval(p, x, y, 1.9, 1.3, weight=1.1)
+    else:
+        lotus_leaf(p, 30, 88, 20, 7.5)
+        p.path('M 58 60 Q 62 88 60 113')
+        for dx, dy, w in [(-20, -22, 8), (20, -24, 8), (-14, -30, 8), (13, -32, 8), (0, -40, 9)]:
+            p.leaf(58, 60, dx, dy, w)
+        p.path('M 58 60 L 58 34', weight=1.1)
+
+
+# ------------------------------------------------------------ vegetables, fruit
+
+def calyx(p, cx, cy, r=12, points=5):
+    pts = []
+    for i in range(points*2):
+        a = math.radians(-90+180*i/points); rr = r if i % 2 == 0 else r*.32
+        pts.append((cx+math.cos(a)*rr, cy+math.sin(a)*rr*.62))
+    p.path(P(pts), 'white')
+
+
+def tomato(p, v):
+    if v == 0:
+        pts = [(50+31*(1+.04*math.cos(5*t))*math.cos(t), 76+26*(1+.04*math.cos(5*t))*math.sin(t)) for t in [TAU*i/40 for i in range(40)]]
+        p.curve(pts, True, 'white')
+        calyx(p, 50, 52, 14)
+        p.path('M 50 50 Q 50 40 56 36')
+        p.path('M 30 66 Q 32 58 40 56', weight=1.4)
+    else:
+        p.path('M 12 20 Q 46 34 88 18')
+        p.leaf(56, 26, 16, -14, 6, True)
+        for cx, cy, r, sx in [(34, 70, 18, 32), (68, 82, 16, 64)]:
+            p.path(f'M {sx} 27 Q {cx-3} {(cy-r+27)/2:.1f} {cx} {cy-r+2}')
+            p.ellipse(cx, cy, r, r*.88)
+            calyx(p, cx, cy-r*.82, 9)
+            p.path(f'M {cx-r*.62:.2f} {cy-r*.2:.2f} Q {cx-r*.55:.2f} {cy-r*.55:.2f} {cx-r*.25:.2f} {cy-r*.62:.2f}', weight=1.3)
+
+
+def peapod(p, v):
+    if v == 0:
+        p.path('M 18 86 C 30 104 74 90 84 54 C 70 68 34 80 18 86 Z', 'white')
+        for x, y in [(31, 82), (44, 77), (57, 71), (69, 64)]:
+            p.ellipse(x, y, 6.3)
+        p.path('M 20 84 C 26 64 62 46 84 52')
+        p.path('M 84 54 Q 92 46 86 36')
+        p.spiral(83, 30, 6, 1.6)
+        p.leaf(84, 54, -8, -12, 4)
+    else:
+        p.path('M 12 18 Q 50 8 90 22')
+        p.leaf(74, 18, 12, -10, 6)
+        p.spiral(28, 30, 7, 1.7)
+        p.path('M 54 14 L 54 22')
+        p.path('M 54 22 C 38 40 44 86 60 100 C 72 82 66 38 54 22 Z', 'white')
+        p.path('M 54 30 Q 49 40 55 48 Q 49 58 56 66 Q 51 77 58 88', weight=1.4)
+        p.leaf(54, 24, -10, 6, 4); p.leaf(54, 24, 10, 6, 4)
+
+
+def persimmon_body(p, cx, cy, rx, ry, leaf=7):
+    pts = [(cx+rx*(1+.06*math.cos(4*t))*math.cos(t), cy+ry*(1+.06*math.cos(4*t))*math.sin(t)) for t in [TAU*i/36 for i in range(36)]]
+    p.curve(pts, True, 'white')
+    top = cy-ry+3
+    # Four broad sepals lie flat on the fruit: two to the sides, two in front.
+    for dx, dy in [(-leaf*2.3, 2), (leaf*2.3, 1), (-leaf*1.1, leaf*.9), (leaf*1.2, leaf*.8)]:
+        p.leaf(cx, top, dx, dy, leaf*.72)
+    p.path(f'M {cx} {top} L {cx+1} {top-leaf}')
+    p.path(f'M {cx-3} {top-leaf} L {cx+5} {top-leaf}', weight=1.6)
+
+
+def persimmon(p, v):
+    if v == 0:
+        persimmon_body(p, 50, 82, 31, 24, 10)
+        p.path('M 28 74 Q 30 66 37 64', weight=1.4)
+    else:
+        p.path('M 8 22 Q 40 16 60 26 L 92 18 M 60 26 L 68 10')
+        p.leaf(40, 19, -4, -14, 6)
+        p.path('M 34 22 L 34 46 M 72 23 L 72 58')
+        persimmon_body(p, 34, 64, 19, 15, 5)
+        persimmon_body(p, 72, 76, 17, 13, 5)
+
+
+def gourd_shape(p, cx, top, s=1):
+    rel = [(0, 0), (-11, 4), (-13, 16), (-7, 26), (-18, 36), (-22, 52), (-16, 70), (0, 76), (16, 70), (22, 52), (18, 36), (7, 26), (13, 16), (11, 4)]
+    p.curve([(cx+x*s, top+y*s) for x, y in rel], True, 'white')
+    p.path(f'M {cx-12*s:.2f} {top+46*s:.2f} Q {cx-14*s:.2f} {top+38*s:.2f} {cx-9*s:.2f} {top+33*s:.2f}', weight=1.3)
+
+
+def gourd(p, v):
+    if v == 0:
+        p.path('M 50 32 Q 49 22 56 17')
+        p.leaf(55, 18, 24, -4, 8, True)
+        p.spiral(34, 18, 6, 1.6)
+        gourd_shape(p, 50, 32)
+        p.path('M 37 31 L 63 31', weight=1.6)
+    else:
+        p.path('M 8 16 Q 50 30 92 14')
+        p.leaf(50, 23, -6, -14, 7, True)
+        p.spiral(78, 28, 6, 1.6)
+        p.path('M 30 21 L 31 30 M 66 22 L 65 44')
+        gourd_shape(p, 31, 30, .78)
+        gourd_shape(p, 65, 44, .7)
+
+
+# ------------------------------------------------------------------- creatures
+
+def dragonfly_body(p):
+    for x, y, rx, ry, a in [(29, 27, 21, 5, 14), (71, 27, 21, 5, -14), (30, 41, 19, 5, -14), (70, 41, 19, 5, 14)]:
+        oval(p, x, y, rx, ry, a)
+    p.path('M 48 42 L 49 104 Q 50 111 52 104 L 53 42 Z', 'white')
+    for y in range(52, 104, 9):
+        p.path(f'M 48 {y} L 53 {y}', weight=1)
+    oval(p, 50, 35, 5.5, 8)
+    p.ellipse(50, 22, 6.5, 5.5)
+    p.dot(46, 21, 1.6); p.dot(54, 21, 1.6)
+
+
+def dragonfly(p, v):
+    if v == 0:
+        dragonfly_body(p)
+    else:
+        p.T = transform(.85, 35, 0, -2)
+        dragonfly_body(p)
+        p.T = None
+        p.path('M 14 96 Q 22 90 30 94 M 8 82 Q 16 76 24 80', weight=1.3)
+
+
+def rabbit(p, v):
+    if v == 0:
+        p.ellipse(18, 86, 6.5)
+        oval(p, 60, 30, 4.8, 16, -18); oval(p, 70, 31, 4.8, 16, 6)
+        p.curve([(20, 98), (22, 74), (40, 62), (60, 66), (66, 84), (64, 104), (40, 108)], True, 'white')
+        p.ellipse(70, 56, 13.5, 12.5)
+        p.path('M 69 23 L 70 40', weight=1.2)
+        p.dot(74, 53, 1.5); p.dot(83, 58, 1.3)
+        p.path('M 82 60 L 90 58 M 82 62 L 90 64', weight=1)
+        p.path('M 58 104 Q 60 96 66 98')
+    else:
+        oval(p, 42, 26, 5, 16, -10); oval(p, 58, 26, 5, 16, 10)
+        p.path('M 42 18 L 43 33 M 58 18 L 57 33', weight=1.2)
+        p.curve([(50, 62), (30, 72), (28, 98), (40, 108), (60, 108), (72, 98), (70, 72)], True, 'white')
+        p.ellipse(50, 52, 16, 14)
+        p.dot(44, 50, 1.6); p.dot(56, 50, 1.6)
+        p.path('M 48 56 L 50 58 L 52 56 M 50 58 L 50 61', weight=1.4)
+        p.path('M 40 58 L 30 56 M 40 60 L 30 62 M 60 58 L 70 56 M 60 60 L 70 62', weight=1)
+        oval(p, 40, 106, 7, 4); oval(p, 60, 106, 7, 4)
+
+
+def squirrel(p, v):
+    if v:
+        p.T = transform(1, 0, 0, 0, mirror=True)
+    p.curve([(56, 102), (74, 94), (86, 72), (88, 50), (82, 30), (70, 22), (58, 28), (64, 38), (72, 52), (70, 70), (60, 84), (48, 92)], True, 'white')
+    for x, y in [(74, 40), (80, 56), (76, 74)]:
+        p.path(f'M {x} {y} L {x-5} {y+3}', weight=1.2)
+    oval(p, 44, 84, 15, 20, 10)
+    p.path('M 36 47 L 39 35 L 45 46', 'white')
+    p.ellipse(37, 57, 12, 11)
+    p.dot(32, 55, 1.6); p.dot(26, 60, 1.3)
+    if v == 0:
+        p.ellipse(28, 76, 5, 5.5)
+        p.path('M 22 73 Q 28 66 34 73 Z', 'white')
+        p.path('M 34 74 Q 30 80 26 80 M 38 80 Q 34 84 30 82', weight=1.6)
+    else:
+        p.path('M 32 72 Q 26 78 30 84', weight=1.6)
+        p.ellipse(18, 104, 5, 5.5); p.path('M 12 101 Q 18 94 24 101 Z', 'white')
+    p.path('M 32 104 Q 42 108 54 104')
+    p.T = None
+
+
+def cat(p, v):
+    if v == 0:
+        p.path('M 38 34 L 37 16 L 48 28 Z', 'white'); p.path('M 52 28 L 63 16 L 62 34 Z', 'white')
+        p.curve([(50, 48), (34, 58), (28, 82), (31, 102), (50, 108), (69, 102), (72, 82), (66, 58)], True, 'white')
+        p.ellipse(50, 40, 15, 14)
+        p.path('M 68 102 C 90 104 92 82 80 74 Q 76 72 78 66', weight=None)
+    else:
+        p.path('M 37 38 L 35 20 L 47 31 Z', 'white'); p.path('M 53 31 L 65 20 L 63 38 Z', 'white')
+        p.path('M 66 102 C 88 100 88 114 60 112')
+        p.curve([(50, 54), (34, 62), (29, 86), (33, 104), (50, 109), (67, 104), (71, 86), (66, 62)], True, 'white')
+        p.ellipse(50, 44, 16, 14)
+        p.path('M 41 43 Q 44 46 47 43 M 53 43 Q 56 46 59 43', weight=1.4)
+        p.path('M 48 49 L 50 51 L 52 49', weight=1.4)
+        p.path('M 38 48 L 27 46 M 38 51 L 27 53 M 62 48 L 73 46 M 62 51 L 73 53', weight=1)
+        p.path('M 43 109 L 43 98 M 57 109 L 57 98', weight=1.4)
+
+
+def ant_body(p, antennae=True):
+    oval(p, 27, 80, 13, 10, -10)
+    p.ellipse(52, 74, 9, 6)
+    p.path('M 39 78 L 44 76', weight=2.4)
+    p.ellipse(69, 66, 7.5)
+    p.dot(72, 64, 1.4)
+    if antennae:
+        p.path('M 72 60 Q 78 46 87 48 M 68 59 Q 70 46 78 41', weight=1.5)
+    p.path('M 48 78 L 40 90 L 33 100 M 52 79 L 52 92 L 47 102 M 56 78 L 64 90 L 71 100', weight=1.8)
+
+
+def ant(p, v):
+    if v == 0:
+        ant_body(p)
+    else:
+        p.leaf(72, 60, -36, -40, 13, True)
+        ant_body(p, False)
+        p.path('M 74 62 Q 80 52 86 54', weight=1.5)
+
+
+def mole(p, v):
+    if v == 0:
+        p.ellipse(50, 70, 14, 13)
+        p.path('M 43 66 Q 45 68 47 66 M 53 66 Q 55 68 57 66', weight=1.4)
+        oval(p, 50, 75, 4, 3)
+        p.path('M 8 112 C 14 80 86 80 92 112 Z', 'white')
+        for x in (38, 62):
+            oval(p, x, 87, 6, 3.6)
+            p.path(f'M {x-4} 89 L {x-5} 92 M {x} 90 L {x} 93 M {x+4} 89 L {x+5} 92', weight=1)
+        for x, y in [(24, 102), (70, 98), (52, 104), (80, 106)]:
+            p.dot(x, y, 1.4)
+    else:
+        p.ellipse(40, 72, 13, 12)
+        p.dot(36, 69, 1.4); p.dot(45, 69, 1.4)
+        p.path('M 37 76 Q 40 79 44 76', weight=1.2)
+        oval(p, 40, 74, 3, 2.2)
+        p.path('M 6 112 C 12 84 70 82 76 112 Z', 'white')
+        oval(p, 28, 88, 5.5, 3.4); oval(p, 52, 88, 5.5, 3.4)
+        p.path('M 64 112 C 70 98 92 96 96 112 Z', 'white')
+        p.path('M 80 98 Q 80 88 76 84', weight=1.6); p.leaf(80, 90, -9, -8, 3.5); p.leaf(80, 92, 8, -8, 3.5)
+        for x, y in [(62, 66), (70, 72), (56, 60)]:
+            oval(p, x, y, 2.4, 1.8)
+
+
+# ----------------------------------------------------------- garden objects
+
+def scarecrow(p, v):
+    p.path('M 50 113 L 50 80')
+    p.path('M 36 54 L 16 54 L 16 63 L 36 65 Z', 'white'); p.path('M 64 54 L 84 54 L 84 63 L 64 65 Z', 'white')
+    for x, k in ((16, -1), (84, 1)):
+        p.path(f'M {x} 56 L {x+k*7} 52 M {x} 59 L {x+k*8} 60 M {x} 62 L {x+k*6} 67', weight=1.3)
+    p.path('M 36 50 L 64 50 L 68 86 L 32 86 Z', 'white')
+    p.path('M 53 64 L 61 64 L 61 72 L 53 72 Z', weight=1.3)
+    p.path('M 36 86 L 34 93 M 44 86 L 44 94 M 56 86 L 57 94 M 64 86 L 67 92', weight=1.3)
+    p.ellipse(50, 39, 11, 11)
+    if v == 0:
+        p.path('M 44 36 L 47 39 M 47 36 L 44 39 M 53 36 L 56 39 M 56 36 L 53 39', weight=1.3)
+    else:
+        p.dot(45, 37, 1.4); p.dot(55, 37, 1.4)
+    p.path('M 44 44 Q 50 47 56 44', weight=1.3)
+    p.path('M 41 29 L 43 16 L 57 16 L 59 29 Z', 'white')
+    oval(p, 50, 29.5, 19, 3.6)
+    if v:
+        oval(p, 80, 47, 6, 4.5, -8); p.ellipse(86, 42, 3.4)
+        p.path('M 89 42 L 93 43 L 89 44 M 74 48 L 69 50 L 73 51', weight=1.4)
+        p.dot(87, 41, .8)
+
+
+def birdhouse(p, v):
+    p.path('M 47 113 L 47 70 M 55 113 L 55 70')
+    p.path('M 31 42 L 71 42 L 71 72 L 31 72 Z', 'white')
+    p.path('M 23 46 L 51 19 L 79 46 Z', 'white')
+    p.path('M 27 44 L 51 23 L 75 44', weight=1.3)
+    p.ellipse(51, 54, 6)
+    p.dot(51, 66, 2)
+    p.path('M 40 82 L 47 78 M 55 78 L 62 82', weight=1.6)
+    if v:
+        oval(p, 70, 25, 6, 4.5, -25); p.ellipse(75, 18, 3.4)
+        p.path('M 78 17 L 82 18 L 78 19 M 64 29 L 59 33 L 64 32', weight=1.4)
+        p.dot(76, 17, .8)
+        p.path('M 40 113 L 38 102 M 44 113 L 46 104 M 60 113 L 63 103', weight=1.5)
+
+
+def flowerpot(p, v):
+    if v == 0:
+        p.path('M 44 70 Q 42 56 38 48'); p.leaf(38, 48, -14, -6, 6); p.leaf(38, 49, 9, -12, 6)
+        p.path('M 56 70 Q 58 60 62 54'); p.leaf(62, 54, 12, -7, 5); p.leaf(62, 55, -5, -12, 5)
+    else:
+        p.stem(x=50, top=32, bottom=70, bend=4, leaves=2)
+        p.flower(50, 30, 13, 7)
+    p.path('M 30 78 L 70 78 L 64 112 L 36 112 Z', 'white')
+    p.path('M 26 69 L 74 69 L 74 80 L 26 80 Z', 'white')
+    if v:
+        p.path('M 56 88 L 52 96 L 57 102', weight=1.3)
+
+
+def wheelbarrow(p, v):
+    if v == 0:
+        p.path('M 18 58 C 28 40 62 38 74 58 Z', 'white')
+        p.path('M 46 46 Q 46 36 42 30'); p.leaf(42, 31, -10, -5, 4.5); p.leaf(43, 31, 5, -10, 4.5)
+    else:
+        for x, y, r in [(32, 50, 10), (54, 46, 12), (70, 52, 8)]:
+            p.ellipse(x, y, r, r*.85)
+            p.path(f'M {x} {y-r*.85+1:.2f} Q {x-1} {y-r:.2f} {x+3} {y-r-5:.2f}')
+            p.path(f'M {x-r*.4:.2f} {y-r*.6:.2f} Q {x-r*.55:.2f} {y:.2f} {x-r*.35:.2f} {y+r*.6:.2f}', weight=1.2)
+    p.path('M 14 56 L 80 56 L 68 82 L 26 84 Z', 'white')
+    p.path('M 18 62 L 4 72 M 28 84 L 24 104 M 19 104 L 30 104 M 60 82 L 76 94')
+    p.ellipse(77, 95, 13)
+    p.dot(77, 95, 2)
+
+
+def skep_x(y):
+    return 31*((y-22)/82)**.5
+
+
+def beehive(p, v):
+    if v == 0:
+        p.path('M 12 104 L 88 104 L 88 110 L 12 110 Z', 'white')
+        pts = [(50-skep_x(y), y) for y in range(104, 22, -6)]+[(50, 22)]+[(50+skep_x(y), y) for y in range(28, 105, 6)]
+        p.curve(pts, True, 'white')
+        for y in (38, 52, 66, 80, 94):
+            w = skep_x(y)-1.5
+            p.path(f'M {50-w:.2f} {y} Q 50 {y+4} {50+w:.2f} {y}', weight=1.4)
+        p.path('M 42 104 Q 50 91 58 104 Z', 'white')
+        bee_x, bee_y = 82, 26
+    else:
+        p.path('M 26 104 L 24 112 M 74 104 L 76 112')
+        p.path('M 24 62 L 76 62 L 76 104 L 24 104 Z', 'white')
+        p.path('M 24 76 L 76 76 M 24 90 L 76 90', weight=1.5)
+        p.path('M 18 62 L 50 44 L 82 62 Z', 'white')
+        p.path('M 40 100 L 60 100', weight=2.2)
+        bee_x, bee_y = 80, 26
+    oval(p, bee_x, bee_y, 6.5, 4.6, 10)
+    p.path(f'M {bee_x-2} {bee_y-4} L {bee_x-3} {bee_y+4} M {bee_x+2} {bee_y-4} L {bee_x+1} {bee_y+4}', weight=1.2)
+    oval(p, bee_x-2, bee_y-8, 3, 4.5, -20, weight=1.2); oval(p, bee_x+3, bee_y-8, 3, 4.5, 20, weight=1.2)
+    p.path(f'M {bee_x-12} {bee_y+10} L {bee_x-16} {bee_y+13} M {bee_x-21} {bee_y+16} L {bee_x-25} {bee_y+19}', weight=1.3)
+
+
+def pinwheel_head(p, cx, cy, R, rot=0):
+    for k in range(4):
+        a = rot+k*90
+        p1 = at(cx, cy, R, a); ctrl = at(cx, cy, R*.95, a+55); p3 = at(cx, cy, R*.55, a+88)
+        p.path(f'M {cx:.2f} {cy:.2f} L {p1[0]:.2f} {p1[1]:.2f} Q {ctrl[0]:.2f} {ctrl[1]:.2f} {p3[0]:.2f} {p3[1]:.2f} Z', 'white')
+    p.ellipse(cx, cy, 2.6)
+
+
+def pinwheel(p, v):
+    if v == 0:
+        p.path('M 50 113 L 52 50')
+        pinwheel_head(p, 52, 40, 24, 15)
+    else:
+        p.path('M 36 113 L 34 56 M 64 113 L 68 76')
+        pinwheel_head(p, 34, 46, 18, 30)
+        pinwheel_head(p, 68, 68, 14, 0)
+
+
+def boot(p, dx, dy):
+    p.path(f'M {30+dx} {50+dy} L {52+dx} {50+dy} L {52+dx} {90+dy} L {74+dx} {93+dy} Q {84+dx} {96+dy} {82+dx} {108+dy} L {26+dx} {108+dy} Q {24+dx} {92+dy} {30+dx} {88+dy} Z', 'white')
+    p.path(f'M {28+dx} {48+dy} L {54+dx} {48+dy} L {54+dx} {56+dy} L {28+dx} {56+dy} Z', 'white')
+    p.path(f'M {27+dx} {103+dy} L {82+dx} {103+dy}', weight=1.3)
+
+
+def boots(p, v):
+    if v == 0:
+        boot(p, 12, -4)
+        boot(p, -8, 2)
+        p.path('M 6 114 Q 30 110 52 114 Q 74 118 94 113', weight=1.4)
+    else:
+        p.stem(x=40, top=24, bottom=52, bend=-3, leaves=1)
+        p.flower(40, 24, 12, 6)
+        boot(p, -2, 0)
+
+
+# ---------------------------------------------------------------- seasonal
+
+def snowflake(p, v):
+    cx, cy, R = 50, 62, 36
+    for k in range(6):
+        a = -90+k*60
+        x, y = at(cx, cy, R, a)
+        p.path(f'M {cx} {cy} L {x:.2f} {y:.2f}', weight=1.8)
+        marks = (14, 25) if v == 0 else (20,)
+        for d in marks:
+            bx, by = at(cx, cy, d, a); size = 9 if d < 20 else 7
+            for s in (-1, 1):
+                ex, ey = at(bx, by, size, a+s*45)
+                p.path(f'M {bx:.2f} {by:.2f} L {ex:.2f} {ey:.2f}', weight=1.6)
+        if v:
+            tx, ty = at(cx, cy, R-4, a)
+            p.path(P([at(tx, ty, 4, a), at(tx, ty, 3, a+90), at(tx, ty, 4, a+180), at(tx, ty, 3, a-90)]), weight=1.3)
+    if v:
+        p.path(P([at(cx, cy, 9, -90+k*60) for k in range(6)]), 'white', weight=1.6)
+
+
+def maple_leaf(p, cx, cy, R):
+    lobes = [(160, .55), (-145, .85), (-90, 1.0), (-35, .85), (20, .55)]
+    pts = [at(cx, cy, R*.16, 105)]
+    for i, (a, L) in enumerate(lobes):
+        a = a-360 if a > 90 else a
+        for da, rr in [(-22, .62), (-12, .56), (0, 1.0), (12, .56), (22, .62)]:
+            pts.append(at(cx, cy, R*L*rr, a+da))
+        if i < len(lobes)-1:
+            nxt = lobes[i+1][0]
+            pts.append(at(cx, cy, R*.36, (a+nxt)/2))
+    pts.append(at(cx, cy, R*.16, 75))
+    p.path(P(pts), 'white')
+    for a, L in lobes:
+        x, y = at(cx, cy, R*L*.78, a)
+        p.path(f'M {cx} {cy} L {x:.2f} {y:.2f}', weight=1.2)
+    p.path(f'M {cx} {cy} Q {cx+2} {cy+R*.5:.2f} {cx-1} {cy+R*.85:.2f}')
+
+
+def maple(p, v):
+    if v == 0:
+        maple_leaf(p, 50, 64, 40)
+    else:
+        p.T = transform(.72, -26, -12, -18); maple_leaf(p, 50, 64, 40)
+        p.T = transform(.6, 34, 14, 24); maple_leaf(p, 50, 64, 40)
+        p.T = None
+
+
+def blossom_branch(p, v):
+    if v == 0:
+        p.path('M 14 113 L 30 84 L 26 60 M 30 84 L 52 66 L 74 56 L 88 36 M 52 66 L 58 42')
+        for x, y in [(26, 52), (58, 34), (76, 50), (86, 30)]:
+            p.flower(x, y, 7.5, 5)
+        for x, y in [(42, 72), (68, 62)]:
+            oval(p, x, y, 2.6, 3.6)
+    else:
+        p.path('M 86 113 L 70 88 L 74 64 M 70 88 L 46 72 L 28 62 L 16 40 M 46 72 L 40 48')
+        for x, y in [(74, 56), (40, 40), (24, 56), (16, 32)]:
+            p.flower(x, y, 7.5, 5)
+        oval(p, 56, 78, 2.6, 3.6)
+        for x, y, a in [(64, 30, 30), (82, 40, -20)]:
+            oval(p, x, y, 3.4, 2.4, a, weight=1.3)
+
+
+ADDITIONS = [
+ ('dandelion',dandelion,0),('dandelion',dandelion,1),('foxtail',foxtail,0),('foxtail',foxtail,1),
+ ('shamrock',shamrock,0),('luckyclover',shamrock,1),('lavender',lavender,0),('lavender',lavender,1),
+ ('morningglory',morning_glory,0),('morningglory',morning_glory,1),('hydrangea',hydrangea,0),('hydrangea',hydrangea,1),
+ ('lotuspod',lotus,0),('lotus',lotus,1),('blossom',blossom_branch,0),('blossom',blossom_branch,1),
+ ('tomato',tomato,0),('tomato',tomato,1),('peapod',peapod,0),('peapod',peapod,1),
+ ('persimmon',persimmon,0),('persimmon',persimmon,1),('gourd',gourd,0),('gourd',gourd,1),
+ ('dragonfly',dragonfly,0),('dragonfly',dragonfly,1),('rabbit',rabbit,0),('rabbit',rabbit,1),
+ ('squirrel',squirrel,0),('squirrel',squirrel,1),('cat',cat,0),('cat',cat,1),('ant',ant,0),('ant',ant,1),
+ ('mole',mole,0),('mole',mole,1),('scarecrow',scarecrow,0),('scarecrow',scarecrow,1),
+ ('birdhouse',birdhouse,0),('birdhouse',birdhouse,1),('flowerpot',flowerpot,0),('flowerpot',flowerpot,1),
+ ('wheelbarrow',wheelbarrow,0),('wheelbarrow',wheelbarrow,1),('beehive',beehive,0),('beehive',beehive,1),
+ ('pinwheel',pinwheel,0),('pinwheel',pinwheel,1),('boots',boots,0),('boots',boots,1),
+ ('snowflake',snowflake,0),('snowflake',snowflake,1),('maple',maple,0),('maple',maple,1),
+]
+# Numbers 1-365 are the reference slots and 366 the leap day.
+FIRST_ADDITION = 367
+
+
 def draw_asset(kind:str,number:int):
     pen=Pen(number)
     if not (foliage(pen,kind,number) or fruit(pen,kind,number) or animal(pen,kind,number)
@@ -547,6 +1193,18 @@ def draw_asset(kind:str,number:int):
         if kind=='mushroom':mushroom(pen,number)
         else:raise ValueError(f'Unimplemented subject {kind}')
     return pen
+
+
+def record(pen,stem,shapes):
+    svg_path=DEST/'svg'/f'{stem}.svg';png_path=DEST/'png'/f'{stem}.png'
+    mask=pen.output(svg_path,png_path)
+    digest=hashlib.sha256(svg_path.read_bytes()).hexdigest()
+    assert digest not in shapes
+    shapes.add(digest)
+    box=mask.getbbox()
+    assert box and 1<=box[0]<box[2]<200 and 1<=box[1]<box[3]<240,stem
+    return {'svg':f'svg/{stem}.svg','png':f'png/{stem}.png','sha256':digest,
+            'png_sha256':hashlib.sha256(png_path.read_bytes()).hexdigest(),'ink_bbox':box}
 
 
 def build():
@@ -559,44 +1217,37 @@ def build():
     shapes=set()
     for index,kind in enumerate(kinds,1):
         stem=f'{index:03d}-{kind}'
-        pen=draw_asset(kind,index)
-        mask=pen.output(DEST/'svg'/stem)
-        # Pen writes siblings; move the raster into the matching raster directory.
-        (DEST/'svg'/f'{stem}.png').replace(DEST/'png'/f'{stem}.png')
-        svg_path=DEST/'svg'/f'{stem}.svg'
-        png_path=DEST/'png'/f'{stem}.png'
-        digest=hashlib.sha256(svg_path.read_bytes()).hexdigest()
-        assert digest not in shapes
-        shapes.add(digest)
-        box=mask.getbbox()
-        assert box and 1<=box[0]<box[2]<200 and 1<=box[1]<box[3]<240,stem
-        records.append({'id':stem,'subject':kind,'reference_slot':index,
-                        'svg':f'svg/{stem}.svg','png':f'png/{stem}.png',
-                        'sha256':digest,'png_sha256':hashlib.sha256(png_path.read_bytes()).hexdigest(),
-                        'ink_bbox':box})
+        records.append({'id':stem,'subject':kind,'reference_slot':index,**record(draw_asset(kind,index),stem,shapes)})
     # A separate blossom prevents repeating an existing day on leap years.
     pen=Pen(366);pen.stem(top=43,leaves=3);pen.flower(49,39,18,8,smile=True)
     pen.flower(27,68,8,5);pen.flower(73,82,7,5)
-    pen.output(DEST/'svg/leap-day')
-    (DEST/'svg/leap-day.png').replace(DEST/'png/leap-day.png')
-    manifest={'version':3,'count':365,'format':'individually authored SVG paths and matching transparent black masks',
+    pen.output(DEST/'svg/leap-day.svg',DEST/'png/leap-day.png')
+    added=[]
+    for offset,(kind,drawer,variant) in enumerate(ADDITIONS):
+        number=FIRST_ADDITION+offset;stem=f'{number:03d}-{kind}'
+        pen=Pen(number);drawer(pen,variant)
+        added.append({'id':stem,'subject':kind,'variant':'AB'[variant],**record(pen,stem,shapes)})
+    manifest={'version':4,'count':365,'format':'individually authored SVG paths and matching transparent black masks',
               'provenance':'Reconstructed vector illustrations informed by the user-provided One Year garden screenshots; not the original application asset files.',
               'reference':'user-full-garden-2026.jpg','subjects':sorted(set(kinds)),
-              'assets':records,'leap_day':{'svg':'svg/leap-day.svg','png':'png/leap-day.png'}}
-    (DEST/'manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding='utf-8')
+              'assets':records,'leap_day':{'svg':'svg/leap-day.svg','png':'png/leap-day.png'},
+              'additions_provenance':'Original drawings authored for KindleGlance with the same pen; not derived from the reference screenshots.',
+              'additions':added}
+    (DEST/'manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding='utf-8',newline='\r\n')
     output=ROOT/'previews/generated/annual-garden'
     output.mkdir(parents=True,exist_ok=True)
-    atlas=Image.new('L',(1800,2520),255);draw=ImageDraw.Draw(atlas)
+    atlas=Image.new('L',(1800,132*math.ceil((len(records)+len(added))/20)),255);draw=ImageDraw.Draw(atlas)
     face=ImageFont.truetype(str(DEST/'fonts/ShantellSans.ttf'),14)
     face.set_variation_by_axes([500,40,20,0])
-    for i,record in enumerate(records):
+    for i,item in enumerate(records+added):
         x=(i%20)*90;y=(i//20)*132
-        with Image.open(DEST/record['png']) as asset:
+        with Image.open(DEST/item['png']) as asset:
             asset=asset.resize((80,96),Image.Resampling.LANCZOS)
             atlas.paste(0,(x+5,y+6,x+85,y+102),asset.getchannel('A'))
-        draw.text((x+45,y+108),f'{i+1:03d}',font=face,fill=0,anchor='mt')
+        draw.text((x+45,y+108),item['id'][:3],font=face,fill=0,anchor='mt')
     atlas.save(output/'365-assets.png',optimize=True)
-    print(json.dumps({'assets':len(records),'unique_svg_hashes':len(shapes),'subject_families':len(set(kinds)),
+    print(json.dumps({'assets':len(records),'additions':len(added),'unique_svg_hashes':len(shapes),
+                      'subject_families':len(set(kinds)),'addition_subjects':len({a['subject'] for a in added}),
                       'leap_day_bonus':1,'atlas':str(output/'365-assets.png')},ensure_ascii=False))
 
 

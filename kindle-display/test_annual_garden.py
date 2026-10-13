@@ -1,4 +1,5 @@
 """Garden identity, calendar boundaries, asset integrity and display regressions."""
+from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta, timezone
 import hashlib
@@ -19,8 +20,11 @@ class AnnualGardenTest(unittest.TestCase):
     def test_complete_individual_assets_and_fonts(self):
         ids=garden.library()
         self.assertEqual(len(ids),365)
+        additions=garden.pool()[365:]
+        self.assertEqual(len(additions),54)
+        self.assertEqual(len({garden.subject_of(asset_id) for asset_id in additions}),29)
         hashes=set()
-        for asset_id in ids+('leap-day',):
+        for asset_id in garden.pool()+('leap-day',):
             mask=garden.asset_mask(asset_id)
             self.assertIsNotNone(mask.getbbox(),asset_id)
             left,top,right,bottom=mask.getbbox()
@@ -32,13 +36,19 @@ class AnnualGardenTest(unittest.TestCase):
             self.assertLess(sum(mask.histogram()[192:]),mask.width*mask.height*.55,asset_id)
             hashes.add(hashlib.sha256(mask.tobytes()).hexdigest())
             self.assertIn('viewBox="0 0 100 120"',(garden.ASSETS/'svg'/f'{asset_id}.svg').read_text())
-        self.assertEqual(len(hashes),366)
+        self.assertEqual(len(hashes),420)
+        manifest=garden.manifest()
+        for item in manifest['assets']+manifest['additions']:
+            self.assertEqual(hashlib.sha256((garden.ASSETS/item['svg']).read_bytes()).hexdigest(),item['sha256'],item['id'])
+            self.assertEqual(hashlib.sha256((garden.ASSETS/item['png']).read_bytes()).hexdigest(),item['png_sha256'],item['id'])
         self.assertIn('Shantell',garden.handwriting(32).getname()[0])
         self.assertIn('Yozai',garden.handwriting(32,True).getname()[0])
 
     def test_calendar_order_has_no_repeats_and_is_stable(self):
         order=garden.order_for_year(2026,'garden-a')
-        self.assertEqual(set(order),set(garden.library()))
+        self.assertEqual(len(order),365)
+        self.assertEqual(len(set(order)),365)
+        self.assertLessEqual(set(order),set(garden.pool()))
         self.assertEqual(order,garden.order_for_year(2026,'garden-a'))
         self.assertNotEqual(order,garden.order_for_year(2026,'garden-b'))
         self.assertNotEqual(order,garden.order_for_year(2027,'garden-a'))
@@ -180,7 +190,7 @@ class AnnualGardenTest(unittest.TestCase):
                 self.assertLessEqual(bounds[3],bottom-garden.OUTLINE_GAP)
 
     def test_today_is_featured_in_the_header_without_an_underline(self):
-        names={garden.subject_of(asset_id) for asset_id in garden.library()+('leap-day',)}
+        names={garden.subject_of(asset_id) for asset_id in garden.pool()+('leap-day',)}
         self.assertLessEqual(names,set(garden.SUBJECT_NAMES))
         seed='featured'
         slots=list(garden.garden_slots(2026,seed))
@@ -193,20 +203,19 @@ class AnnualGardenTest(unittest.TestCase):
         leap=garden.draw_annual_garden(datetime(2028,2,29),seed)
         self.assertEqual(leap.crop((1340,30,1600,150)).getextrema()[0],0)
 
-    def test_seasons_start_next_year_and_follow_the_hemisphere(self):
-        # 2026 keeps its drawing for every day; the pinned layout guards against
-        # accidental moves (R8 deliberately re-planned every year once).
+    def test_seasons_follow_the_hemisphere_in_every_year(self):
+        # Pin the public example so an unintended change to drawings or
+        # positions is caught (R9 deliberately re-planned every year).
         order=garden.order_for_year(2026,'public-example-garden')
-        self.assertEqual(hashlib.sha256('|'.join(order).encode()).hexdigest()[:16],'b68a7f5badce4593')
+        self.assertEqual(hashlib.sha256('|'.join(order).encode()).hexdigest()[:16],'b229be62ac20296a')
         layout=[(s['asset_id'],s['x'],s['y'],s['width'],s['height'])
                 for s in garden.planned_slots(2026,'public-example-garden')]
-        self.assertEqual(hashlib.sha256(json.dumps(layout).encode()).hexdigest()[:16],'8ae5aecf4e5554b3')
-        self.assertEqual(garden.order_for_year(2026,'public-example-garden',True),order)
-        for year in (2027,2028):
+        self.assertEqual(hashlib.sha256(json.dumps(layout).encode()).hexdigest()[:16],'40d663a6dd3f5eef')
+        for year in (2026,2027,2028):
             for southern in (False,True):
                 with self.subTest(year=year,southern=southern):
                     order=garden.order_for_year(year,'seasons',southern)
-                    self.assertEqual(set(order)-{'leap-day'},set(garden.library()))
+                    self.assertEqual(len(set(order)),366 if year==2028 else 365)
                     if year==2028:self.assertEqual(order[59],'leap-day')
                     for day,asset_id in enumerate(order):
                         months=garden.season_months(garden.subject_of(asset_id),southern)
@@ -215,7 +224,32 @@ class AnnualGardenTest(unittest.TestCase):
                     tulips=[day for day,asset_id in enumerate(order) if asset_id.endswith('-tulip')]
                     self.assertGreaterEqual(min(b-a for a,b in zip(tulips,tulips[1:])),3)
         self.assertEqual(garden.season_months('snowman',True),(6,7,8))
-        self.assertNotEqual(garden.order_for_year(2027,'seasons'),garden.order_for_year(2027,'seasons',True))
+        self.assertEqual(garden.season_months('blossom',True),(9,10))
+        self.assertNotEqual(garden.order_for_year(2026,'seasons'),garden.order_for_year(2026,'seasons',True))
+
+    def test_each_year_draws_365_by_quota_with_rare_surprises(self):
+        variants=Counter(garden.subject_of(asset_id) for asset_id in garden.pool())
+        appearances=Counter()
+        selections=set()
+        for index in range(24):
+            order=garden.order_for_year(2027,f'quota-{index}')
+            counts=Counter(garden.subject_of(asset_id) for asset_id in order)
+            rares=sum(counts[subject] for subject in garden.RARE)
+            for subject in garden.RARE:
+                self.assertLessEqual(counts[subject],1)
+                appearances[subject]+=counts[subject]
+            # Absent rare subjects hand their days to the wildflowers and daisies.
+            self.assertEqual(counts['clover']+counts['daisy'],52+6-rares)
+            self.assertGreaterEqual(counts['clover'],30)
+            self.assertGreaterEqual(counts['daisy'],22)
+            for subject,count in variants.items():
+                if subject not in garden.RARE+garden.FILLERS:
+                    self.assertEqual(counts[subject],garden.QUOTAS.get(subject,count),subject)
+            selections.add(frozenset(order))
+        # Look-alike subjects show a different subset of their drawings each year.
+        self.assertGreater(len(selections),20)
+        for subject in garden.RARE:
+            self.assertTrue(4<=appearances[subject]<=20,(subject,appearances[subject]))
 
     def test_persistent_identity_concurrent_calls_and_corruption(self):
         with tempfile.TemporaryDirectory() as directory,patch.object(main,'DATA_DIR',Path(directory)):
