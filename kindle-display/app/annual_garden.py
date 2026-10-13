@@ -11,7 +11,7 @@ import random
 
 from PIL import Image, ImageDraw, ImageFont
 
-RENDER_REVISION = 7
+RENDER_REVISION = 8
 SIZE = (1648, 1236)
 ASSETS = Path(__file__).with_name('assets') / 'annual-garden'
 INK = 0
@@ -174,9 +174,7 @@ def silhouette_rows(asset_id: str, width: int, height: int):
     Fill the span between the outermost ink pixels on each scanline. Unlike a
     bounding rectangle this retains the narrower stem and concave sides, while
     preventing another plant from entering a flower, rainbow or bamboo clump.
-    Include antialiasing, the future seed and a short strip below the stem.
-    That strip once held the today underline; it stays reserved so existing
-    yearly layouts keep every plant where it is.
+    Include antialiasing and the future seed.
     """
     original = asset_mask(asset_id)
     mask = original.crop(original.getbbox()).resize((width, height), Image.Resampling.LANCZOS)
@@ -198,8 +196,6 @@ def silhouette_rows(asset_id: str, width: int, height: int):
     cx, cy = width//2, height//2
     for y in range(cy-2, cy+3):
         reserve(y, cx-2, cx+3)
-    for y in range(height+1, height+5):
-        reserve(y, cx-7, cx+8)
     return tuple((y, left, right) for y, (left, right) in sorted(spans.items()))
 
 
@@ -278,6 +274,17 @@ def place_plant(plant, cx, cy, occupied, row_top, row_bottom, fallback):
     return slot
 
 
+def row_counts(days: int, year: int, seed: str) -> list[int]:
+    """Spread the year over equally full rows so the finished garden fills the
+    page: 365 days become ten rows of 24 and five of 25. Each garden and year
+    picks its own longer rows, so they form no pattern."""
+    rows=math.ceil(days/COLUMNS)
+    base,extra=divmod(days,rows)
+    rng=random.Random(hashlib.sha256(f'rows:v1:{year}:{seed}'.encode()).digest())
+    longer=set(rng.sample(range(rows),extra))
+    return [base+(row in longer) for row in range(rows)]
+
+
 @lru_cache(maxsize=32)
 def planned_slots(year: int, seed: str, southern: bool = False):
     """Compose the whole year once; daily growth never moves existing plants.
@@ -288,13 +295,14 @@ def planned_slots(year: int, seed: str, southern: bool = False):
     """
     order = order_for_year(year, seed, southern)
     left,top,right,bottom = GRID
-    rows=math.ceil(len(order)/COLUMNS)
-    sy=(bottom-top)/rows
+    counts=row_counts(len(order),year,seed)
+    sy=(bottom-top)/len(counts)
     rng=random.Random(hashlib.sha256(f'positions:v3:{year}:{seed}'.encode()).digest())
     occupied=[0]*SIZE[1]
     anchors=[]
-    for row in range(rows):
-        row_order=order[row*COLUMNS:(row+1)*COLUMNS]
+    for row,count in enumerate(counts):
+        start=sum(counts[:row])
+        row_order=order[start:start+count]
         plants=[]; gaps=[]; group_remaining=0; phase=rng.uniform(0,math.tau)
         for column,asset_id in enumerate(row_order):
             bounds=asset_mask(asset_id).getbbox()
@@ -302,7 +310,7 @@ def planned_slots(year: int, seed: str, southern: bool = False):
             height,cap,role=plant_size(subject,rng,sy)
             width=height*(bounds[2]-bounds[0])/(bounds[3]-bounds[1])
             if width>cap:height*=cap/width;width=cap
-            plants.append({'index':row*COLUMNS+column,'asset_id':asset_id,'bounds':bounds,
+            plants.append({'index':start+column,'row':row,'asset_id':asset_id,'bounds':bounds,
                            'width':width,'height':height,'role':role})
             if column:
                 # Short, irregular clusters, with pockets that do not form
@@ -310,10 +318,8 @@ def planned_slots(year: int, seed: str, southern: bool = False):
                 gaps.append(rng.uniform(13,21) if group_remaining==0 else rng.uniform(2,5))
             if group_remaining==0:group_remaining=rng.randint(3,5)
             group_remaining-=1
-        count=len(plants)
-        span=(right-left)*min(1,count/COLUMNS)
         margins=rng.uniform(OUTLINE_GAP+1,12)
-        available=span-margins*2
+        available=right-left-margins*2
         widths=sum(p['width'] for p in plants)
         scale=min(1.08,(available-sum(gaps))/widths)
         for plant in plants:

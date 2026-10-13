@@ -93,10 +93,26 @@ class AnnualGardenTest(unittest.TestCase):
         self.assertLess(density,.40)
         slots=list(garden.garden_slots(2026,'density'))
         close=sum(b['x']-a['x']-a['width']<=8 for a,b in zip(slots,slots[1:])
-                  if a['index']//garden.COLUMNS==b['index']//garden.COLUMNS)
+                  if a['row']==b['row'])
         # Clear contours need positive gaps; retain substantial close grouping.
         self.assertGreater(close,120)
         self.assertGreater(max(s['height'] for s in slots)-min(s['height'] for s in slots),15)
+
+    def test_rows_hold_24_or_25_days_and_the_finished_year_fills_the_page(self):
+        for year,days in ((2026,365),(2028,366)):
+            slots=list(garden.garden_slots(year,'full-page'))
+            rows=[[s for s in slots if s['row']==row] for row in range(15)]
+            self.assertEqual(sum(map(len,rows)),days)
+            self.assertEqual({len(row) for row in rows},{24,25})
+            self.assertEqual(sum(len(row)==25 for row in rows),days-15*24)
+            self.assertEqual([s['index'] for s in slots],list(range(days)))
+            # Every row, the last one included, reaches across the page.
+            for row in rows:
+                self.assertLess(min(s['x'] for s in row),garden.GRID[0]+30)
+                self.assertGreater(max(s['x']+s['width'] for s in row),garden.GRID[2]-30)
+        self.assertNotEqual(garden.row_counts(365,2026,'full-page'),garden.row_counts(365,2026,'other'))
+        image=garden.draw_annual_garden(datetime(2026,12,31),'full-page')
+        self.assertEqual(image.crop((1300,1110,1600,1176)).getextrema()[0],0)
 
     def test_daily_growth_is_stable_with_touching_neighbours(self):
         first=garden.draw_annual_garden(datetime(2026,5,10),'touching')
@@ -122,22 +138,21 @@ class AnnualGardenTest(unittest.TestCase):
                            sum(roles['accent'])/len(roles['accent'])+15)
         self.assertGreater(max(s['height'] for s in slots)-min(s['height'] for s in slots),40)
         gaps=[b['x']-a['x']-a['width'] for a,b in zip(slots,slots[1:])
-              if a['index']//garden.COLUMNS==b['index']//garden.COLUMNS]
+              if a['row']==b['row']]
         self.assertGreater(sum(g<=8 for g in gaps),120)
         self.assertGreater(sum(g>=14 for g in gaps),40)
         # Variable-width composition must not settle back into equal-pitch rows.
         pitches={b['seed_x']-a['seed_x'] for a,b in zip(slots,slots[1:])
-                 if a['index']//garden.COLUMNS==b['index']//garden.COLUMNS}
+                 if a['row']==b['row']}
         self.assertGreater(max(pitches)-min(pitches),35)
         self.assertEqual(tuple(s['asset_id'] for s in slots),garden.order_for_year(2026,'composition'))
         slots[0]['x']=-999
         self.assertGreaterEqual(next(garden.garden_slots(2026,'composition'))['x'],0)
 
-    def test_complete_year_contours_seeds_and_markers_have_clearance(self):
+    def test_complete_year_contours_and_seeds_have_clearance(self):
         # Rebuild the visible envelopes independently with Pillow. Test the
         # actual resized ink (including faint antialiasing), enclosed white
-        # space, future seeds and the strip reserved below each stem, rather
-        # than planner scores.
+        # space and future seeds, rather than planner scores.
         for year,seed in ((2024,'public-example-garden'),(2026,'public-example-garden'),
                           (2026,'touching'),(2027,'composition')):
             with self.subTest(year=year,seed=seed):
@@ -152,8 +167,6 @@ class AnnualGardenTest(unittest.TestCase):
                         if xs:draw.line((8+min(xs),2+yy,8+max(xs),2+yy),fill=255)
                     cx,cy=8+w//2,2+h//2
                     draw.ellipse((cx-2,cy-2,cx+2,cy+2),fill=255)
-                    middle=8+w/2;bottom=2+h+2
-                    draw.line([(middle-6,bottom),(middle-1,bottom+1),(middle+6,bottom)],fill=255,width=2)
                     spaced=envelope.filter(ImageFilter.MaxFilter(2*garden.OUTLINE_GAP+1))
                     rectangle=(x-8,y-2,x+w+8,y+h+10)
                     old=occupied.crop(rectangle)
@@ -181,12 +194,13 @@ class AnnualGardenTest(unittest.TestCase):
         self.assertEqual(leap.crop((1340,30,1600,150)).getextrema()[0],0)
 
     def test_seasons_start_next_year_and_follow_the_hemisphere(self):
-        # The garden already growing in 2026 keeps every drawing and position.
+        # 2026 keeps its drawing for every day; the pinned layout guards against
+        # accidental moves (R8 deliberately re-planned every year once).
         order=garden.order_for_year(2026,'public-example-garden')
         self.assertEqual(hashlib.sha256('|'.join(order).encode()).hexdigest()[:16],'b68a7f5badce4593')
         layout=[(s['asset_id'],s['x'],s['y'],s['width'],s['height'])
                 for s in garden.planned_slots(2026,'public-example-garden')]
-        self.assertEqual(hashlib.sha256(json.dumps(layout).encode()).hexdigest()[:16],'9a7478f9801eb338')
+        self.assertEqual(hashlib.sha256(json.dumps(layout).encode()).hexdigest()[:16],'8ae5aecf4e5554b3')
         self.assertEqual(garden.order_for_year(2026,'public-example-garden',True),order)
         for year in (2027,2028):
             for southern in (False,True):

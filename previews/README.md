@@ -16,7 +16,7 @@
 | 每日概览 | [daily-overview.png](daily-overview.png) |
 | 时间刻度 | [time-scales.png](time-scales.png) |
 
-年度进度单图于 2026-10-02 重新生成；年度花园于 2026-10-13 更新为 R7：顶部以日期为主，右上角展示今日图案，种子灰度 80。两者均为原生横屏 1648×1236；花园使用固定公开示例种子，与私人安装实例无关。最新花园参数见 [selected-render-manifest.json](selected-render-manifest.json)。上方历史拼图仍保留原年度进度，不包含年度花园。
+年度进度单图于 2026-10-02 重新生成；年度花园于 2026-10-13 更新为 R8：顶部以日期为主，右上角展示今日图案，每行 24 或 25 株铺满画面，种子灰度 80。两者均为原生横屏 1648×1236；花园使用固定公开示例种子，与私人安装实例无关。最新花园参数见 [selected-render-manifest.json](selected-render-manifest.json)。上方历史拼图仍保留原年度进度，不包含年度花园。
 
 `setup-desktop.png` 来自 v0.2.0 隔离测试实例的日常设置，使用保留示例域名，没有显示设备码或账号资料。
 
