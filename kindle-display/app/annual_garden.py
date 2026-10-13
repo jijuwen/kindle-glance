@@ -11,7 +11,7 @@ import random
 
 from PIL import Image, ImageDraw, ImageFont
 
-RENDER_REVISION = 8
+RENDER_REVISION = 9
 SIZE = (1648, 1236)
 ASSETS = Path(__file__).with_name('assets') / 'annual-garden'
 INK = 0
@@ -40,33 +40,60 @@ SUBJECT_NAMES = {
     'strawberry': '草莓', 'stump': '树桩', 'succulent': '多肉', 'sun': '太阳', 'sunflower': '向日葵',
     'tortoise': '乌龟', 'tree': '小树', 'tulip': '郁金香', 'twig': '枝条', 'vine': '藤蔓',
     'wateringcan': '洒水壶', 'waterlily': '睡莲', 'well': '水井', 'witch': '小女巫', 'worm': '小虫',
+    'ant': '蚂蚁', 'beehive': '蜂箱', 'birdhouse': '鸟屋', 'blossom': '樱花枝', 'boots': '雨靴', 'cat': '小猫',
+    'dandelion': '蒲公英', 'dragonfly': '蜻蜓', 'flowerpot': '花盆', 'foxtail': '狗尾巴草', 'gourd': '葫芦',
+    'hydrangea': '绣球', 'lavender': '薰衣草', 'lotus': '荷花', 'lotuspod': '莲蓬', 'luckyclover': '幸运草',
+    'maple': '枫叶', 'mole': '鼹鼠', 'morningglory': '牵牛花', 'peapod': '豌豆', 'persimmon': '柿子',
+    'pinwheel': '风车', 'rabbit': '兔子', 'scarecrow': '稻草人', 'shamrock': '三叶草', 'snowflake': '雪花',
+    'squirrel': '松鼠', 'tomato': '番茄', 'wheelbarrow': '手推车',
     'leap-day': '闰日花',
 }
 
-# Years from this one place seasonal subjects in their months. Earlier years
-# keep the original shuffle so gardens already growing do not change.
-SEASONAL_FROM_YEAR = 2027
 # Northern-hemisphere months; the southern hemisphere shifts them by six.
 SEASONS = {
-    'tulip': (3, 4, 5), 'cherry': (5, 6), 'strawberry': (5, 6, 7), 'raspberry': (6, 7, 8),
-    'waterlily': (6, 7, 8), 'sunflower': (7, 8, 9), 'grapes': (8, 9, 10), 'fig': (8, 9, 10),
-    'apple': (9, 10, 11), 'pumpkin': (10, 11), 'acorn': (10, 11), 'snowman': (12, 1, 2),
+    'blossom': (3, 4), 'dandelion': (3, 4, 5), 'tulip': (3, 4, 5), 'peapod': (4, 5, 6),
+    'cherry': (5, 6), 'strawberry': (5, 6, 7), 'raspberry': (6, 7, 8), 'waterlily': (6, 7, 8),
+    'lotus': (6, 7, 8), 'tomato': (6, 7, 8, 9), 'lotuspod': (7, 8, 9), 'sunflower': (7, 8, 9),
+    'grapes': (8, 9, 10), 'fig': (8, 9, 10), 'apple': (9, 10, 11), 'persimmon': (9, 10, 11),
+    'pumpkin': (10, 11), 'acorn': (10, 11), 'maple': (10, 11), 'snowman': (12, 1, 2), 'snowflake': (12, 1, 2),
 }
+# Each year grows 365 drawings from the library. Subjects with many look-alike
+# drawings contribute only part of them, chosen anew each year; every other
+# subject contributes all of its drawings.
+QUOTAS = {'clover': 30, 'daisy': 22, 'berries': 6, 'succulent': 4, 'apple': 4, 'bell': 6}
+# Rare subjects appear at most once, in about half of all years. Their unused
+# days go to further wildflowers and daisies.
+RARE = ('luckyclover', 'rainbow', 'sailboat', 'scarecrow', 'witch')
+FILLERS = ('clover', 'daisy')
 MONTH_OF_DAY = tuple(month for month in range(1, 13) for _ in range(calendar.mdays[month]))
 
 
 @lru_cache(maxsize=1)
+def manifest() -> dict:
+    return json.loads((ASSETS / 'manifest.json').read_text(encoding='utf-8'))
+
+
+@lru_cache(maxsize=1)
 def library() -> tuple[str, ...]:
-    manifest = json.loads((ASSETS / 'manifest.json').read_text(encoding='utf-8'))
-    ids = tuple(item['id'] for item in manifest['assets'])
-    if manifest['count'] != 365 or len(ids) != 365 or len(set(ids)) != 365:
+    """The 365 drawings redrawn from the reference garden."""
+    ids = tuple(item['id'] for item in manifest()['assets'])
+    if manifest()['count'] != 365 or len(ids) != 365 or len(set(ids)) != 365:
+        raise RuntimeError('年度花园素材库不完整')
+    return ids
+
+
+@lru_cache(maxsize=1)
+def pool() -> tuple[str, ...]:
+    """Every drawing a year can grow: the reference set plus original additions."""
+    ids = library()+tuple(item['id'] for item in manifest().get('additions', ()))
+    if len(set(ids)) != len(ids):
         raise RuntimeError('年度花园素材库不完整')
     return ids
 
 
 @lru_cache(maxsize=512)
 def asset_mask(asset_id: str) -> Image.Image:
-    if asset_id != 'leap-day' and asset_id not in library():
+    if asset_id != 'leap-day' and asset_id not in pool():
         raise ValueError('unknown garden illustration')
     with Image.open(ASSETS / 'png' / f'{asset_id}.png') as image:
         return image.getchannel('A').copy()
@@ -136,24 +163,39 @@ def seasonal_order(order, rng, southern: bool) -> list[str]:
     return [asset_id or next(rest) for asset_id in days]
 
 
+def annual_selection(rng) -> list[str]:
+    """Choose the 365 drawings of one year by subject quota and rarity."""
+    groups = {}
+    for asset_id in pool():
+        groups.setdefault(subject_of(asset_id), []).append(asset_id)
+    chosen = [rng.choice(groups[subject]) for subject in RARE if rng.random() < .5]
+    for subject, ids in groups.items():
+        if subject not in RARE:
+            chosen += rng.sample(ids, QUOTAS.get(subject, len(ids)))
+    spare = [asset_id for subject in FILLERS for asset_id in groups[subject] if asset_id not in chosen]
+    return chosen+rng.sample(spare, 365-len(chosen))
+
+
 @lru_cache(maxsize=128)
 def order_for_year(year: int, seed: str, southern: bool = False) -> tuple[str, ...]:
-    order = list(library())
-    digest = hashlib.sha256(f'annual-garden:v1:{year}:{seed}'.encode()).digest()
+    digest = hashlib.sha256(f'annual-garden:v2:{year}:{seed}'.encode()).digest()
     rng = random.Random(int.from_bytes(digest,'big'))
+    order = annual_selection(rng)
     rng.shuffle(order)
-    if year >= SEASONAL_FROM_YEAR:
-        order = seasonal_order(order, rng, southern)
+    order = seasonal_order(order, rng, southern)
     if calendar.isleap(year):
         order.insert(59,'leap-day')
     return tuple(order)
 
 
-CANOPY_SUBJECTS = frozenset(('tree','pine','palm','bush','fern','seaweed','bamboo','vine','rosemary','twig'))
+CANOPY_SUBJECTS = frozenset(('tree','pine','palm','bush','fern','seaweed','bamboo','vine','rosemary','twig',
+    'foxtail','blossom'))
 ACCENT_SUBJECTS = frozenset(('apple','pumpkin','fig','onion','acorn','cherry','banana','grapes','raspberry',
     'mushroom','ladybug','bee','butterfly','snail','fish','frog','mouse','hedgehog','tortoise','worm',
-    'bird','cow','rainbow','house','camp','log','stones','honeycomb','watermelon'))
-SMALL_SUBJECTS = frozenset(('sprout','clover','bell','droop','tulip'))
+    'bird','cow','rainbow','house','camp','log','stones','honeycomb','watermelon',
+    'tomato','peapod','persimmon','gourd','dragonfly','rabbit','squirrel','cat','ant','mole','scarecrow',
+    'birdhouse','flowerpot','wheelbarrow','beehive','pinwheel','boots','maple'))
+SMALL_SUBJECTS = frozenset(('sprout','clover','bell','droop','tulip','shamrock','luckyclover','snowflake'))
 
 
 def plant_size(subject: str, rng, row_height: float):

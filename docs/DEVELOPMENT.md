@@ -47,7 +47,7 @@ node kindle-display/test_admin_navigation.cjs
 
 脚本默认写入 `previews/`，使用临时数据目录、演示天气和固定公开花园种子，不读取实际授权或实例种子。`--images-only` 跳过管理端和拼图浏览器截图；`--pages` 只生成指定看板并写入独立 `selected-render-manifest.json`，不改写完整画廊的历史清单。不加参数时生成完整画廊及设置截图，需要 Chromium。Windows 上可用 `FONT_PATH` / `FONT_BOLD_PATH` 指定中文字体，花园字体已内置。生成图片不能冒充设备实拍。
 
-重新生成素材使用 `tools/build_annual_garden_assets.py`；它会覆盖基础 SVG、PNG 和清单，修改前先保留版本。字体不由生成器下载，许可证与来源随素材目录保存。修改素材或构图后递增渲染修订并运行花园测试，见 [年度花园](ANNUAL_GARDEN.md)。
+重新生成素材使用 `tools/build_annual_garden_assets.py`；它会重写 SVG 和清单（统一 CRLF，与提交的字节一致），像素未变的 PNG 保留原文件，因此在 Windows 或 Linux 上重建都不会改动已有素材。新增图案写在生成器的 additions 部分，从 367 号起编号。字体不由生成器下载，许可证与来源随素材目录保存。修改素材或构图后递增渲染修订并运行花园测试，见 [年度花园](ANNUAL_GARDEN.md)。
 
 ## Git 和版本边界
 

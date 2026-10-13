@@ -8,6 +8,6 @@ Python / FastAPI / Pillow 渲染十类看板，Chromium 用于山水资源。单
 
 用量采集器是可选组件。未配置 `CODEX_COLLECTOR_URL` 时不连接采集器，不默认添加用量页。凭据只存采集器私有卷，应用仅读取展示快照。采集器复用已有官方授权自动同步套餐及订阅周期；订阅接口变化时保留自动缓存并显示待更新。配置与升级见 [采集器说明](../tools/codex-collector/README.md)。
 
-年度花园是独立的日期看板，包含 365 幅重绘素材、独立闰日图案和两套 OFL 手绘字体。完整素材随源码及部署包分发，无须安装系统字体或外部素材服务；启用、排列规则和实例种子备份见 [年度花园](../docs/ANNUAL_GARDEN.md)。
+年度花园是独立的日期看板，包含 365 幅重绘素材、54 幅原创新增图案、独立闰日图案和两套 OFL 手绘字体，每年按配额抽取 365 幅。完整素材随源码及部署包分发，无须安装系统字体或外部素材服务；启用、排列规则和实例种子备份见 [年度花园](../docs/ANNUAL_GARDEN.md)。
 
 依赖见 requirements；测试 `python -m unittest discover -s kindle-display`（从仓库根目录）。字体和 Chromium 实际渲染需在 Linux 镜像中验收。`/api/health` 表示存活，内容和设备状态分别展示。更多说明见完整仓库 docs。

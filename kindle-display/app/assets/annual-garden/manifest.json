@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "count": 365,
   "format": "individually authored SVG paths and matching transparent black masks",
   "provenance": "Reconstructed vector illustrations informed by the user-provided One Year garden screenshots; not the original application asset files.",
@@ -5562,5 +5562,818 @@
   "leap_day": {
     "svg": "svg/leap-day.svg",
     "png": "png/leap-day.png"
-  }
+  },
+  "additions_provenance": "Original drawings authored for KindleGlance with the same pen; not derived from the reference screenshots.",
+  "additions": [
+    {
+      "id": "367-dandelion",
+      "subject": "dandelion",
+      "variant": "A",
+      "svg": "svg/367-dandelion.svg",
+      "png": "png/367-dandelion.png",
+      "sha256": "3ff1e627d9d088751b31ddba87e03adf0a997c0c0f5f65fb47041640df76df36",
+      "png_sha256": "5f3e32334bafc4f4863cd263633df8a587db5c28597f98f0c400d76b76fed149",
+      "ink_bbox": [
+        33,
+        34,
+        167,
+        223
+      ]
+    },
+    {
+      "id": "368-dandelion",
+      "subject": "dandelion",
+      "variant": "B",
+      "svg": "svg/368-dandelion.svg",
+      "png": "png/368-dandelion.png",
+      "sha256": "135469568746fdeddacbfefea5419ae83d5d555a6cdc2a23d37541cf5619b295",
+      "png_sha256": "0eb20b9ca1baa43e48bd381e61b1324fc2e1bfe695eb6da6f09ce0b5fa6b880b",
+      "ink_bbox": [
+        33,
+        20,
+        188,
+        223
+      ]
+    },
+    {
+      "id": "369-foxtail",
+      "subject": "foxtail",
+      "variant": "A",
+      "svg": "svg/369-foxtail.svg",
+      "png": "png/369-foxtail.png",
+      "sha256": "20b4cbedf65cbcef10ce55129ac755e1513c858cd9547d1e5f8a01e79f0ccf7b",
+      "png_sha256": "5f99bf631746a5b85a51e8e88c68f8e50a6bf3fabe6cac20349ec8090ba0facb",
+      "ink_bbox": [
+        26,
+        32,
+        182,
+        223
+      ]
+    },
+    {
+      "id": "370-foxtail",
+      "subject": "foxtail",
+      "variant": "B",
+      "svg": "svg/370-foxtail.svg",
+      "png": "png/370-foxtail.png",
+      "sha256": "4563f858a1072550612a93e7581e36b268e12b7253f6602c374e7868cc1a21ca",
+      "png_sha256": "a4f0918c22643202060b9cfd07db6e2230ced0aa05f611fd22041be226a9372c",
+      "ink_bbox": [
+        29,
+        43,
+        171,
+        222
+      ]
+    },
+    {
+      "id": "371-shamrock",
+      "subject": "shamrock",
+      "variant": "A",
+      "svg": "svg/371-shamrock.svg",
+      "png": "png/371-shamrock.png",
+      "sha256": "9fb833a7531a1b36b53257763d31f9e3a80949f897e5939422090940103adae2",
+      "png_sha256": "65d4c29ec1d23b094ff2100beaed6a6e940d95aee5a830370846adce413a64cb",
+      "ink_bbox": [
+        32,
+        75,
+        143,
+        225
+      ]
+    },
+    {
+      "id": "372-luckyclover",
+      "subject": "luckyclover",
+      "variant": "B",
+      "svg": "svg/372-luckyclover.svg",
+      "png": "png/372-luckyclover.png",
+      "sha256": "5e8e805b836a784f0e73cef1f5f6a466fafb5e927fa9a75c312481c573723e8e",
+      "png_sha256": "229cb056e68ad0faba65efc47a1d895b179c34d8595d3df9478c7a28c1495809",
+      "ink_bbox": [
+        57,
+        67,
+        142,
+        224
+      ]
+    },
+    {
+      "id": "373-lavender",
+      "subject": "lavender",
+      "variant": "A",
+      "svg": "svg/373-lavender.svg",
+      "png": "png/373-lavender.png",
+      "sha256": "148910be66275ead84d3e1d0c2636fba33db38ca3d05e471668a6894d32113bd",
+      "png_sha256": "1da00a1e8795171ecc76d9220debf7babe9b2a05ef2c394449e1bc3a1bc36d55",
+      "ink_bbox": [
+        54,
+        27,
+        149,
+        222
+      ]
+    },
+    {
+      "id": "374-lavender",
+      "subject": "lavender",
+      "variant": "B",
+      "svg": "svg/374-lavender.svg",
+      "png": "png/374-lavender.png",
+      "sha256": "c951d313ddffd68407f2b9a0af76179d6703b0fbbd651b3e98cb6fcc462673cb",
+      "png_sha256": "9ad53d7acd31bfdf09f2330ca9ababbeed9f52645310a34485e70cb64623b53e",
+      "ink_bbox": [
+        53,
+        19,
+        149,
+        223
+      ]
+    },
+    {
+      "id": "375-morningglory",
+      "subject": "morningglory",
+      "variant": "A",
+      "svg": "svg/375-morningglory.svg",
+      "png": "png/375-morningglory.png",
+      "sha256": "eb35656cd79a9c8d9e191de83bef3c8bccc61b3928da9add04da6118cc1ce736",
+      "png_sha256": "75230dbd0abc275911d7a01d07539b83d93b6193dfbd1fa4cc7ab098099c5e95",
+      "ink_bbox": [
+        33,
+        35,
+        163,
+        224
+      ]
+    },
+    {
+      "id": "376-morningglory",
+      "subject": "morningglory",
+      "variant": "B",
+      "svg": "svg/376-morningglory.svg",
+      "png": "png/376-morningglory.png",
+      "sha256": "989e2a332311cb795228fbe8babcdaa2ecd25ac8ed355bcbcafb86bb9021a358",
+      "png_sha256": "f2a7e095d7c5decce736274cfd1913edc709b27fce81d7cffa7c5c053db96ea2",
+      "ink_bbox": [
+        25,
+        38,
+        176,
+        224
+      ]
+    },
+    {
+      "id": "377-hydrangea",
+      "subject": "hydrangea",
+      "variant": "A",
+      "svg": "svg/377-hydrangea.svg",
+      "png": "png/377-hydrangea.png",
+      "sha256": "2d0742946ea39427a503073e494a5a96540745e565a3d8c51e5a967dcb6c3fff",
+      "png_sha256": "3a4484883d79a91dfefa28947d235a37bcf4db193175aec4cbe8ddeb9f671fd0",
+      "ink_bbox": [
+        37,
+        43,
+        163,
+        224
+      ]
+    },
+    {
+      "id": "378-hydrangea",
+      "subject": "hydrangea",
+      "variant": "B",
+      "svg": "svg/378-hydrangea.svg",
+      "png": "png/378-hydrangea.png",
+      "sha256": "7e3b0d462f3137ebc9e0fba7dcf519f155e0dd1439b749029f80a5220d246b74",
+      "png_sha256": "80d4dfe9e486ba752a8de47573ac6bf1e8fa498423698476748aae2e359ea6cd",
+      "ink_bbox": [
+        37,
+        46,
+        172,
+        224
+      ]
+    },
+    {
+      "id": "379-lotuspod",
+      "subject": "lotuspod",
+      "variant": "A",
+      "svg": "svg/379-lotuspod.svg",
+      "png": "png/379-lotuspod.png",
+      "sha256": "184561e50fa035e3ee1d620aa75cfeb5a90cebc079ddca087b818aa45fbb0bdc",
+      "png_sha256": "731477e8354c996910ddada9407a6e89d15fd47d5a573d5cc4d24f87df463e83",
+      "ink_bbox": [
+        42,
+        51,
+        178,
+        225
+      ]
+    },
+    {
+      "id": "380-lotus",
+      "subject": "lotus",
+      "variant": "B",
+      "svg": "svg/380-lotus.svg",
+      "png": "png/380-lotus.png",
+      "sha256": "5f7af3587d55086fc9c8f1f7771403e11e3da1899cd8f1f7e1bd7550759efa94",
+      "png_sha256": "598baf6f9f7cf950a2719481b90573b2c7826b6a9aef9c1e224f1fbcec119674",
+      "ink_bbox": [
+        20,
+        40,
+        158,
+        225
+      ]
+    },
+    {
+      "id": "381-blossom",
+      "subject": "blossom",
+      "variant": "A",
+      "svg": "svg/381-blossom.svg",
+      "png": "png/381-blossom.png",
+      "sha256": "f8374598c5b9873427411fb09dfae808a180d415436a11b73fd07c5da2044ada",
+      "png_sha256": "15d768050cf52b2a2af9dff0e492181a949fb0bffe517b85e88f9337d9da26a1",
+      "ink_bbox": [
+        27,
+        43,
+        190,
+        224
+      ]
+    },
+    {
+      "id": "382-blossom",
+      "subject": "blossom",
+      "variant": "B",
+      "svg": "svg/382-blossom.svg",
+      "png": "png/382-blossom.png",
+      "sha256": "df6631946ebe622467b8af29ded094313098040fff76c4dee69cbdfb2cd9667c",
+      "png_sha256": "85c78218159241623df1ff24a7405981d8f0b62ead3bc455f8b61b8a463aa2ed",
+      "ink_bbox": [
+        17,
+        48,
+        173,
+        224
+      ]
+    },
+    {
+      "id": "383-tomato",
+      "subject": "tomato",
+      "variant": "A",
+      "svg": "svg/383-tomato.svg",
+      "png": "png/383-tomato.png",
+      "sha256": "f5e27d55fdb5af9b3326cc87f11610cf652ede19c7b34e5e8367f56eb2b1b965",
+      "png_sha256": "08f52064e94233b055798c807ec7d371fe5707be3cd59f6edf2f596c82b9bd41",
+      "ink_bbox": [
+        38,
+        69,
+        166,
+        205
+      ]
+    },
+    {
+      "id": "384-tomato",
+      "subject": "tomato",
+      "variant": "B",
+      "svg": "svg/384-tomato.svg",
+      "png": "png/384-tomato.png",
+      "sha256": "6f1f98b1506f96810bdf6934bb7ef74ad0df742f7afa046eb9ae777fe3e8e9ee",
+      "png_sha256": "8f615e1e993d2ef93c709e7916de6c03f312d8f2daba6a43e018665ecacc5c30",
+      "ink_bbox": [
+        23,
+        25,
+        176,
+        193
+      ]
+    },
+    {
+      "id": "385-peapod",
+      "subject": "peapod",
+      "variant": "A",
+      "svg": "svg/385-peapod.svg",
+      "png": "png/385-peapod.png",
+      "sha256": "283c05ba5e85174cf23591cb68c6b62d42cbcacbd57a75ff61525e06be47fb70",
+      "png_sha256": "bb74b60a612848af45629bf8e8e4093df658eaeb14afc95b84ddffba4e52bf22",
+      "ink_bbox": [
+        34,
+        51,
+        177,
+        189
+      ]
+    },
+    {
+      "id": "386-peapod",
+      "subject": "peapod",
+      "variant": "B",
+      "svg": "svg/386-peapod.svg",
+      "png": "png/386-peapod.png",
+      "sha256": "e427b68d4ebac2dbdffb1db6512763f8491093e7bb760361a2c65730e2cc56c9",
+      "png_sha256": "ac2796cc2bffe09ea911d6d88a6cc313f64a9c8898bbcc2d8dd117293ffdd6f2",
+      "ink_bbox": [
+        23,
+        17,
+        180,
+        200
+      ]
+    },
+    {
+      "id": "387-persimmon",
+      "subject": "persimmon",
+      "variant": "A",
+      "svg": "svg/387-persimmon.svg",
+      "png": "png/387-persimmon.png",
+      "sha256": "77a74f300505eafdffc6d6015ec9e405eebe0751289c8bdc86a4481b08c1d10d",
+      "png_sha256": "d3e4b6dbccf9e336806824a2a8634e4869b5cc5edf0737c0010adbba8bfb8e2b",
+      "ink_bbox": [
+        33,
+        97,
+        167,
+        214
+      ]
+    },
+    {
+      "id": "388-persimmon",
+      "subject": "persimmon",
+      "variant": "B",
+      "svg": "svg/388-persimmon.svg",
+      "png": "png/388-persimmon.png",
+      "sha256": "32e6f5e428ca85b0cace2543ef9cdb60ade0e2dc3d6a2662479bf03b12594126",
+      "png_sha256": "1960101f82777d7d9a89da59db3bdeaf5afbb8fe3468f441a1bb8d1f2ce23d0e",
+      "ink_bbox": [
+        15,
+        13,
+        185,
+        181
+      ]
+    },
+    {
+      "id": "389-gourd",
+      "subject": "gourd",
+      "variant": "A",
+      "svg": "svg/389-gourd.svg",
+      "png": "png/389-gourd.png",
+      "sha256": "8afc0e1d687ca925546a02980cb8258526c4e4112d3cd6f257d3c85d890991ba",
+      "png_sha256": "abdd49f6aded041d23752e4de8cdd01838a48bd16a70a7c7185b204220552bf9",
+      "ink_bbox": [
+        53,
+        24,
+        159,
+        215
+      ]
+    },
+    {
+      "id": "390-gourd",
+      "subject": "gourd",
+      "variant": "B",
+      "svg": "svg/390-gourd.svg",
+      "png": "png/390-gourd.png",
+      "sha256": "113939e72c60f34cef2a3f8d4fe7cd5ecbd60c61b2736f8f34075a371bd2f7f5",
+      "png_sha256": "df0f1b133312b57ae834ebc337598d8999b11f72d947e5d00f4b75dc018ab9f7",
+      "ink_bbox": [
+        16,
+        20,
+        184,
+        195
+      ]
+    },
+    {
+      "id": "391-dragonfly",
+      "subject": "dragonfly",
+      "variant": "A",
+      "svg": "svg/391-dragonfly.svg",
+      "png": "png/391-dragonfly.png",
+      "sha256": "ec54007fa9d7064285f1403739b602b14c9e1d6491b47ff444ee57e969e01a24",
+      "png_sha256": "03d24e059bc5c5221ee1f102db3a4718f34e8b089d5798d3366f66b2bf557dd2",
+      "ink_bbox": [
+        18,
+        33,
+        183,
+        214
+      ]
+    },
+    {
+      "id": "392-dragonfly",
+      "subject": "dragonfly",
+      "variant": "B",
+      "svg": "svg/392-dragonfly.svg",
+      "png": "png/392-dragonfly.png",
+      "sha256": "a041e0dc4b0b91bd3e19f75a0e684c4d7244e165602be3d0d1adb42372dff66b",
+      "png_sha256": "1382004acf3e92bbef3725f69a29bbb13788d16539769c10e91f7331ad59b7fa",
+      "ink_bbox": [
+        18,
+        23,
+        194,
+        192
+      ]
+    },
+    {
+      "id": "393-rabbit",
+      "subject": "rabbit",
+      "variant": "A",
+      "svg": "svg/393-rabbit.svg",
+      "png": "png/393-rabbit.png",
+      "sha256": "a23ddcf4bfdf1013995088bb18217f2e21dbcd1fb8d3acebcf3fffb13528cfd8",
+      "png_sha256": "82f2133e8cf61439c296a4f440e0cd8f974b1eaf3d150f895c75c38b0b8fa5f9",
+      "ink_bbox": [
+        23,
+        30,
+        178,
+        215
+      ]
+    },
+    {
+      "id": "394-rabbit",
+      "subject": "rabbit",
+      "variant": "B",
+      "svg": "svg/394-rabbit.svg",
+      "png": "png/394-rabbit.png",
+      "sha256": "9ecbb0b4841aafc376bf25f5ee5bbda2901c36e44b398ef8fc80b367c53f563b",
+      "png_sha256": "e65007a2f0d91951af900c8ddf6dc32cc575d2a71d115b862832a61f4fe2a9c4",
+      "ink_bbox": [
+        51,
+        22,
+        149,
+        219
+      ]
+    },
+    {
+      "id": "395-squirrel",
+      "subject": "squirrel",
+      "variant": "A",
+      "svg": "svg/395-squirrel.svg",
+      "png": "png/395-squirrel.png",
+      "sha256": "0a09fd15fa4ca7737fe833d975bf8aeab8f37f1f17ba9d746f2ce3e0fcf29949",
+      "png_sha256": "a3bac4304a0886e0bbdc37915e60b48f2a08418fc87e205ecdab7c212d14bb91",
+      "ink_bbox": [
+        42,
+        43,
+        177,
+        212
+      ]
+    },
+    {
+      "id": "396-squirrel",
+      "subject": "squirrel",
+      "variant": "B",
+      "svg": "svg/396-squirrel.svg",
+      "png": "png/396-squirrel.png",
+      "sha256": "212646899302bc3f56eb16dd27af7c76fafcb1839c23565928b970e5c69e3dd9",
+      "png_sha256": "88e8ebe050623db5f80aa052033a98a2080ed53e61c0b2737d4449b9eced01da",
+      "ink_bbox": [
+        23,
+        44,
+        176,
+        218
+      ]
+    },
+    {
+      "id": "397-cat",
+      "subject": "cat",
+      "variant": "A",
+      "svg": "svg/397-cat.svg",
+      "png": "png/397-cat.png",
+      "sha256": "13bd5dd5cd1862cd92e5f7d165ebdf6ace1dd088ed021d3c6bf96a362b1c628a",
+      "png_sha256": "ebde44cdd3548b1bad9176510b14d3f4bba652bea1b6f2708e963d943563d871",
+      "ink_bbox": [
+        53,
+        33,
+        175,
+        214
+      ]
+    },
+    {
+      "id": "398-cat",
+      "subject": "cat",
+      "variant": "B",
+      "svg": "svg/398-cat.svg",
+      "png": "png/398-cat.png",
+      "sha256": "c4bf65a31a90502b06cfe5a7465e997a37573aee3fe6e8c18330b9091c007f59",
+      "png_sha256": "92c5ceb9798687f61668b23139155291a12025314a00cf73c3ed2d369218d402",
+      "ink_bbox": [
+        53,
+        40,
+        165,
+        222
+      ]
+    },
+    {
+      "id": "399-ant",
+      "subject": "ant",
+      "variant": "A",
+      "svg": "svg/399-ant.svg",
+      "png": "png/399-ant.png",
+      "sha256": "8518f16f496249295ad080a6eefb78657e7ef1ed5a6119452fec2b16d4948c8d",
+      "png_sha256": "4c6ba9a05632f24af5536c7ae2af2769a2209cd3c63abc3263340e972a2ca1f2",
+      "ink_bbox": [
+        27,
+        80,
+        172,
+        203
+      ]
+    },
+    {
+      "id": "400-ant",
+      "subject": "ant",
+      "variant": "B",
+      "svg": "svg/400-ant.svg",
+      "png": "png/400-ant.png",
+      "sha256": "13524d2fb54382c9071815d7292559dfea1508f64b8a6a4aaf0c68b3af092b8a",
+      "png_sha256": "82a6a403ffde1881a19d8d62c8244d148aeada3da2cdb5f0ef8a1924034fb6fb",
+      "ink_bbox": [
+        27,
+        40,
+        171,
+        203
+      ]
+    },
+    {
+      "id": "401-mole",
+      "subject": "mole",
+      "variant": "A",
+      "svg": "svg/401-mole.svg",
+      "png": "png/401-mole.png",
+      "sha256": "03e2fe81fdc21a699e7a539c7d17bdb866b45f3fc16426095776a1a7a9586a64",
+      "png_sha256": "1fcdb1d7c9adb8691cb81e893887c4b45d53f1c3f2c53245d972f6ee1a09d01d",
+      "ink_bbox": [
+        17,
+        108,
+        183,
+        222
+      ]
+    },
+    {
+      "id": "402-mole",
+      "subject": "mole",
+      "variant": "B",
+      "svg": "svg/402-mole.svg",
+      "png": "png/402-mole.png",
+      "sha256": "abaa261d4a4df77279dc93ce46e2f0fe9f7fff9580e2973d4baa2967f924d295",
+      "png_sha256": "f6d91fd320d3d623b88604212775ba2582433770e6a7c812da049d846fb3add2",
+      "ink_bbox": [
+        12,
+        111,
+        191,
+        223
+      ]
+    },
+    {
+      "id": "403-scarecrow",
+      "subject": "scarecrow",
+      "variant": "A",
+      "svg": "svg/403-scarecrow.svg",
+      "png": "png/403-scarecrow.png",
+      "sha256": "103850b40eae9b612a2c1d3a2793a4f7510d7d0cbddf785979ad9807b55dd0fb",
+      "png_sha256": "ea127b6b4e594a18e77489e03dc777f2f5bd278e44ddb584d52c748a003dd739",
+      "ink_bbox": [
+        18,
+        33,
+        182,
+        224
+      ]
+    },
+    {
+      "id": "404-scarecrow",
+      "subject": "scarecrow",
+      "variant": "B",
+      "svg": "svg/404-scarecrow.svg",
+      "png": "png/404-scarecrow.png",
+      "sha256": "2a4d3a91dc3b11c358fc52c1794971185a52df4cadad7a1f78d6f5fe07702302",
+      "png_sha256": "48b0079c144a15a3b92bad53a1bd31d6f445b9c0238a5b9e82d48ae3686279b5",
+      "ink_bbox": [
+        18,
+        33,
+        183,
+        224
+      ]
+    },
+    {
+      "id": "405-birdhouse",
+      "subject": "birdhouse",
+      "variant": "A",
+      "svg": "svg/405-birdhouse.svg",
+      "png": "png/405-birdhouse.png",
+      "sha256": "30a8faab81f1473dc887d89bb46b3b1cafb9045101f5f39a5bd9b8cacb2240ab",
+      "png_sha256": "b236a646117e244fb0bd2a7dbd9e97520acbd7db428f3207f926e809742956be",
+      "ink_bbox": [
+        43,
+        38,
+        160,
+        224
+      ]
+    },
+    {
+      "id": "406-birdhouse",
+      "subject": "birdhouse",
+      "variant": "B",
+      "svg": "svg/406-birdhouse.svg",
+      "png": "png/406-birdhouse.png",
+      "sha256": "55a8ea084a9aab1067aea82b81b607462517ce4a3a03e7c7168405398d2f94f7",
+      "png_sha256": "433ed948f05b83644540a62fb8789c2d7f912eaab5207a426922f9433d055103",
+      "ink_bbox": [
+        43,
+        30,
+        163,
+        225
+      ]
+    },
+    {
+      "id": "407-flowerpot",
+      "subject": "flowerpot",
+      "variant": "A",
+      "svg": "svg/407-flowerpot.svg",
+      "png": "png/407-flowerpot.png",
+      "sha256": "ac56f7cca47618c7819b5c560e19cc2846360df89dbb3cf6a6ed33f28d5a75d3",
+      "png_sha256": "df8a5ad010149aed1fb8e06679166bef135592a925638d92ede213ce64284223",
+      "ink_bbox": [
+        45,
+        71,
+        151,
+        222
+      ]
+    },
+    {
+      "id": "408-flowerpot",
+      "subject": "flowerpot",
+      "variant": "B",
+      "svg": "svg/408-flowerpot.svg",
+      "png": "png/408-flowerpot.png",
+      "sha256": "050b81a311f2f481b0ec820096a94197689034b00e1b63e9dfe9b84efaab8927",
+      "png_sha256": "9ba48270360ca5b78abd98e1a5dcce25e2fc22cc91ca1b00e2b1b11af1e326c0",
+      "ink_bbox": [
+        41,
+        33,
+        153,
+        221
+      ]
+    },
+    {
+      "id": "409-wheelbarrow",
+      "subject": "wheelbarrow",
+      "variant": "A",
+      "svg": "svg/409-wheelbarrow.svg",
+      "png": "png/409-wheelbarrow.png",
+      "sha256": "8d5e8165b0ac52168cbaa00ce168ef7b2d0db641bb2f75df12c8493b3527e354",
+      "png_sha256": "1d4d303e3445b816e6d6014fcdc958ba1ad754fadd408cc69a0a780ff7df0c4c",
+      "ink_bbox": [
+        8,
+        42,
+        180,
+        215
+      ]
+    },
+    {
+      "id": "410-wheelbarrow",
+      "subject": "wheelbarrow",
+      "variant": "B",
+      "svg": "svg/410-wheelbarrow.svg",
+      "png": "png/410-wheelbarrow.png",
+      "sha256": "653f17816f504389696bfb17f7ae5c4fa0a01e95f8e8441bb70fcd740d90fe58",
+      "png_sha256": "3c993696e02bd409195586077f0cde071415925caa3a01caa089411babe9f3cd",
+      "ink_bbox": [
+        9,
+        56,
+        181,
+        215
+      ]
+    },
+    {
+      "id": "411-beehive",
+      "subject": "beehive",
+      "variant": "A",
+      "svg": "svg/411-beehive.svg",
+      "png": "png/411-beehive.png",
+      "sha256": "55cc6feec31fb3166e986a9b2ac43ef7e9acd7986fce61fbaae0a3b89201bc30",
+      "png_sha256": "2af88d74b02ad7b1011f645281d8e50ce4bd2b8bc72a03d4f77d1800aecffba0",
+      "ink_bbox": [
+        23,
+        30,
+        178,
+        219
+      ]
+    },
+    {
+      "id": "412-beehive",
+      "subject": "beehive",
+      "variant": "B",
+      "svg": "svg/412-beehive.svg",
+      "png": "png/412-beehive.png",
+      "sha256": "80c560feac9fc63ef0b2dbc0a6d9c06884d96579739432c590e1ac2615273828",
+      "png_sha256": "1ff0bca41e6ccd77196dc3384c961c867d6a79bc4008b98c75953cbdf95d66c6",
+      "ink_bbox": [
+        35,
+        31,
+        174,
+        222
+      ]
+    },
+    {
+      "id": "413-pinwheel",
+      "subject": "pinwheel",
+      "variant": "A",
+      "svg": "svg/413-pinwheel.svg",
+      "png": "png/413-pinwheel.png",
+      "sha256": "35c67cbea10d7c78659447e8bb788cb31e5548d94cff0abb3d5b90bd0f53766f",
+      "png_sha256": "825562481642e8ffd91f56a011005ea40216661ca89a79e9fbbf56e5d1c6c5d0",
+      "ink_bbox": [
+        54,
+        35,
+        153,
+        225
+      ]
+    },
+    {
+      "id": "414-pinwheel",
+      "subject": "pinwheel",
+      "variant": "B",
+      "svg": "svg/414-pinwheel.svg",
+      "png": "png/414-pinwheel.png",
+      "sha256": "d87a5ee203c740e05552df8493319450590f039c78bd4205255d76cb8f1f0cdc",
+      "png_sha256": "7061726dd1a3ef25a46bf68140fb8a2b825e73c6e8a3fe7039eae52b2ab2bd41",
+      "ink_bbox": [
+        35,
+        59,
+        165,
+        224
+      ]
+    },
+    {
+      "id": "415-boots",
+      "subject": "boots",
+      "variant": "A",
+      "svg": "svg/415-boots.svg",
+      "png": "png/415-boots.png",
+      "sha256": "2beca7cedd65d967638aad585e4e0defceb0d2a58e91bd80a8bad1e236688970",
+      "png_sha256": "61b84cdf82e759dc2063a17b33936a2a5903a89c72d4b44e48cd261f9f3e51d6",
+      "ink_bbox": [
+        14,
+        83,
+        188,
+        228
+      ]
+    },
+    {
+      "id": "416-boots",
+      "subject": "boots",
+      "variant": "B",
+      "svg": "svg/416-boots.svg",
+      "png": "png/416-boots.png",
+      "sha256": "d190e50fb1bb44ce0fd424a739807cf6d7f303b585d4202be44774541a6b16a8",
+      "png_sha256": "eb1dba90647c6e052d3ea54865d79e32ed999e82325df20996148d1fcf13bf56",
+      "ink_bbox": [
+        45,
+        26,
+        162,
+        215
+      ]
+    },
+    {
+      "id": "417-snowflake",
+      "subject": "snowflake",
+      "variant": "A",
+      "svg": "svg/417-snowflake.svg",
+      "png": "png/417-snowflake.png",
+      "sha256": "9b9e263be5a5fd07172045c7bdcb5b692cf2609e2d02a499f409d15273a3fbab",
+      "png_sha256": "ad1930e2a129ffea956532bebdb3f2d6fa54a50488a709f274bfcc3f289f8cd5",
+      "ink_bbox": [
+        37,
+        52,
+        163,
+        196
+      ]
+    },
+    {
+      "id": "418-snowflake",
+      "subject": "snowflake",
+      "variant": "B",
+      "svg": "svg/418-snowflake.svg",
+      "png": "png/418-snowflake.png",
+      "sha256": "f1103e51294387946b1951801716294f0b32380711518057ab7cbc981e8d3371",
+      "png_sha256": "787ab351410d11b5473310a91b43c3a1b383be87a9e05ab2515027c25737a547",
+      "ink_bbox": [
+        37,
+        52,
+        163,
+        196
+      ]
+    },
+    {
+      "id": "419-maple",
+      "subject": "maple",
+      "variant": "A",
+      "svg": "svg/419-maple.svg",
+      "png": "png/419-maple.png",
+      "sha256": "401624a28dcb3733ab1fcd6dad1b1adf797d35bd7ede46605effdc5798f174c4",
+      "png_sha256": "db5fb484fb03447425679542077e0d94d48fbacd2f9db7e5437e3bf50aa8c3ef",
+      "ink_bbox": [
+        43,
+        48,
+        157,
+        197
+      ]
+    },
+    {
+      "id": "420-maple",
+      "subject": "maple",
+      "variant": "B",
+      "svg": "svg/420-maple.svg",
+      "png": "png/420-maple.png",
+      "sha256": "05b71b26d3ff30172bf08b5a2b7e64f867ff75344c899ebfe042500e557e2eee",
+      "png_sha256": "b21197359e6ba71e7a76465d67ea1d4e3337942469c186058707e3a859d0483f",
+      "ink_bbox": [
+        29,
+        38,
+        167,
+        205
+      ]
+    }
+  ]
 }
