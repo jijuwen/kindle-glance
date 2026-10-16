@@ -48,7 +48,7 @@ def atomic_json(path, value):
 def defaults():
     return {"schema_version": 1, "revision": 1, "setup_state": "uninitialized",
             "location": None, "timezone": "UTC", "external_base_url": "",
-            "device_profile": "kpw11", "selected_pages": ["simple-calendar", "weather-glance", "year-progress"],
+            "device_profile": "kpw11", "selected_pages": ["simple-calendar", "weather-glance", "annual-garden"],
             "display_preferences": {"temperature_unit": "celsius", "week_start": 0,
                                     "hour_format": "24", "mask_email": False}}
 

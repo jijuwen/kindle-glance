@@ -1,6 +1,6 @@
 # KindleGlance 服务端
 
-Python / FastAPI / Pillow 渲染十类看板，Chromium 用于山水资源。单进程逐页渲染锁、全局设置修订和图片缓存；传输画布为 1236×1648，当前为 KPW11 档案。横屏原生画面为 1648×1236，管理端预览恢复直立方向。
+Python / FastAPI / Pillow 渲染八类看板，Chromium 用于山水资源。单进程逐页渲染锁、全局设置修订和图片缓存；传输画布为 1236×1648，当前为 KPW11 档案。横屏原生画面为 1648×1236，管理端预览恢复直立方向。
 
 完整发行包的通用部署入口位于根 `compose.yaml`，包含 docs 和可选采集器。也可以在本目录执行 `docker compose up -d --build`，然后运行 `docker compose exec board python -m app.manage setup-code` 并访问 `http://localhost:3001/admin`。推荐使用完整发行包以便查阅安装与配置指南。
 

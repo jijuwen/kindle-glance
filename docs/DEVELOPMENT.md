@@ -42,7 +42,7 @@ node kindle-display/test_admin_navigation.cjs
 ## 预览
 
 ```powershell
-.\.venv\Scripts\python.exe tools/render_public_previews.py --at 2026-10-02T12:00:00+08:00 --images-only --pages annual-garden year-progress
+.\.venv\Scripts\python.exe tools/render_public_previews.py --at 2026-10-13T12:00:00+08:00 --images-only --pages annual-garden
 ```
 
 脚本默认写入 `previews/`，使用临时数据目录、演示天气和固定公开花园种子，不读取实际授权或实例种子。`--images-only` 跳过管理端和拼图浏览器截图；`--pages` 只生成指定看板并写入独立 `selected-render-manifest.json`，不改写完整画廊的历史清单。不加参数时生成完整画廊及设置截图，需要 Chromium。Windows 上可用 `FONT_PATH` / `FONT_BOLD_PATH` 指定中文字体，花园字体已内置。生成图片不能冒充设备实拍。

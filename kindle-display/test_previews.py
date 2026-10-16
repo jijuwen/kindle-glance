@@ -13,7 +13,7 @@ class PreviewTest(unittest.TestCase):
     csrf = test_settings.SettingsTest.csrf
     region = test_settings.SettingsTest.region
 
-    def configure(self, pages=('simple-calendar', 'weather-glance', 'year-progress'), finish=False):
+    def configure(self, pages=('simple-calendar', 'weather-glance', 'annual-garden'), finish=False):
         self.claim()
         response = self.client.post('/admin/api/settings', json={**self.region(), 'selected_pages': list(pages)}, headers=self.csrf())
         self.assertEqual(response.status_code, 200, response.text)
@@ -26,7 +26,6 @@ class PreviewTest(unittest.TestCase):
         state = main.read_pages_state()
         state.setdefault('pages', {})[page_id] = {'filename': page_id + '.png', 'config_revision': main.board_settings()['revision'], 'rendered_at': main.time.time()}
         revisions = {'day-night': main.DAY_NIGHT_REVISION,
-                     'year-progress': main.YEAR_PROGRESS_REVISION,
                      'annual-garden': main.ANNUAL_GARDEN_REVISION}
         if page_id in revisions:
             state['pages'][page_id]['render_revision'] = revisions[page_id]
@@ -148,15 +147,28 @@ class PreviewTest(unittest.TestCase):
         self.configure()
         with patch.object(main, 'render_page_if_stale', side_effect=self.fake_render):
             main.render_preview_pass()
-        (self.directory / 'year-progress.png').unlink()
+        (self.directory / 'annual-garden.png').unlink()
         progress = main.preview_progress()
         self.assertEqual(progress['ready'], 2)
         self.assertTrue(progress['active'])
-        self.assertEqual(next(p for p in progress['pages'] if p['page_id'] == 'year-progress')['status'], 'queued')
+        self.assertEqual(next(p for p in progress['pages'] if p['page_id'] == 'annual-garden')['status'], 'queued')
         with patch.object(main, 'render_page_if_stale', side_effect=self.fake_render) as render:
             main.render_preview_pass()
-        render.assert_called_once_with('year-progress')
+        render.assert_called_once_with('annual-garden')
         self.assertEqual(main.preview_progress()['ready'], 3)
+
+    def test_retired_boards_left_in_saved_settings_are_ignored(self):
+        self.configure()
+        saved = settings.load(self.directory)
+        saved['selected_pages'] = ['year-progress', 'simple-calendar', 'time-scales']
+        settings.atomic_json(self.directory / 'settings.json', saved)
+        self.assertEqual(main.preview_targets(), ['simple-calendar'])
+        saved['selected_pages'] = ['year-progress']
+        settings.atomic_json(self.directory / 'settings.json', saved)
+        self.assertEqual(main.preview_targets(), settings.defaults()['selected_pages'])
+        response = self.client.post('/admin/api/setup/finish', json={'revision': main.board_settings()['revision']}, headers=self.csrf())
+        self.assertEqual(response.status_code, 200, response.text)
+        self.assertEqual([item['page_id'] for item in main.read_playlist_state()['items']], settings.defaults()['selected_pages'])
 
     def test_new_progress_and_view_endpoints_require_admin(self):
         self.claim()

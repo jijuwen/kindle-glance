@@ -11,15 +11,11 @@ from datetime import datetime, timedelta
 from app.display_context import preferences, temperature_unit, clock
 from PIL import Image, ImageDraw
 from app.ink_palette import (INK_MUTED, INK_PRIMARY, INK_SECONDARY,
-                             INK_TERTIARY, PAPER_WHITE, PROGRESS_ELAPSED,
-                             PROGRESS_FUTURE, SURFACE_LIGHT)
+                             INK_TERTIARY, PAPER_WHITE, SURFACE_LIGHT)
 from app.weather_overview import icon_name, icon_tile, parse_time, number
 
 SIZE = (1648, 1236)
 WEEKDAYS = '一二三四五六日'
-YEAR_PROGRESS_REVISION = 3
-YEAR_LABEL_INK = 96
-YEAR_FUTURE_INK = 192
 
 
 class Canvas:
@@ -159,101 +155,4 @@ def draw_weather_glance(weather, now, font, city=''):
         canvas.text(x, upper+1, number(high), 43, True)
         canvas.text(x, lower+1, number(low), 39, True)
     canvas.footer('天气', city)
-    return canvas.image
-
-
-def year_progress(now):
-    """Return the one-based day, number of days, and continuous year progress."""
-    first = now.replace(month=1, day=1, hour=0, minute=0, second=0, microsecond=0)
-    following = first.replace(year=first.year+1)
-    total = (following-first).days
-    ordinal = (now.date()-first.date()).days+1
-    fraction = (now-first).total_seconds()/(following-first).total_seconds()
-    return ordinal, total, min(1.0, max(0.0, fraction))
-
-
-def progress_cell(canvas, box, state):
-    """Draw one solid time unit: elapsed, current, or future."""
-    fill = PROGRESS_ELAPSED if state == 'elapsed' else INK_PRIMARY if state == 'current' else PROGRESS_FUTURE
-    x1, y1, x2, y2 = box
-    canvas.capsule(box, radius=min(x2-x1, y2-y1)*.32, fill=fill)
-
-
-def draw_year_progress(now, font):
-    canvas = Canvas(font)
-    ordinal, total, fraction = year_progress(now)
-    canvas.text(78, 76, now.year, 128, True, align='left')
-    canvas.text(1568, 76, f'{fraction*100:.1f}%', 128, True, align='right')
-    canvas.text(78, 228, f'{now.month}月{now.day}日 · 星期{WEEKDAYS[now.weekday()]}',
-                30, fill=YEAR_LABEL_INK, align='left')
-
-    # Keep the day numbers black while their explanatory labels are quieter.
-    summary = [('今年已过 · 第 ', False), (str(ordinal), True), (' 天 / ', False),
-               (str(total), True), (' · 还剩 ', False), (str(total-ordinal), True),
-               (' 天', False)]
-    runs = [(value, font(30, important), INK_PRIMARY if important else YEAR_LABEL_INK)
-            for value, important in summary]
-    x = 1568 - sum(face.getlength(value) for value, face, _ in runs)
-    for value, face, fill in runs:
-        canvas.draw.text((x, 257), value, font=face, fill=fill, anchor='ls')
-        x += face.getlength(value)
-
-    grid_left, grid_top = 224, 336
-    cell, column_step, row_step, quarter_gap = 28, 42, 64, 24
-    for month in range(1, 13):
-        y = grid_top+(month-1)*row_step+((month-1)//3)*quarter_gap
-        canvas.text(164, y-2, f'{month}月', 32, month == now.month,
-                    fill=YEAR_LABEL_INK, align='right')
-        days = calendar.monthrange(now.year, month)[1]
-        for day in range(1, days+1):
-            date = now.date().replace(month=month, day=day)
-            x = grid_left+(day-1)*column_step
-            canvas.capsule((x, y, x+cell, y+cell), radius=8,
-                           fill=INK_PRIMARY if date <= now.date() else YEAR_FUTURE_INK)
-            if date == now.date():
-                # Shape, rather than a different gray, identifies today's black dot.
-                canvas.draw.rounded_rectangle((x-6, y-6, x+cell+5, y+cell+5),
-                                              radius=13, outline=INK_PRIMARY, width=3)
-    return canvas.image
-
-
-def period_progress(now):
-    """Continuous fractions and current units for today, week, month, and year."""
-    day_fraction = (now.hour*3600+now.minute*60+now.second)/86400
-    month_days = calendar.monthrange(now.year, now.month)[1]
-    ordinal, year_days, year_fraction = year_progress(now)
-    return [
-        ('今日', 24, now.hour, day_fraction, '小时'),
-        ('本周', 7, (now.weekday()-preferences.get().get('week_start', 0)) % 7, ((now.weekday()-preferences.get().get('week_start', 0)) % 7+day_fraction)/7, '天'),
-        ('本月', month_days, now.day-1, (now.day-1+day_fraction)/month_days, '天'),
-        ('今年', 12, now.month-1, year_fraction, '月'),
-    ]
-
-
-def draw_scale_row(canvas, y, label, count, current_index, fraction, unit):
-    canvas.text(78, y-4, label, 40, True, align='left')
-    canvas.text(286, y-26, f'{fraction*100:.1f}%', 58, True, align='left')
-    canvas.text(290, y+49, f'第 {current_index+1} {unit} / 共 {count}', 27,
-                fill=INK_SECONDARY, align='left')
-    left, right, gap, height = 590, 1570, 9, 50
-    width = (right-left-gap*(count-1))/count
-    for index in range(count):
-        state = 'elapsed' if index < current_index else 'current' if index == current_index else 'future'
-        x = left+index*(width+gap)
-        progress_cell(canvas, (x, y, x+width, y+height), state)
-    if count <= 12:
-        labels = list("日一二三四五六" if preferences.get().get("week_start", 0) == 6 else WEEKDAYS) if count == 7 else [str(index+1) for index in range(count)]
-        for index, text in enumerate(labels):
-            x = left+index*(width+gap)+width/2
-            canvas.text(x, y+76, text, 24, fill=INK_TERTIARY)
-
-
-def draw_time_scales(now, font):
-    canvas = Canvas(font)
-    canvas.text(78, 72, '时间刻度', 86, True, align='left')
-    canvas.text(1570, 96, f'{now.year}年{now.month}月{now.day}日  周{WEEKDAYS[now.weekday()]}', 32, True, align='right')
-    canvas.draw.line((78, 200, 1570, 200), fill=PROGRESS_FUTURE, width=3)
-    for y, values in zip((282, 500, 718, 936), period_progress(now)):
-        draw_scale_row(canvas, y, *values)
-    canvas.footer('时间', clock(now, '%H:%M'))
     return canvas.image
