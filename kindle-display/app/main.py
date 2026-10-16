@@ -36,7 +36,6 @@ from app.annual_garden import draw_annual_garden, RENDER_REVISION as ANNUAL_GARD
 from app.day_night import draw_day_night, RENDER_REVISION as DAY_NIGHT_REVISION
 from app.hourly_weather import draw_hourly_weather
 from app.kindle_classics import draw_calendar, draw_weather_glance
-from app.shan_shui import apply_render_mode, render_original, scene_seed
 from app.weather_overview import draw_overview, normalize_weather
 
 logging.basicConfig(level=os.getenv("LOG_LEVEL", "INFO"), format="%(asctime)s %(levelname)s %(message)s")
@@ -55,7 +54,6 @@ ADMIN_SESSION_COOKIE = "kindle_dashboard_session"
 ADMIN_SESSION_SECONDS = 8 * 60 * 60
 PAGES_STATE_PATH = DATA_DIR / "pages.json"
 PLAYLIST_PATH = DATA_DIR / "playlist.json"
-SHAN_SHUI_STATE_PATH = DATA_DIR / "shan-shui.json"
 TRANSPORT_SIZE = (1236, 1648)
 STATIC_DIR = Path(__file__).with_name("static")
 PLAYLIST_VERSION = 4
@@ -63,14 +61,14 @@ PLAYLIST_VERSION = 4
 # The renderer loop, the device endpoint and the admin actions all run in
 # separate worker threads and every state file is read-modify-write.  STATE_LOCK
 # serialises those short mutations; RENDER_LOCKS serialise the expensive part
-# (a page render can launch Chromium) with one lock per page, so two callers
+# (a page render can take seconds) with one lock per page, so two callers
 # never render the same page twice and a slow render never blocks an unrelated
 # one.  A render always takes its page lock *before* STATE_LOCK, never the
 # reverse, so the two can not deadlock.
 STATE_LOCK = threading.RLock()
 RENDER_LOCKS: dict[str, threading.Lock] = {}
 # Transport encoding and its garbage collection share one short critical
-# section. Native page rendering (including Chromium) stays outside it.
+# section. Native page rendering stays outside it.
 TRANSPORT_LOCK = threading.RLock()
 
 
@@ -134,10 +132,6 @@ PAGE_DEFINITIONS: dict[str, dict[str, Any]] = {
     "day-night": {"title": "世界昼夜", "orientation": "landscape", "size": (1648, 1236), "render_interval": 900},
     "annual-garden": {"title": "年度花园", "orientation": "landscape", "size": (1648, 1236), "render_interval": 86400},
     "daily-overview": {"title": "每日概览", "orientation": "landscape", "size": (1648, 1236)},
-    "shan-shui": {
-        "title": "山水长卷", "orientation": "landscape", "size": (1648, 1236),
-        "render_interval": 6 * 60 * 60,
-    },
     "ai-accounts": {"title": "用量提示", "orientation": "landscape", "size": (1648, 1236), "render_interval": 300},
 }
 
@@ -153,7 +147,7 @@ def default_playlist_item(page_id: str, index: int = 0) -> dict[str, Any]:
         "rotation": 90 if definition["orientation"] == "landscape" else 0,
         "schedule": {"days": [1, 2, 3, 4, 5, 6, 7], "start": "00:00", "end": "24:00"},
         "smart_skip": True,
-        "config": {"render_mode": "original_gray"} if page_id == "shan-shui" else {},
+        "config": {},
     }
 
 
@@ -489,10 +483,7 @@ def normalize_playlist_item(candidate: Any, index: int) -> dict[str, Any] | None
     }
     base["smart_skip"] = bool(candidate.get("smart_skip", True))
     raw_config = candidate.get("config", {}) if isinstance(candidate.get("config"), dict) else {}
-    if page_id == "shan-shui":
-        render_mode = str(raw_config.get("render_mode", "original_gray"))
-        base["config"] = {"render_mode": render_mode if render_mode in {"original_gray", "kindle_gray"} else "original_gray"}
-    elif page_id == "day-night":
+    if page_id == "day-night":
         base["config"] = {key: value for key, value in raw_config.items() if key != "render_mode"}
     else:
         base["config"] = raw_config
@@ -645,29 +636,6 @@ def cleanup_page_images() -> None:
             old.unlink(missing_ok=True)
 
 
-def shan_shui_variant() -> int:
-    try:
-        payload = cached_json(SHAN_SHUI_STATE_PATH)
-        return max(0, int((payload or {}).get("variant", 0)))
-    except (AttributeError, TypeError, ValueError):
-        return 0
-
-
-def bump_shan_shui_variant() -> int:
-    with STATE_LOCK:
-        payload = {"variant": shan_shui_variant() + 1}
-        temporary = SHAN_SHUI_STATE_PATH.with_suffix(".tmp")
-        temporary.write_text(json.dumps(payload), encoding="utf-8")
-        temporary.replace(SHAN_SHUI_STATE_PATH)
-        invalidate_json(SHAN_SHUI_STATE_PATH)
-        return payload["variant"]
-
-
-def current_shan_shui_seed(now: datetime | None = None) -> str:
-    current = now or datetime.now(display_timezone())
-    return scene_seed(current, shan_shui_variant())
-
-
 def current_ai_snapshot():
     official = Path(os.getenv("CODEX_SNAPSHOT_PATH", "/app/codex-data/ai-accounts.json"))
     return load_ai_snapshot(official if official.exists() else DATA_DIR / "ai-accounts.json")
@@ -703,8 +671,6 @@ def page_needs_render(page_id: str, page: dict[str, Any], now: datetime | None =
     current = now or datetime.now(display_timezone())
     if page_id in {"simple-calendar", "annual-garden"}:
         return datetime.fromtimestamp(page.get("rendered_at", 0), tz=current.tzinfo).date() != current.date()
-    if page_id == "shan-shui" and page.get("scene_seed") != current_shan_shui_seed(current):
-        return True
     interval = int(PAGE_DEFINITIONS[page_id].get("render_interval", config()["render_interval"]))
     return int(time.time()) - int(page.get("rendered_at", 0)) >= interval
 
@@ -722,7 +688,7 @@ def render_page_if_stale(page_id: str, now: datetime | None = None) -> dict[str,
 
     Two callers can decide a page needs rendering at the same moment.  Checking
     again inside the lock means the second one reuses what the first produced
-    instead of launching a second Chromium.
+    instead of rendering it a second time.
     """
     if page_id not in PAGE_DEFINITIONS:
         raise ValueError(f"unknown page: {page_id}")
@@ -759,7 +725,6 @@ def _render_page_impl(page_id: str, settings: dict[str, Any]) -> dict[str, Any]:
             LOG.warning("%s weather update failed: %s", page_id, error)
             weather = fallback_weather()
             weather_status = {"ok": False, "checked_at": int(time.time()), "error": str(error)[:180]}
-    scene_key: str | None = None
     ai_snapshot = None
     if page_id == "ai-accounts":
         ai_snapshot = current_ai_snapshot()
@@ -774,11 +739,8 @@ def _render_page_impl(page_id: str, settings: dict[str, Any]) -> dict[str, Any]:
         image = draw_day_night(now, font, settings["latitude"], settings["longitude"], settings["city"])
     elif page_id == "annual-garden":
         image = draw_annual_garden(now, annual_garden_seed(), southern=settings["latitude"] < 0)
-    elif page_id == "daily-overview":
+    else:  # daily-overview
         image = draw_overview(width, height, weather or fallback_weather(), now, font, settings["city"])
-    else:
-        scene_key = current_shan_shui_seed(now)
-        image = render_original(width, height, scene_key)
     temporary = DATA_DIR / f"page-working-{page_id}.png"
     image.save(temporary, "PNG", optimize=True)
     digest = hashlib.sha256(temporary.read_bytes()).hexdigest()[:16]
@@ -798,7 +760,6 @@ def _render_page_impl(page_id: str, settings: dict[str, Any]) -> dict[str, Any]:
         pages_state.setdefault("pages", {})[page_id] = {
             "filename": filename, "width": width, "height": height, "rendered_at": int(time.time()),
             "weather_status": weather_status, "config_revision": settings["revision"],
-            **({"scene_seed": scene_key} if scene_key else {}),
             **({"render_revision": DAY_NIGHT_REVISION} if page_id == "day-night" else {}),
             **({"render_revision": ANNUAL_GARDEN_REVISION} if page_id == "annual-garden" else {}),
             **({"render_revision": AI_REVISION, "source_revision": ai_snapshot_revision(ai_snapshot)} if page_id == "ai-accounts" else {}),
@@ -826,14 +787,15 @@ def compose_playlist_item(item: dict[str, Any], force_render: bool = False) -> d
         page = render_page(item["page_id"])
     elif not page.get("filename") or page_needs_render(item["page_id"], page):
         page = render_page_if_stale(item["page_id"])
-    render_mode = str(item.get("config", {}).get("render_mode", "original_gray"))
     rotation = int(item.get("rotation", 0))
     safe_item_id = "".join(character for character in item["id"] if character.isalnum() or character in "-_")[:48]
     # The native filename already carries a digest of the page's pixels, so the
     # inputs below fully determine the transport image.  Naming the file after
     # them (instead of after its own bytes) lets an unchanged screen skip the
     # rotate/pad/encode work entirely rather than doing it and throwing it away.
-    recipe = f"{page['filename']}|{rotation}|{render_mode if item['page_id'] == 'shan-shui' else ''}|{TRANSPORT_SIZE}"
+    # The empty field once held a render mode; keeping it keeps existing
+    # transport names, so the upgrade does not force a refresh on the device.
+    recipe = f"{page['filename']}|{rotation}||{TRANSPORT_SIZE}"
     digest = hashlib.sha256(recipe.encode("utf-8")).hexdigest()[:16]
     filename = f"screen-{safe_item_id}-{digest}.png"
     target = DATA_DIR / filename
@@ -843,8 +805,6 @@ def compose_playlist_item(item: dict[str, Any], force_render: bool = False) -> d
             with STATE_LOCK:
                 with Image.open(DATA_DIR / page["filename"]) as opened:
                     image = opened.convert("L")
-            if item["page_id"] == "shan-shui":
-                image = apply_render_mode(image, render_mode)
             if rotation == 90:
                 image = image.transpose(Image.Transpose.ROTATE_270)
             elif rotation == 270:
@@ -1256,7 +1216,7 @@ def verify_configuration() -> None:
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     verify_configuration()
-    # The admin UI becomes available before weather or Chromium rendering.
+    # The admin UI becomes available before weather or page rendering.
     with STATE_LOCK:
         jobs = preview_jobs()
         for job in jobs.values():
@@ -1572,14 +1532,6 @@ def admin_playlist_item_action(item_id: str, action: str, request: Request) -> d
     elif action == "render":
         rendered = compose_playlist_item(item, force_render=True)
         record_event("manual_render", f"已重新渲染：{item['name']}", item_id=item_id, filename=rendered["filename"])
-        return {"status": "ok", "rendered": rendered}
-    elif action == "new-scene":
-        if item["page_id"] != "shan-shui":
-            raise HTTPException(status_code=400, detail="此页面不支持换景")
-        variant = bump_shan_shui_variant()
-        render_page("shan-shui")
-        rendered = compose_playlist_item(item)
-        record_event("shan_shui_new_scene", "山水长卷已换景", item_id=item_id, variant=variant, filename=rendered["filename"])
         return {"status": "ok", "rendered": rendered}
     else:
         raise HTTPException(status_code=404, detail="unknown playlist action")

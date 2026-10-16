@@ -6,7 +6,7 @@
 
 ![KindleGlance v0.2.0 八种看板拼图](previews/showcase.png)
 
-上图为 v0.2.0 的八种看板，示例日期为 2026-09-30，天气为演示数据。当前 main 分支另包含年度花园、自动订阅信息及预览改进，并已移除图中的年度进度和时间刻度，详见 [更新记录](CHANGELOG.md)；这些源码更新尚未打新的发行标签。
+上图为 v0.2.0 的八种看板，示例日期为 2026-09-30，天气为演示数据。当前 main 分支另包含年度花园、自动订阅信息及预览改进，并已移除图中的年度进度、时间刻度和山水长卷，详见 [更新记录](CHANGELOG.md)；这些源码更新尚未打新的发行标签。
 
 ![年度花园横屏原生渲染](previews/annual-garden.png)
 
@@ -14,7 +14,7 @@
 
 ## 包含什么
 
-- 八类内容：每日概览、天气一览、逐时天气、简约月历、世界昼夜、山水长卷、年度花园、可选 Codex 用量。
+- 七类内容：每日概览、天气一览、逐时天气、简约月历、世界昼夜、年度花园、可选 Codex 用量。
 - 手机和桌面管理端：首次设置与日常设置分离，共享 Dock、播放列表、后台预览和设备连接；横屏预览自动直立显示。
 - 城市搜索支持中文、繁体、拼音和英文；城市优先、其他地点折叠。
 - 管理密码至少 6 字符，支持显示／隐藏；设备连接码自动生成 6 位大写字母与数字。
@@ -45,7 +45,7 @@ KUAL → KindleGlance → **B - Dashboard (no framework)** → KOReader 工具 �
 `浏览器 → 服务端配置 / 渲染 ← 天气源与可选采集器`，`Kindle 插件 → 鉴权 API → 灰阶图片`。单管理员、一个全局地区和播放列表、单 Uvicorn worker。运行数据与授权不进入源码仓库。
 
 ```text
-kindle-display/          服务端、管理页面、设置与八类渲染
+kindle-display/          服务端、管理页面、设置与七类渲染
 kindle-plugin/           KOReader 插件和 Lua 回归测试
 kindle-launcher-ab/      A/B KUAL 菜单与构建器
 tools/codex-collector/   可选账号授权及用量采集
@@ -65,4 +65,4 @@ compose.codex.yaml      可选采集器覆盖配置
 - [开源规划](docs/OPEN_SOURCE_PLAN.md) · [实施进度](docs/IMPLEMENTATION_STATUS.md)
 - [兼容与验收](docs/COMPATIBILITY.md) · [贡献指南](CONTRIBUTING.md) · [安全说明](SECURITY.md)
 
-自有代码采用 MIT。第三方插件基础、AGPL 测试夹具、字体、山水与地图资源保留各自许可证，见 [第三方说明](THIRD_PARTY_NOTICES.md)。天气来源为 Open-Meteo，部署者须遵守其服务使用条件。
+自有代码采用 MIT。第三方插件基础、AGPL 测试夹具、字体与地图资源保留各自许可证，见 [第三方说明](THIRD_PARTY_NOTICES.md)。天气来源为 Open-Meteo，部署者须遵守其服务使用条件。

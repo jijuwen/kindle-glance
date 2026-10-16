@@ -1,6 +1,7 @@
 """Render public examples from current code, synthetic weather and isolated state.
 
-Run with the server dependencies, CJK fonts and Chromium installed.
+Run with the development dependencies and CJK fonts installed; the admin and
+gallery screenshots also need Chromium.
 FONT_PATH/FONT_BOLD_PATH may point to local CJK fonts on Windows.
 """
 import argparse
@@ -38,6 +39,16 @@ def sample_weather(now):
     }
 
 
+def chromium_executable():
+    candidates = [os.getenv('CHROMIUM_EXECUTABLE', '').strip(), '/usr/bin/chromium', '/usr/bin/chromium-browser',
+                  r'C:\Program Files\Google\Chrome\Application\chrome.exe',
+                  r'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe']
+    for candidate in candidates:
+        if candidate and Path(candidate).is_file():
+            return candidate
+    raise RuntimeError('Chromium executable was not found; set CHROMIUM_EXECUTABLE')
+
+
 def run(now, output, images_only=False, pages=None):
     # Import only after binding DATA_DIR to a new temporary directory. Never read
     # a deployed account, token, weather cache or persistent configuration.
@@ -60,7 +71,6 @@ def run(now, output, images_only=False, pages=None):
         'weather-glance': lambda: main.draw_weather_glance(weather,now,main.font,'厦门市'),
         'simple-calendar': lambda: main.draw_calendar(now,main.font),
         'hourly-weather': lambda: main.draw_hourly_weather(weather,now,main.font,'厦门市'),
-        'shan-shui': lambda: main.render_original(1648,1236,'2026-09-30:night'),
         'annual-garden': lambda: main.draw_annual_garden(now,'public-example-garden'),
         'daily-overview': lambda: main.draw_overview(1648,1236,weather,now,main.font,'厦门市'),
     }
@@ -80,7 +90,6 @@ def run(now, output, images_only=False, pages=None):
     (output/manifest_name).write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     if images_only:
         return
-    from app.shan_shui import _chromium_executable
     from playwright.sync_api import sync_playwright
     import uvicorn
 
@@ -103,7 +112,7 @@ def run(now, output, images_only=False, pages=None):
             time.sleep(.05)
         assert server.started
         with sync_playwright() as pw:
-            browser=pw.chromium.launch(executable_path=_chromium_executable(),headless=True)
+            browser=pw.chromium.launch(executable_path=chromium_executable(),headless=True)
             page=browser.new_page(viewport={'width':1440,'height':1180},device_scale_factor=1)
             page.context.add_cookies([{'name':main.ADMIN_SESSION_COOKIE,'value':main.make_admin_session(),'url':f'http://127.0.0.1:{port}'}])
             page.goto(f'http://127.0.0.1:{port}/admin/settings',wait_until='networkidle')
@@ -118,7 +127,7 @@ def run(now, output, images_only=False, pages=None):
             .grid{display:grid;grid-template-columns:1fr 1fr;gap:26px}figure{margin:0;padding:12px 12px 0;background:white;border:1px solid #d5dbd3;border-radius:12px;overflow:hidden}
             img{display:block;width:100%;aspect-ratio:4/3;object-fit:contain;background:white}figcaption{padding:16px 8px 18px;font-size:23px;border-top:1px solid #e9ede6}figcaption span{font-size:16px;color:#778775;margin-right:14px}
             footer{margin-top:26px;font-size:16px;color:#657263}
-            </style><main><header><div><h1>KindleGlance</h1><p>天气 · 日历 · 世界昼夜 · 山水 · 年度花园</p></div><div class="version">main 源码预览</div></header><div class="grid">'''+cards+'''</div><footer>当前源码原生渲染 · 示例日期 '''+now.date().isoformat()+''' · 天气为演示数据</footer></main>'''
+            </style><main><header><div><h1>KindleGlance</h1><p>天气 · 日历 · 世界昼夜 · 年度花园</p></div><div class="version">main 源码预览</div></header><div class="grid">'''+cards+'''</div><footer>当前源码原生渲染 · 示例日期 '''+now.date().isoformat()+''' · 天气为演示数据</footer></main>'''
             gallery=Path(os.environ['DATA_DIR'])/'gallery.html';gallery.write_text(document,encoding='utf-8')
             page.set_viewport_size({'width':1600,'height':1200})
             page.goto(gallery.as_uri(),wait_until='networkidle')

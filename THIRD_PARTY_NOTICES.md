@@ -6,7 +6,6 @@
 | --- | --- |
 | TRMNL KOReader 插件及本地修改 | [kindle-plugin/LICENSE](kindle-plugin/LICENSE)，上游提交见插件 README |
 | KOReader 测试夹具 | [COPYING](kindle-plugin/tests/fixtures/koreader/COPYING)、[来源](kindle-plugin/tests/fixtures/koreader/README.md)，AGPL-3.0 |
-| 山水绘图资源 | [LICENSE](kindle-display/app/assets/shan-shui-inf/LICENSE)、[NOTICE](kindle-display/app/assets/shan-shui-inf/NOTICE.txt) |
 | 天气字体 | [OFL](kindle-display/app/assets/weather-icons/OFL.txt)、[NOTICE](kindle-display/app/assets/weather-icons/NOTICE.txt)、上游 README |
 | Natural Earth 地图 | [NOTICE](kindle-display/app/assets/natural-earth/NOTICE.md)，公有领域数据 |
 | 年度花园中文手写字体 Yozai | [OFL](kindle-display/app/assets/annual-garden/fonts/Yozai-OFL.txt)，来源与校验见字体目录 sources.json |

@@ -26,10 +26,7 @@
     return url.pathname + url.search + url.hash;
   };
   const orientationLabel = item => item.rotation === 90 ? "横屏 · 向右转" : item.rotation === 270 ? "横屏 · 向左转" : "竖屏";
-  const iconFor = page => ({"simple-calendar":"日", "weather-glance":"☀", "hourly-weather":"时", "annual-garden":"花", "daily-overview":"▤", "shan-shui":"山"})[page] || "◇";
-  const renderModeLabel = item => item.page_id === "shan-shui"
-    ? (item.config?.render_mode === "kindle_gray" ? "Kindle 优化灰阶" : "原版灰阶")
-    : "";
+  const iconFor = page => ({"simple-calendar":"日", "weather-glance":"☀", "hourly-weather":"时", "annual-garden":"花", "daily-overview":"▤"})[page] || "◇";
 
   function toast(message, error = false) {
     const node = document.createElement("div");
@@ -130,7 +127,7 @@
     return `<li class="playlist-row${item.enabled ? "" : " disabled"}" data-item-id="${h(item.id)}">
       <div class="page-icon">${h(iconFor(item.page_id))}</div>
       <div class="row-thumb">${screenPicture(item)}</div>
-      <div class="row-main"><div class="row-title"><strong>${h(item.name)}</strong><span class="tag">${h(item.page_title)}</span></div><div class="row-sub">${h(orientationLabel(item))}${renderModeLabel(item) ? ` · ${h(renderModeLabel(item))}` : ""} · ${h(item.schedule.start)}–${h(item.schedule.end)}</div></div>
+      <div class="row-main"><div class="row-title"><strong>${h(item.name)}</strong><span class="tag">${h(item.page_title)}</span></div><div class="row-sub">${h(orientationLabel(item))} · ${h(item.schedule.start)}–${h(item.schedule.end)}</div></div>
       ${slotMeter(item.duration_slots)}${dayDots(item.schedule.days)}
       <div class="row-status">${item.is_current ? '<span class="now-pill">⚡ 正在显示</span>' : ""}<button class="icon-button menu-trigger" aria-label="${h(item.name)}菜单">•••</button></div>
       <button class="icon-button drag-handle" aria-label="拖动排序">≡</button>
@@ -164,7 +161,7 @@
     const item = data.items.find(value => value.id === row.dataset.itemId);
     const menu = document.createElement("div");
     menu.className = "row-menu";
-    menu.innerHTML = `<button data-action="preview">预览</button><button data-action="settings">设置</button><button data-action="duplicate">复制</button><button data-action="render">立即重新渲染</button>${item.page_id === "shan-shui" ? '<button data-action="new-scene">换一幅山水</button>' : ""}<button data-action="toggle">${item.enabled ? "临时隐藏" : "重新启用"}</button><button class="danger" data-action="delete">从播放列表删除</button>`;
+    menu.innerHTML = `<button data-action="preview">预览</button><button data-action="settings">设置</button><button data-action="duplicate">复制</button><button data-action="render">立即重新渲染</button><button data-action="toggle">${item.enabled ? "临时隐藏" : "重新启用"}</button><button class="danger" data-action="delete">从播放列表删除</button>`;
     row.appendChild(menu);
     menu.addEventListener("click", async menuEvent => {
       const action = menuEvent.target.dataset.action;
@@ -210,7 +207,6 @@
         <div class="field"><label>展示方向</label><select name="rotation"><option value="0"${item.rotation === 0 ? " selected" : ""}>竖屏</option><option value="90"${item.rotation === 90 ? " selected" : ""}>横屏 · 向右转</option><option value="270"${item.rotation === 270 ? " selected" : ""}>横屏 · 向左转</option></select></div>
         <div class="field"><label>开始时间</label><input name="start" type="time" value="${item.schedule.start === "24:00" ? "00:00" : h(item.schedule.start)}"></div>
         <div class="field"><label>结束时间</label><input name="end" type="time" value="${item.schedule.end === "24:00" ? "00:00" : h(item.schedule.end)}"></div>
-        ${item.page_id === "shan-shui" ? `<div class="field full"><label>渲染风格</label><select name="render_mode"><option value="original_gray"${item.config?.render_mode !== "kindle_gray" ? " selected" : ""}>原版灰阶（默认）</option><option value="kindle_gray"${item.config?.render_mode === "kindle_gray" ? " selected" : ""}>Kindle 优化灰阶</option></select><small>切换模式会保留同一幅山水，只改变灰阶处理。</small></div>` : ""}
         <div class="field full"><label>生效星期</label><div class="check-days">${weekday.map((label,index) => `<label><input type="checkbox" name="day" value="${index+1}"${item.schedule.days.includes(index+1) ? " checked" : ""}><span>${label}</span></label>`).join("")}</div></div>
       </div>${item.page_id === "ai-accounts" ? '<section id="codex-account-settings" class="codex-settings" aria-label="Codex 账号管理"></section>' : ''}<div class="sheet-actions"><button class="secondary-button close-sheet" type="button">取消</button><button class="primary-button" type="submit">保存设置</button></div></form></div>`;
     if (item.page_id === "ai-accounts") window.mountCodexAccounts?.(document.getElementById("codex-account-settings"), {api, toast, h, formatTime});
@@ -219,7 +215,6 @@
       event.preventDefault();
       const form = new FormData(event.currentTarget);
       const body = {name: form.get("name"), duration_slots:Number(form.get("duration_slots")), rotation:Number(form.get("rotation")), schedule:{start:form.get("start"), end:form.get("end") === "00:00" ? "24:00" : form.get("end"), days:form.getAll("day").map(Number)}};
-      if (item.page_id === "shan-shui") body.config = {render_mode:form.get("render_mode") || "original_gray"};
       try { await api(`/admin/api/playlist/items/${encodeURIComponent(item.id)}`, {method:"POST", body}); location.reload(); }
       catch (error) { toast(error.message, true); }
     });

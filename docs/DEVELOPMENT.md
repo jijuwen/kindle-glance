@@ -11,7 +11,7 @@ python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
 ```
 
-下文使用虚拟环境解释器，无需激活脚本。服务端新容器环境见 `kindle-display/README.md`；需要完整浏览器渲染时另安装 Playwright Chromium 和适用中文字体。
+下文使用虚拟环境解释器，无需激活脚本。服务端新容器环境见 `kindle-display/README.md`；生成完整预览画廊（管理页截图和拼图）时另需 Chromium 和适用中文字体。
 
 ## 测试
 
@@ -58,4 +58,4 @@ node kindle-display/test_admin_navigation.cjs
 - 先跑适合改动的测试、构建并检查暂存内容，再提交；不将未经实机验证的功能写成已验收。
 - 公开发布前检查导出目录、文档链接、许可证、凭据排除和 CI；不改写历史发行附件。
 
-第三方字体、地图、山水资源、KOReader 测试夹具保留各自授权文件；仓库不是一份统一 MIT 授权。见 `THIRD_PARTY_NOTICES.md`。
+第三方字体、地图、KOReader 测试夹具保留各自授权文件；仓库不是一份统一 MIT 授权。见 `THIRD_PARTY_NOTICES.md`。
