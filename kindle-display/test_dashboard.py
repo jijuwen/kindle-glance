@@ -17,6 +17,9 @@ from fastapi.testclient import TestClient
 
 from app import main
 
+# Boards that once existed; old playlists may still name them.
+RETIRED_PAGES = ("weather", "countdown", "reading-note", "year-progress", "time-scales", "shan-shui")
+
 
 class DashboardTest(unittest.TestCase):
     def setUp(self) -> None:
@@ -178,19 +181,19 @@ class DashboardTest(unittest.TestCase):
         self.assertEqual(migrated["version"], main.PLAYLIST_VERSION)
         self.assertEqual([item["page_id"] for item in migrated["items"]],
                          ["daily-overview", "simple-calendar", "weather-glance", "hourly-weather",
-                          "day-night", "annual-garden", "shan-shui", "ai-accounts"])
+                          "day-night", "annual-garden", "ai-accounts"])
         overview = next(item for item in migrated["items"] if item["page_id"] == "daily-overview")
         self.assertEqual(overview["rotation"], 90)
 
     def test_retired_pages_are_removed_and_rejected(self) -> None:
-        kept = main.default_playlist_item("shan-shui", 4)
-        kept.update(name="保留山水", rotation=270, duration_slots=3)
-        kept["config"]["render_mode"] = "kindle_gray"
+        kept = main.default_playlist_item("daily-overview", 4)
+        kept.update(name="保留概览", rotation=270, duration_slots=3)
+        kept["config"]["note"] = "keep"
         main.write_playlist_state({"version": 2, "revision": 9, "smart_skip": False,
-            "items": [{"id": "old-" + p, "page_id": p} for p in ("weather", "countdown", "reading-note", "year-progress", "time-scales")] + [kept]})
+            "items": [{"id": "old-" + p, "page_id": p} for p in RETIRED_PAGES] + [kept]})
         migrated = main.read_playlist_state()
         self.assertEqual(migrated["items"][0], kept)
-        self.assertEqual([item["page_id"] for item in migrated["items"]], ["shan-shui", "hourly-weather", "day-night"])
+        self.assertEqual([item["page_id"] for item in migrated["items"]], ["daily-overview", "hourly-weather", "day-night"])
         self.assertEqual(migrated["version"], main.PLAYLIST_VERSION)
         self.assertEqual(migrated["revision"], 10)
         self.assertFalse(migrated["smart_skip"])
@@ -201,7 +204,7 @@ class DashboardTest(unittest.TestCase):
         self.assertEqual(main.read_playlist_state()["items"], [kept])
         self.client.post("/admin/login", json={"password": "admin123!"})
         session = self.client.cookies.get(main.ADMIN_SESSION_COOKIE)
-        for page_id in ("weather", "countdown", "reading-note", "year-progress", "time-scales"):
+        for page_id in RETIRED_PAGES:
             with self.assertRaises(ValueError):
                 main.render_page(page_id)
             response = self.client.post("/admin/api/playlist/items", json={"page_id": page_id},
