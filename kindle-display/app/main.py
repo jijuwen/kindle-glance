@@ -35,7 +35,7 @@ from app.ai_accounts import draw_ai_accounts, load_snapshot as load_ai_snapshot,
 from app.annual_garden import draw_annual_garden, RENDER_REVISION as ANNUAL_GARDEN_REVISION
 from app.day_night import draw_day_night, RENDER_REVISION as DAY_NIGHT_REVISION
 from app.hourly_weather import draw_hourly_weather
-from app.kindle_classics import YEAR_PROGRESS_REVISION, draw_calendar, draw_time_scales, draw_weather_glance, draw_year_progress
+from app.kindle_classics import draw_calendar, draw_weather_glance
 from app.shan_shui import apply_render_mode, render_original, scene_seed
 from app.weather_overview import draw_overview, normalize_weather
 
@@ -132,9 +132,7 @@ PAGE_DEFINITIONS: dict[str, dict[str, Any]] = {
     "weather-glance": {"title": "天气一览", "orientation": "landscape", "size": (1648, 1236)},
     "hourly-weather": {"title": "逐时天气", "orientation": "landscape", "size": (1648, 1236)},
     "day-night": {"title": "世界昼夜", "orientation": "landscape", "size": (1648, 1236), "render_interval": 900},
-    "year-progress": {"title": "年度进度", "orientation": "landscape", "size": (1648, 1236), "render_interval": 86400},
     "annual-garden": {"title": "年度花园", "orientation": "landscape", "size": (1648, 1236), "render_interval": 86400},
-    "time-scales": {"title": "时间刻度", "orientation": "landscape", "size": (1648, 1236)},
     "daily-overview": {"title": "每日概览", "orientation": "landscape", "size": (1648, 1236)},
     "shan-shui": {
         "title": "山水长卷", "orientation": "landscape", "size": (1648, 1236),
@@ -170,7 +168,10 @@ def default_playlist() -> dict[str, Any]:
 
 def board_settings():
     with STATE_LOCK:
-        return persistent.load(DATA_DIR)
+        saved = persistent.load(DATA_DIR)
+    # Older installations may still list boards that have since been retired.
+    saved["selected_pages"] = [page for page in saved["selected_pages"] if page in PAGE_DEFINITIONS] or persistent.defaults()["selected_pages"]
+    return saved
 
 
 def required_env(name: str) -> str:
@@ -637,7 +638,7 @@ def display_profile(width: int, height: int) -> str:
 def cleanup_page_images() -> None:
     images = sorted((path for path in DATA_DIR.glob("page-*.png") if not path.name.startswith("page-working-")),
                     key=lambda path: path.stat().st_mtime, reverse=True)
-    pinned = {page.get("filename") for page in read_pages_state().get("pages", {}).values()}
+    pinned = {page.get("filename") for page_id, page in read_pages_state().get("pages", {}).items() if page_id in PAGE_DEFINITIONS}
     pinned.add((read_state() or {}).get("native_filename"))
     for old in images[MAX_PAGE_IMAGES:]:
         if old.name not in pinned:
@@ -693,8 +694,6 @@ def page_needs_render(page_id: str, page: dict[str, Any], now: datetime | None =
         return True
     if page_id == "day-night" and page.get("render_revision") != DAY_NIGHT_REVISION:
         return True
-    if page_id == "year-progress" and page.get("render_revision") != YEAR_PROGRESS_REVISION:
-        return True
     if page_id == "annual-garden" and page.get("render_revision") != ANNUAL_GARDEN_REVISION:
         return True
     if page_id == "ai-accounts":
@@ -702,7 +701,7 @@ def page_needs_render(page_id: str, page: dict[str, Any], now: datetime | None =
         if page.get("render_revision") != AI_REVISION or page.get("source_revision") != ai_snapshot_revision(snapshot):
             return True
     current = now or datetime.now(display_timezone())
-    if page_id in {"simple-calendar", "year-progress", "annual-garden"}:
+    if page_id in {"simple-calendar", "annual-garden"}:
         return datetime.fromtimestamp(page.get("rendered_at", 0), tz=current.tzinfo).date() != current.date()
     if page_id == "shan-shui" and page.get("scene_seed") != current_shan_shui_seed(current):
         return True
@@ -773,12 +772,8 @@ def _render_page_impl(page_id: str, settings: dict[str, Any]) -> dict[str, Any]:
         image = draw_hourly_weather(weather or fallback_weather(), now, font, settings["city"])
     elif page_id == "day-night":
         image = draw_day_night(now, font, settings["latitude"], settings["longitude"], settings["city"])
-    elif page_id == "year-progress":
-        image = draw_year_progress(now, font)
     elif page_id == "annual-garden":
         image = draw_annual_garden(now, annual_garden_seed(), southern=settings["latitude"] < 0)
-    elif page_id == "time-scales":
-        image = draw_time_scales(now, font)
     elif page_id == "daily-overview":
         image = draw_overview(width, height, weather or fallback_weather(), now, font, settings["city"])
     else:
@@ -805,7 +800,6 @@ def _render_page_impl(page_id: str, settings: dict[str, Any]) -> dict[str, Any]:
             "weather_status": weather_status, "config_revision": settings["revision"],
             **({"scene_seed": scene_key} if scene_key else {}),
             **({"render_revision": DAY_NIGHT_REVISION} if page_id == "day-night" else {}),
-            **({"render_revision": YEAR_PROGRESS_REVISION} if page_id == "year-progress" else {}),
             **({"render_revision": ANNUAL_GARDEN_REVISION} if page_id == "annual-garden" else {}),
             **({"render_revision": AI_REVISION, "source_revision": ai_snapshot_revision(ai_snapshot)} if page_id == "ai-accounts" else {}),
         }

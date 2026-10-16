@@ -26,7 +26,7 @@
     return url.pathname + url.search + url.hash;
   };
   const orientationLabel = item => item.rotation === 90 ? "横屏 · 向右转" : item.rotation === 270 ? "横屏 · 向左转" : "竖屏";
-  const iconFor = page => ({"simple-calendar":"日", "weather-glance":"☀", "hourly-weather":"时", "year-progress":"年", "annual-garden":"花", "time-scales":"刻", "daily-overview":"▤", "shan-shui":"山"})[page] || "◇";
+  const iconFor = page => ({"simple-calendar":"日", "weather-glance":"☀", "hourly-weather":"时", "annual-garden":"花", "daily-overview":"▤", "shan-shui":"山"})[page] || "◇";
   const renderModeLabel = item => item.page_id === "shan-shui"
     ? (item.config?.render_mode === "kindle_gray" ? "Kindle 优化灰阶" : "原版灰阶")
     : "";

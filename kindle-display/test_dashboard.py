@@ -178,7 +178,7 @@ class DashboardTest(unittest.TestCase):
         self.assertEqual(migrated["version"], main.PLAYLIST_VERSION)
         self.assertEqual([item["page_id"] for item in migrated["items"]],
                          ["daily-overview", "simple-calendar", "weather-glance", "hourly-weather",
-                          "day-night", "year-progress", "annual-garden", "time-scales", "shan-shui", "ai-accounts"])
+                          "day-night", "annual-garden", "shan-shui", "ai-accounts"])
         overview = next(item for item in migrated["items"] if item["page_id"] == "daily-overview")
         self.assertEqual(overview["rotation"], 90)
 
@@ -187,7 +187,7 @@ class DashboardTest(unittest.TestCase):
         kept.update(name="保留山水", rotation=270, duration_slots=3)
         kept["config"]["render_mode"] = "kindle_gray"
         main.write_playlist_state({"version": 2, "revision": 9, "smart_skip": False,
-            "items": [{"id": "old-" + p, "page_id": p} for p in ("weather", "countdown", "reading-note")] + [kept]})
+            "items": [{"id": "old-" + p, "page_id": p} for p in ("weather", "countdown", "reading-note", "year-progress", "time-scales")] + [kept]})
         migrated = main.read_playlist_state()
         self.assertEqual(migrated["items"][0], kept)
         self.assertEqual([item["page_id"] for item in migrated["items"]], ["shan-shui", "hourly-weather", "day-night"])
@@ -201,7 +201,7 @@ class DashboardTest(unittest.TestCase):
         self.assertEqual(main.read_playlist_state()["items"], [kept])
         self.client.post("/admin/login", json={"password": "admin123!"})
         session = self.client.cookies.get(main.ADMIN_SESSION_COOKIE)
-        for page_id in ("weather", "countdown", "reading-note"):
+        for page_id in ("weather", "countdown", "reading-note", "year-progress", "time-scales"):
             with self.assertRaises(ValueError):
                 main.render_page(page_id)
             response = self.client.post("/admin/api/playlist/items", json={"page_id": page_id},
@@ -251,8 +251,8 @@ class DashboardTest(unittest.TestCase):
 
     def test_unchanged_transport_image_is_reused_without_re_encoding(self) -> None:
         """A device fetch that changes nothing must not redo the rotate/pad/encode."""
-        main.render_page("year-progress")
-        item = main.default_playlist_item("year-progress")
+        main.render_page("simple-calendar")
+        item = main.default_playlist_item("simple-calendar")
         first = main.compose_playlist_item(item)
 
         saves: list[str] = []
@@ -273,9 +273,9 @@ class DashboardTest(unittest.TestCase):
 
     def test_display_version_is_stable_when_only_signature_expiry_changes(self) -> None:
         """The plugin may compare filename without comparing the expiring URL."""
-        main.render_page("year-progress")
-        item = main.default_playlist_item("year-progress")
-        selection = {"item": item, "page_id": "year-progress", "slot": 0}
+        main.render_page("simple-calendar")
+        item = main.default_playlist_item("simple-calendar")
+        selection = {"item": item, "page_id": "simple-calendar", "slot": 0}
         current = int(time.time())
         headers = {"access-token": "test-device-token"}
         with patch.object(main, "select_playlist_item", return_value=selection):
@@ -295,8 +295,8 @@ class DashboardTest(unittest.TestCase):
 
     def test_transport_version_changes_with_native_pixels(self) -> None:
         """A newly rendered native PNG must invalidate the device's filename cache."""
-        native = main.render_page("year-progress")
-        item = main.default_playlist_item("year-progress")
+        native = main.render_page("simple-calendar")
+        item = main.default_playlist_item("simple-calendar")
         before = main.compose_playlist_item(item)
         with main.Image.open(main.DATA_DIR / native["filename"]) as opened:
             changed = opened.copy()
@@ -307,10 +307,10 @@ class DashboardTest(unittest.TestCase):
         changed.save(encoded, "PNG")
         changed.close()
         data = encoded.getvalue()
-        name = f"page-year-progress-changed-{hashlib.sha256(data).hexdigest()[:16]}.png"
+        name = f"page-simple-calendar-changed-{hashlib.sha256(data).hexdigest()[:16]}.png"
         (main.DATA_DIR / name).write_bytes(data)
         pages = main.read_pages_state()
-        pages["pages"]["year-progress"]["filename"] = name
+        pages["pages"]["simple-calendar"]["filename"] = name
         main.write_pages_state(pages)
         after = main.compose_playlist_item(item)
         self.assertNotEqual(before["filename"], after["filename"])
@@ -331,7 +331,7 @@ class DashboardTest(unittest.TestCase):
 
         def worker() -> None:
             try:
-                main.render_page_if_stale("time-scales")
+                main.render_page_if_stale("simple-calendar")
             except Exception as error:  # pragma: no cover - surfaced by the assert
                 failures.append(error)
 
@@ -345,11 +345,11 @@ class DashboardTest(unittest.TestCase):
             main._render_page_locked = original
 
         self.assertEqual(failures, [])
-        self.assertEqual(attempts, ["time-scales"])
+        self.assertEqual(attempts, ["simple-calendar"])
 
     def test_concurrent_first_transport_fetch_encodes_once(self) -> None:
-        main.render_page("year-progress")
-        item = main.default_playlist_item("year-progress")
+        main.render_page("simple-calendar")
+        item = main.default_playlist_item("simple-calendar")
         start = threading.Barrier(8)
         saves = []
         original = main.Image.Image.save
@@ -373,8 +373,8 @@ class DashboardTest(unittest.TestCase):
         self.assertEqual(list(main.DATA_DIR.glob("screen-working-*.png")), [])
 
     def test_concurrent_rotations_of_same_item_keep_correct_pixels(self) -> None:
-        main.render_page("year-progress")
-        item = main.default_playlist_item("year-progress")
+        main.render_page("simple-calendar")
+        item = main.default_playlist_item("simple-calendar")
         variants = [{**item, "rotation": rotation} for rotation in (90, 270)]
         expected = []
         for variant in variants:
@@ -397,7 +397,7 @@ class DashboardTest(unittest.TestCase):
                 self.assertEqual(image.tobytes(), pixels)
 
     def test_image_cleanup_preserves_in_progress_files(self) -> None:
-        working = [main.DATA_DIR / name for name in ("page-working-year-progress.png", "screen-working-test.png")]
+        working = [main.DATA_DIR / name for name in ("page-working-simple-calendar.png", "screen-working-test.png")]
         obsolete = [main.DATA_DIR / name for name in ("page-obsolete.png", "screen-obsolete.png")]
         for path in working + obsolete:
             path.write_bytes(b"in progress")
@@ -411,7 +411,7 @@ class DashboardTest(unittest.TestCase):
     def test_concurrent_renders_of_different_pages_all_persist(self) -> None:
         """pages.json is read-modify-write; parallel renders must not drop entries."""
         main.write_pages_state({"pages": {}})
-        page_ids = ["time-scales", "year-progress", "simple-calendar", "weather-glance"]
+        page_ids = ["day-night", "hourly-weather", "simple-calendar", "weather-glance"]
         failures: list[Exception] = []
 
         def worker(page_id: str) -> None:
