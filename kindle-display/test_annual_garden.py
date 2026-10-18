@@ -349,13 +349,20 @@ class AnnualGardenTest(unittest.TestCase):
         def warm(year,seed,budget=40):
             calls.append(year)
             return True
-        settings={'latitude':24.0,'timezone':'Asia/Shanghai'}
         playlist={'items':[main.default_playlist_item('annual-garden')]}
         with tempfile.TemporaryDirectory() as directory,patch.object(main,'DATA_DIR',Path(directory)), \
-                patch.object(main,'board_settings',return_value=settings), \
                 patch.object(main,'read_playlist_state',return_value=playlist), \
                 patch.object(main,'warm_hands',side_effect=warm),patch.object(main,'prune_hands') as prune:
             main._GARDEN_PRUNED.clear()
+            # Saved settings as the server stores them: no place yet, nothing is drawn.
+            main.warm_annual_garden(datetime(2026,10,18,9))
+            self.assertEqual(calls,[])
+            current=main.persistent.load(Path(directory))
+            main.persistent.save(Path(directory),{'location':{'name':'厦门','latitude':24.48,'longitude':118.09},
+                                                  'timezone':'Asia/Shanghai'},current['revision'])
+            main.warm_annual_garden()
+            self.assertEqual(calls[:1],[datetime.now(ZoneInfo('Asia/Shanghai')).year])
+            calls.clear();prune.reset_mock();main._GARDEN_PRUNED.clear()
             main.warm_annual_garden(datetime(2026,10,18,9))
             self.assertEqual(calls,[2026])
             main.warm_annual_garden(datetime(2026,12,2,9))

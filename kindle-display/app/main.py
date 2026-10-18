@@ -1210,7 +1210,7 @@ def warm_annual_garden(now: datetime | None = None) -> None:
     if not any(item["page_id"] == "annual-garden" for item in read_playlist_state()["items"]):
         return
     settings = board_settings()
-    if settings["latitude"] is None:
+    if (settings["location"] or {}).get("latitude") is None:
         return
     configure_hands_cache(DATA_DIR / "annual-garden-hands")
     now = now or datetime.now(display_timezone(settings["timezone"]))
