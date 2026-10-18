@@ -32,7 +32,8 @@ from app import settings as persistent
 from app.display_context import preferences
 from app.codex_bridge import install_routes as install_codex_routes
 from app.ai_accounts import draw_ai_accounts, load_snapshot as load_ai_snapshot, snapshot_revision as ai_snapshot_revision, REVISION as AI_REVISION
-from app.annual_garden import draw_annual_garden, RENDER_REVISION as ANNUAL_GARDEN_REVISION
+from app.annual_garden import (configure_hands_cache, draw_annual_garden, prune_hands, warm_hands,
+                               RENDER_REVISION as ANNUAL_GARDEN_REVISION)
 from app.day_night import draw_day_night, RENDER_REVISION as DAY_NIGHT_REVISION
 from app.hourly_weather import draw_hourly_weather
 from app.kindle_classics import draw_calendar, draw_weather_glance
@@ -738,6 +739,7 @@ def _render_page_impl(page_id: str, settings: dict[str, Any]) -> dict[str, Any]:
     elif page_id == "day-night":
         image = draw_day_night(now, font, settings["latitude"], settings["longitude"], settings["city"])
     elif page_id == "annual-garden":
+        configure_hands_cache(DATA_DIR / "annual-garden-hands")
         image = draw_annual_garden(now, annual_garden_seed(), southern=settings["latitude"] < 0)
     else:  # daily-overview
         image = draw_overview(width, height, weather or fallback_weather(), now, font, settings["city"])
@@ -1199,12 +1201,37 @@ def save_board_settings(candidate, revision):
         return updated
 
 
+_GARDEN_PRUNED: dict[str, Any] = {}
+
+
+def warm_annual_garden(now: datetime | None = None) -> None:
+    """Draw the garden's coming days ahead of time, a batch per pass, so a device
+    fetch never waits while a whole year is drawn. December prepares next year."""
+    if not any(item["page_id"] == "annual-garden" for item in read_playlist_state()["items"]):
+        return
+    settings = board_settings()
+    if settings["latitude"] is None:
+        return
+    configure_hands_cache(DATA_DIR / "annual-garden-hands")
+    now = now or datetime.now(display_timezone(settings["timezone"]))
+    seed = annual_garden_seed()
+    if not warm_hands(now.year, seed) or (now.month == 12 and not warm_hands(now.year + 1, seed)):
+        return
+    if _GARDEN_PRUNED.get("day") != now.date():
+        prune_hands(now.year)
+        _GARDEN_PRUNED["day"] = now.date()
+
+
 async def renderer_loop() -> None:
     while True:
         try:
             await asyncio.to_thread(render_preview_pass)
         except Exception:
             LOG.exception('background preview pass failed')
+        try:
+            await asyncio.to_thread(warm_annual_garden)
+        except Exception:
+            LOG.exception('annual garden warm-up failed')
         await asyncio.sleep(2)
 
 

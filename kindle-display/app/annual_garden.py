@@ -6,12 +6,16 @@ from functools import lru_cache
 import hashlib
 import json
 import math
+import os
 from pathlib import Path
 import random
+import threading
 
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFilter, ImageFont, ImageStat
 
-RENDER_REVISION = 9
+from app import garden_drawings
+
+RENDER_REVISION = 10
 SIZE = (1648, 1236)
 ASSETS = Path(__file__).with_name('assets') / 'annual-garden'
 INK = 0
@@ -91,8 +95,10 @@ def pool() -> tuple[str, ...]:
     return ids
 
 
-@lru_cache(maxsize=512)
+@lru_cache(maxsize=1024)
 def asset_mask(asset_id: str) -> Image.Image:
+    if '~' in asset_id:
+        return hand_mask(asset_id)[0]
     if asset_id != 'leap-day' and asset_id not in pool():
         raise ValueError('unknown garden illustration')
     with Image.open(ASSETS / 'png' / f'{asset_id}.png') as image:
@@ -137,6 +143,7 @@ def day_counts(now):
 
 
 def subject_of(asset_id: str) -> str:
+    asset_id = asset_id.split('~', 1)[0]
     return asset_id if asset_id == 'leap-day' else asset_id.split('-', 1)[1]
 
 
@@ -198,18 +205,174 @@ ACCENT_SUBJECTS = frozenset(('apple','pumpkin','fig','onion','acorn','cherry','b
 SMALL_SUBJECTS = frozenset(('sprout','clover','bell','droop','tulip','shamrock','luckyclover','snowflake'))
 
 
+# Height range in rows and width cap for each size role.
+ROLES = {'canopy': ((1.23, 1.43), 88), 'accent': ((.87, 1.05), 72),
+         'small': ((.96, 1.17), 70), 'flower': ((1.08, 1.30), 82)}
+
+
+def role_of(subject: str) -> str:
+    if subject in CANOPY_SUBJECTS:
+        return 'canopy'
+    if subject in ACCENT_SUBJECTS:
+        return 'accent'
+    if subject in SMALL_SUBJECTS:
+        return 'small'
+    return 'flower'
+
+
 def plant_size(subject: str, rng, row_height: float):
     """Size by visual mass: tall foliage, smaller round accents, mixed flowers."""
-    if subject in CANOPY_SUBJECTS:
-        return rng.uniform(1.23,1.43)*row_height, 88, 'canopy'
-    if subject in ACCENT_SUBJECTS:
-        return rng.uniform(.87,1.05)*row_height, 72, 'accent'
-    if subject in SMALL_SUBJECTS:
-        return rng.uniform(.96,1.17)*row_height, 70, 'small'
-    return rng.uniform(1.08,1.30)*row_height, 82, 'flower'
+    role = role_of(subject)
+    (low, high), cap = ROLES[role]
+    return rng.uniform(low, high)*row_height, cap, role
 
 
-@lru_cache(maxsize=4096)
+# A drawing grown for one day: the library drawing it stands in for, plus the
+# seed of its own hand. The library drawing is the fallback when no hand passes.
+HAND_ATTEMPTS = 12
+# Bump when a drawer, the hand frame or the fit test changes: the day's drawing
+# changes with it, so the cached hands of the old revision are discarded.
+HANDS_REVISION = 1
+# Set by the server to its data directory. Without it hands are drawn in memory.
+HANDS_CACHE: Path | None = None
+# Built and standing things lean very little; plants and creatures lean more.
+UPRIGHT_SUBJECTS = frozenset(('house', 'well', 'signpost', 'gate', 'camp', 'log', 'stump', 'stones', 'wateringcan',
+    'spade', 'rake', 'scarecrow', 'birdhouse', 'flowerpot', 'wheelbarrow', 'beehive', 'boots', 'honeycomb'))
+ROW_HEIGHT = (GRID[3]-GRID[1])/15
+
+
+def hand_key(year: int, seed: str, asset_id: str) -> str:
+    if asset_id == 'leap-day':
+        return asset_id
+    token = hashlib.sha256(f'garden-hand:v1:{year}:{seed}:{asset_id}'.encode()).hexdigest()[:16]
+    return f'{asset_id}~{year}-{token}'
+
+
+def configure_hands_cache(path) -> None:
+    global HANDS_CACHE
+    HANDS_CACHE = Path(path)
+
+
+def hand_file(key: str) -> Path | None:
+    if HANDS_CACHE is None:
+        return None
+    return HANDS_CACHE / f'r{HANDS_REVISION}' / f"{key.split('~', 1)[1]}.png"
+
+
+@lru_cache(maxsize=1)
+def addition_designs() -> dict[str, int]:
+    """Which of its two designs (A or B) each original addition uses."""
+    return {item['id']: 'AB'.index(item['variant']) for item in manifest().get('additions', ())}
+
+
+def ink_metrics(mask: Image.Image, subject: str) -> tuple[float, float, float]:
+    """Darkness as the board shows it: the blurred peak and the mean ink at the
+    subject's typical size, plus the drawing's width-to-height ratio."""
+    (low, high), cap = ROLES[role_of(subject)]
+    crop = mask.crop(mask.getbbox())
+    height = (low+high)/2*ROW_HEIGHT
+    width = height*crop.width/crop.height
+    if width > cap:
+        height, width = height*cap/width, cap
+    small = crop.resize((max(1, round(width)), max(1, round(height))), Image.Resampling.LANCZOS)
+    padded = Image.new('L', (small.width+24, small.height+24), 0)
+    padded.paste(small, (12, 12))
+    peak = padded.filter(ImageFilter.GaussianBlur(6)).getextrema()[1]
+    return peak, ImageStat.Stat(small).mean[0], crop.width/crop.height
+
+
+@lru_cache(maxsize=256)
+def subject_band(subject: str):
+    """What the library's own drawings of this subject span, with a little room.
+    Where the library holds near-copies, keep at least a modest band around
+    their mean so a genuinely new hand can still pass."""
+    values = [ink_metrics(asset_mask(asset_id), subject) for asset_id in pool() if subject_of(asset_id) == subject]
+    band = []
+    for column, room, floor in zip(zip(*values), (.06, .12, .12), (.10, .15, .15)):
+        mean = sum(column)/len(column)
+        band.append((min(min(column)*(1-room), mean*(1-floor)), max(max(column)*(1+room), mean*(1+floor))))
+    return tuple(band)
+
+
+def hand_fits(mask: Image.Image, subject: str) -> bool:
+    box = mask.getbbox()
+    if not box or box[0] < 2 or box[1] < 2 or box[2] > mask.width-2 or box[3] > mask.height-2:
+        return False
+    return all(low <= value <= high for value, (low, high) in zip(ink_metrics(mask, subject), subject_band(subject)))
+
+
+def hand_mask(key: str) -> tuple[Image.Image, int | None]:
+    """The day's own drawing and the attempt that passed: -1 for the library
+    fallback, None when it came from the cache."""
+    path = hand_file(key)
+    if path is not None and path.is_file():
+        try:
+            with Image.open(path) as cached:
+                if cached.mode == 'L' and cached.size == (200, 240):
+                    return cached.copy(), None
+        except OSError:
+            pass  # A damaged file is drawn again and replaced.
+    mask, attempt = draw_hand_mask(key)
+    if path is not None:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = path.with_name(f'{path.stem}.{os.getpid()}.{threading.get_ident()}.tmp')
+        mask.save(temporary, 'PNG')
+        os.replace(temporary, path)
+    return mask, attempt
+
+
+def draw_hand_mask(key: str) -> tuple[Image.Image, int]:
+    asset_id, token = key.split('~', 1)
+    subject = subject_of(asset_id)
+    tilt = 2 if subject in UPRIGHT_SUBJECTS else 4 if role_of(subject) == 'accent' else 7
+    design = addition_designs().get(asset_id)
+    for attempt in range(HAND_ATTEMPTS):
+        digest = hashlib.sha256(f'{token}:{attempt}'.encode()).digest()
+        rng = random.Random(int.from_bytes(digest, 'big'))
+        mask = garden_drawings.draw_hand(subject, rng, tilt, design).mask()
+        if hand_fits(mask, subject):
+            return mask, attempt
+    return asset_mask(asset_id), -1
+
+
+def warm_hands(year: int, seed: str, budget: int = 40) -> bool:
+    """Draw up to budget of a year's missing hands into the cache, so a render
+    never has to draw the whole year while a device waits. True when complete.
+    The hemisphere only reorders the year, so both share the same hands."""
+    if HANDS_CACHE is None:
+        return True
+    for asset_id in order_for_year(year, seed):
+        key = hand_key(year, seed, asset_id)
+        path = hand_file(key)
+        if path is None or path.is_file():
+            continue
+        if budget <= 0:
+            return False
+        hand_mask(key)
+        budget -= 1
+    return True
+
+
+def prune_hands(keep_from_year: int) -> None:
+    """Remove hands of an older revision or of years before keep_from_year."""
+    if HANDS_CACHE is None or not HANDS_CACHE.is_dir():
+        return
+    current = f'r{HANDS_REVISION}'
+    for folder in HANDS_CACHE.iterdir():
+        if not folder.is_dir():
+            continue
+        for path in folder.iterdir():
+            year = path.name.split('-', 1)[0]
+            if folder.name != current or not year.isdigit() or int(year) < keep_from_year:
+                path.unlink(missing_ok=True)
+        if folder.name != current:
+            try:
+                folder.rmdir()
+            except OSError:
+                pass
+
+
+@lru_cache(maxsize=16384)
 def silhouette_rows(asset_id: str, width: int, height: int):
     """Protect the whole drawing, including white interiors and open branches.
 
@@ -335,7 +498,7 @@ def planned_slots(year: int, seed: str, southern: bool = False):
     with wider pockets between them, and their baselines rise and fall.
     Silhouette-aware placement forbids overlaps, including white interiors.
     """
-    order = order_for_year(year, seed, southern)
+    order = tuple(hand_key(year, seed, asset_id) for asset_id in order_for_year(year, seed, southern))
     left,top,right,bottom = GRID
     counts=row_counts(len(order),year,seed)
     sy=(bottom-top)/len(counts)
@@ -348,7 +511,7 @@ def planned_slots(year: int, seed: str, southern: bool = False):
         plants=[]; gaps=[]; group_remaining=0; phase=rng.uniform(0,math.tau)
         for column,asset_id in enumerate(row_order):
             bounds=asset_mask(asset_id).getbbox()
-            subject=asset_id.split('-',1)[-1]
+            subject=subject_of(asset_id)
             height,cap,role=plant_size(subject,rng,sy)
             width=height*(bounds[2]-bounds[0])/(bounds[3]-bounds[1])
             if width>cap:height*=cap/width;width=cap
