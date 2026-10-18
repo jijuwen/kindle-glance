@@ -2,7 +2,7 @@
 
 不要用公开 Compose 直接接管已有私有生产配置。先在副本中迁移和验收，记录旧镜像 digest、原启动配置及数据目录。停止对应测试实例的写入后备份完整持久卷；生产升级应由维护者安排窗口。
 
-完整备份包含 `credentials.json`、`settings.json`、播放列表、页面缓存、年度花园的 `annual-garden.json` 和采集器私有状态，是敏感文件。使用 `docker compose cp board:/app/data ./backup-board` 可在停止写入后复制；启用采集器时同时备份 `/state`、`/public`、`/bridge`。备份保留原权限并限制访问，不上传 GitHub。管理页“可分享显示偏好”导出不含地点、地址或凭据，不能替代完整备份。
+完整备份包含 `credentials.json`、`settings.json`、播放列表、页面缓存、年度花园的 `annual-garden.json` 及现画缓存 `annual-garden-hands/`，以及采集器私有状态，是敏感文件。使用 `docker compose cp board:/app/data ./backup-board` 可在停止写入后复制；启用采集器时同时备份 `/state`、`/public`、`/bridge`。备份保留原权限并限制访问，不上传 GitHub。管理页“可分享显示偏好”导出不含地点、地址或凭据，不能替代完整备份。
 
 首次运行新版本时，有旧运行状态的实例自动导入地区、时区、地址；没有显式地区的旧实例保留历史默认值并提示确认。迁移前相关 JSON 留在 `migration-v1-backup/`，迁移重复执行不会覆盖已保存的新配置。损坏文件不会作为新安装覆盖，先从备份修复。旧播放列表、设备令牌和账号绑定保持。自动订阅更新复用原授权，手工套餐与日期覆盖不再参与展示；自动查询失败时保留自动缓存并标注状态。
 
