@@ -127,7 +127,7 @@ def run(now, output, images_only=False, pages=None):
             .grid{display:grid;grid-template-columns:1fr 1fr;gap:26px}figure{margin:0;padding:12px 12px 0;background:white;border:1px solid #d5dbd3;border-radius:12px;overflow:hidden}
             img{display:block;width:100%;aspect-ratio:4/3;object-fit:contain;background:white}figcaption{padding:16px 8px 18px;font-size:23px;border-top:1px solid #e9ede6}figcaption span{font-size:16px;color:#778775;margin-right:14px}
             footer{margin-top:26px;font-size:16px;color:#657263}
-            </style><main><header><div><h1>KindleGlance</h1><p>天气 · 日历 · 世界昼夜 · 年度花园</p></div><div class="version">main 源码预览</div></header><div class="grid">'''+cards+'''</div><footer>当前源码原生渲染 · 示例日期 '''+now.date().isoformat()+''' · 天气为演示数据</footer></main>'''
+            </style><main><header><div><h1>KindleGlance</h1><p>天气 · 日历 · 世界昼夜 · 年度花园</p></div><div class="version">v0.3.0 正式版</div></header><div class="grid">'''+cards+'''</div><footer>当前源码原生渲染 · 示例日期 '''+now.date().isoformat()+''' · 天气为演示数据</footer></main>'''
             gallery=Path(os.environ['DATA_DIR'])/'gallery.html';gallery.write_text(document,encoding='utf-8')
             page.set_viewport_size({'width':1600,'height':1200})
             page.goto(gallery.as_uri(),wait_until='networkidle')

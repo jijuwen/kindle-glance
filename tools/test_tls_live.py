@@ -19,7 +19,10 @@ with tempfile.TemporaryDirectory() as folder:
         subprocess.run(['openssl','req','-x509','-newkey','rsa:2048','-nodes','-keyout',str(folder/f'{name}.key'),
                         '-out',str(folder/f'{name}.crt'),'-days','1','-subj',f'/CN={hostname}',
                         '-addext',f'subjectAltName=DNS:{hostname}'],check=True,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
-    subprocess.run(['openssl','x509','-in',str(folder/'valid.crt'),'-signkey',str(folder/'valid.key'),'-days','-1','-out',str(folder/'expired.crt')],check=True,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+    expire=['openssl','x509','-in',str(folder/'valid.crt'),'-signkey',str(folder/'valid.key'),'-out',str(folder/'expired.crt')]
+    # OpenSSL 3.4+ rejects a negative -days; older releases lack -not_before/-not_after.
+    if subprocess.run(expire+['-days','-1'],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL).returncode:
+        subprocess.run(expire+['-not_before','20000101000000Z','-not_after','20000102000000Z'],check=True,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
     shutil.copyfile(folder/'valid.key',folder/'expired.key')
     script=folder/'client.lua'
     script.write_text('''package.path="kindle-plugin/trmnl.koplugin/?.lua;"..package.path

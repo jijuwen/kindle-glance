@@ -2,11 +2,11 @@
 
 把闲置 Kindle 变成天气、日历和生活进度看板。服务端生成灰阶图片，KOReader 插件负责定时取图与省电显示。
 
-**正式版 [v0.2.0](https://github.com/jijuwen/kindle-glance/releases/tag/v0.2.0) 已发布。** 支持地区与时区配置、首次设置和独立日常管理；设备基线为 KPW11 / KOReader v2026.07.1。安装前请阅读 [兼容范围](docs/COMPATIBILITY.md)。
+**正式版 [v0.3.0](https://github.com/jijuwen/kindle-glance/releases/tag/v0.3.0) 已发布。** 支持地区与时区配置、首次设置和独立日常管理；设备基线为 KPW11 / KOReader v2026.07.1。安装前请阅读 [兼容范围](docs/COMPATIBILITY.md)。
 
-![KindleGlance v0.2.0 八种看板拼图](previews/showcase.png)
+![KindleGlance v0.3.0 六种看板拼图](previews/showcase.png)
 
-上图为 v0.2.0 的八种看板，示例日期为 2026-09-30，天气为演示数据。当前 main 分支另包含年度花园、自动订阅信息及预览改进，并已移除图中的年度进度、时间刻度和山水长卷，详见 [更新记录](CHANGELOG.md)；这些源码更新尚未打新的发行标签。
+上图为 v0.3.0 的六种看板（另有可选 Codex 用量），示例日期为 2026-10-24，天气为演示数据。与 v0.2.0 相比，新增年度花园和自动订阅信息，移除了年度进度、时间刻度和山水长卷，详见 [更新记录](CHANGELOG.md)。
 
 ![年度花园横屏原生渲染](previews/annual-garden.png)
 

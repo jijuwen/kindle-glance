@@ -25,7 +25,7 @@ def archive(path, entries):
             assert zipfile.read(name) == source.read_bytes()
 
 
-deploy = out/'kindleglance-deploy-0.2.0.zip'
+deploy = out/'kindleglance-deploy-0.3.0.zip'
 archive(deploy, [(p,p.relative_to(ROOT).as_posix()) for p in source_files()])
 plugin=ROOT/'kindle-plugin'
 entries=[(p,'koreader/plugins/trmnl.koplugin/'+p.name) for p in (plugin/'trmnl.koplugin').glob('*.lua')]
