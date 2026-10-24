@@ -162,7 +162,7 @@ def install(app, g):
     @app.get("/admin/api/diagnostics")
     def diagnostics(request: Request):
         g["require_admin"](request)
-        return JSONResponse({"version": "0.2.0", "device_profile": "kpw11",
+        return JSONResponse({"version": "0.3.0", "device_profile": "kpw11",
                              "setup_state": g["board_settings"]()["setup_state"],
                              "has_device_fetch": bool((g["read_state"]() or {}).get("last_device_request")),
                              "collector_installed": bool(g["os"].getenv("CODEX_COLLECTOR_URL"))},
